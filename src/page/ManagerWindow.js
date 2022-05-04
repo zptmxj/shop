@@ -25,7 +25,6 @@ function ManagerWindow(props)
         fingerkey:'',
         idx:0,
         name:'',
-        nickname:'',
         privilege:0,
         pw:'',
         sex:[0],
@@ -37,7 +36,7 @@ function ManagerWindow(props)
     const [checkin,setCheckin] = useState([{
         idx:0,
         uid:'0000',
-        nickname:'',
+        name:'',
         point:10,
         temp:'36.5',
         date:'2021-5-07',
@@ -94,7 +93,7 @@ function ManagerWindow(props)
     const handleShow = () => setShowModal(true);
 
     const onSearch = (inputName) => {
-        var Results = member.filter(item => true === subMatchName(item.nickname, inputName));
+        var Results = member.filter(item => true === subMatchName(item.name, inputName));
         console.log('onSearch',Results,Results.length);
         setResult( Results );
     };
@@ -125,7 +124,7 @@ function ManagerWindow(props)
 
         if(Results.length===1)
         {
-            var overlap = inName.filter((item) =>{return item.nickname===Results[0].nickname})
+            var overlap = inName.filter((item) =>{return item.name===Results[0].name})
             if(overlap.length!=0)
             {
                 console.log('addName','err1',Results);
@@ -136,7 +135,7 @@ function ManagerWindow(props)
             else
             {
                 let addName = inName;
-                let newName = {'nickname':Results[0].nickname, 'uid':Results[0].uid};
+                let newName = {'name':Results[0].name, 'uid':Results[0].uid};
                 addName.push(newName);
                 console.log('setInName',addName);
                 setInName(addName);
@@ -243,7 +242,7 @@ function ManagerWindow(props)
 
     let sendQuery = ()=>{
         let data = inName.map((e)=>{
-        return {uid:e.uid,nickname:e.nickname,point:10,temp:'36.5',date:inDate,checkin:'12:00:00',work:0};
+        return {uid:e.uid,name:e.name,point:10,temp:'36.5',date:inDate,checkin:'12:00:00',work:0};
         })
         console.log('sendQuery',data);
 
@@ -320,7 +319,7 @@ function ManagerWindow(props)
                             <thead>
                                 <tr>
                                 <th>#</th>
-                                <th>nickname</th>
+                                <th>name</th>
                                 <th>uid</th>
                                 </tr>
                             </thead>
@@ -333,7 +332,7 @@ function ManagerWindow(props)
                                         return(
                                             <tr key ={i}>
                                                 <td>{i}</td>
-                                                <td>{e.nickname}</td>
+                                                <td>{e.name}</td>
                                                 <td>{e.uid}</td>
                                             </tr>
                                         )

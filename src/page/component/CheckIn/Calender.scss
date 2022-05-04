@@ -1,0 +1,80 @@
+.Calender-top{
+    background:rgb(255, 255, 255);
+    display: flex;
+    color:black;
+    padding-left:5vw;
+    padding-right:5vw;
+    justify-content: center;
+    align-items: center;
+}
+
+.Calender-top-black{
+    background:rgb(255, 255, 255);
+    padding-top:18px;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+
+
+.Calender{
+    background:rgb(255, 255, 255);
+    display: flex;
+    color:black;
+    justify-content: center;
+    align-items: center;
+}
+
+.Table-border{
+    border: 1px solid rgb(200, 200, 200);
+    table-layout:fixed;
+    max-width: 500px;
+}
+
+.Table-th{
+    width: 50px;
+}
+
+.Table-th-sun{
+    @extend .Table-th;
+    color:rgb(255, 100, 100);
+}
+
+.Table-th-sat{
+    @extend .Table-th;
+    color:rgb(100, 100, 255);
+}
+
+.Table-td{
+    background:rgb(255, 255, 255);
+    border: 1px solid rgb(200, 200, 200);
+    color:black;
+}
+
+.Table-td:hover{
+    background:rgb(240, 240, 240);
+    cursor:pointer;
+}
+
+.Table-td-noncur{
+    @extend .Table-td;
+    color:rgb(150, 150, 150);
+}
+
+.Table-td-noncur:hover{
+    background:rgb(240, 240, 240);
+    cursor:pointer;
+}
+
+.Table-td-p{
+    margin: 5px;
+}
+
+.Table-td-p-user{
+    margin: 5px;
+    color:rgb(55, 100, 255);
+}
+
+.test{
+    background:rgb(255, 136, 136);
+}

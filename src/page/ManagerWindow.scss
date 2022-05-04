@@ -1,0 +1,102 @@
+
+.Manager{
+    background:rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Manager{
+    background:rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top:5px;
+    padding-bottom:5px;
+    z-index: 1;
+}
+
+
+.Manager-input-name{
+    background:rgb(255, 255, 255);
+    display: flex;
+    color:black;
+    width: 20vw;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.Manager-dropdown{
+    background:rgb(255, 255, 255);
+    width: 20vw;
+    position: absolute;
+    border: 2px solid #dfdfdf;
+    z-index: 100;
+}
+
+.Manager-inputList{
+    background:rgb(255, 255, 255);
+    width: 50vw;
+    padding-top:10px;
+    padding-bottom:10px;
+
+}
+
+
+.Calender{
+    background:rgb(255, 255, 255);
+    display: flex;
+    color:black;
+    padding-left:5vw;
+    padding-right:5vw;
+    justify-content: center;
+    align-items: center;
+}
+
+.Table-border{
+    border: 1px solid rgb(200, 200, 200);
+}
+
+.Table-th{
+    background:rgb(220, 220, 220);
+    border: 1px solid rgb(200, 200, 200);
+    min-width: 12vw;
+    width: 7vw;
+    height: 5vw;
+    color:black;
+}
+
+.Table-th-sun{
+    @extend .Table-th;
+    color:rgb(255, 100, 100);
+}
+
+.Table-th-sat{
+    @extend .Table-th;
+    color:rgb(100, 100, 255);
+}
+
+.Table-td{
+    background:rgb(255, 255, 255);
+    border: 1px solid rgb(200, 200, 200);
+    min-height: 12vw;
+    height: 10vw;
+    color:black;
+}
+
+.Table-td:hover{
+    background:rgb(240, 240, 240);
+    cursor:pointer;
+}
+
+.Table-td-noncur{
+    @extend .Table-td;
+    color:rgb(150, 150, 150);
+}
+
+.Table-td-noncur:hover{
+    background:rgb(240, 240, 240);
+    cursor:pointer;
+}
+

@@ -15,8 +15,6 @@
     padding-right:10px;
 }
 
-
-
 .Calender{
     background:rgb(255, 255, 255);
     display: flex;
@@ -25,56 +23,75 @@
     align-items: center;
 }
 
-.Table-border{
+.Cal-Table{
     border: 1px solid rgb(200, 200, 200);
-    table-layout:fixed;
-    max-width: 500px;
+    // table-layout:fixed;
+    max-width: 90vmin;
 }
 
-.Table-th{
-    width: 50px;
+.Cal-th{
+    background:rgb(200, 200, 200);
+    border: 1px solid rgb(150, 150, 150);
+    width: 12vmin;
+    height: 8vh;
+    font-size: 4vmin;
 }
 
-.Table-th-sun{
-    @extend .Table-th;
+.Cal-th-sun{
+    @extend .Cal-th;
     color:rgb(255, 100, 100);
 }
 
-.Table-th-sat{
-    @extend .Table-th;
+.Cal-th-sat{
+    @extend .Cal-th;
     color:rgb(100, 100, 255);
 }
 
-.Table-td{
+.Cal-td{
     background:rgb(255, 255, 255);
     border: 1px solid rgb(200, 200, 200);
+    height: 8vh;
+    font-size: 4vmin;
     color:black;
 }
 
-.Table-td:hover{
+.Cal-td:hover{
     background:rgb(240, 240, 240);
     cursor:pointer;
 }
 
-.Table-td-noncur{
-    @extend .Table-td;
+.Cal-td-noncur{
+    @extend .Cal-td;
     color:rgb(150, 150, 150);
 }
 
-.Table-td-noncur:hover{
+.Cal-td-noncur:hover{
     background:rgb(240, 240, 240);
     cursor:pointer;
 }
 
-.Table-td-p{
+.Cal-td-button{
+    font-size: 4vmin;
+}
+
+.Cal-td-p{
     margin: 5px;
 }
 
-.Table-td-p-user{
+.Cal-td-p-user{
     margin: 5px;
     color:rgb(55, 100, 255);
+}
+
+.Calender-CheckInList{
+    background:rgb(255, 255, 255);
+    max-width: 90vmin;
+    padding-top:10px;
+    padding-bottom:10px;
 }
 
 .test{
     background:rgb(255, 136, 136);
 }
+
+

@@ -1,6 +1,6 @@
 
 import './Calender.scss';
-import {Button,Alert,OverlayTrigger,Popover} from 'react-bootstrap';
+import {Button,Alert,OverlayTrigger,Popover,Table} from 'react-bootstrap';
 import {getMonth, startOfMonth, startOfWeek, addDays,getDate, getDay} from 'date-fns';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import serverIP from '../../../IP_PORT';
@@ -21,6 +21,8 @@ function Calender(props)
     let [onRender,setOnRender] = useState(true);
 
     let [checkin,setCheckin] = useState([]);
+    let [selDay,setSelDay] = useState(0);
+    let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
 
 
 
@@ -142,17 +144,11 @@ function Calender(props)
         }
     }
 
-    function CalenderFor(){
-        return (
-            <div>
-                {
-
-                    // <td className="Table-td" key={j}>{e.day}</td>
-                }
-            </div>
-        )
+    const onDateBlock = (n)=>
+    {
+        console.log('Calender_onDateBlock',n);
+        setSelDay(n);
     }
-
 
     let idx = 0;
 
@@ -169,16 +165,16 @@ function Calender(props)
             </div>
 
             <div className="Calender">
-                <table className="Table-border">
+                <table className="Cal-Table">
                     <thead>
                         <tr>
-                            <th className="Table-th-sun">{Day[0]}</th>
-                            <th className="Table-th">{Day[1]}</th>
-                            <th className="Table-th">{Day[2]}</th>
-                            <th className="Table-th">{Day[3]}</th>
-                            <th className="Table-th">{Day[4]}</th>
-                            <th className="Table-th">{Day[5]}</th>
-                            <th className="Table-th-sat">{Day[6]}</th>
+                            <th className="Cal-th-sun">{Day[0]}</th>
+                            <th className="Cal-th" >{Day[1]}</th>
+                            <th className="Cal-th" >{Day[2]}</th>
+                            <th className="Cal-th" >{Day[3]}</th>
+                            <th className="Cal-th" >{Day[4]}</th>
+                            <th className="Cal-th">{Day[5]}</th>
+                            <th className="Cal-th-sat">{Day[6]}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -190,15 +186,7 @@ function Calender(props)
                                 return(
                                     <tr key={i}> 
                                     {
-                                        <DateBlock idx={idx++} week={week} checkin={checkin}></DateBlock>
-                                        // week.map((e,j)=>{
-                                        //     return(
-
-                                        //         e.month==='cur'?
-                                        //         <td className="Table-td" key={j}>{e.day}</td>:
-                                        //         <td className="Table-td-noncur" key={j}>{e.day}</td>
-                                        //     )
-                                        // })
+                                        <DateBlock idx={idx++}  week={week} checkin={checkin} onCreate={onDateBlock}></DateBlock>
                                     }
                                     </tr>
                                 )
@@ -210,7 +198,7 @@ function Calender(props)
                             //         {
                             //             weekList.map((e,j)=>{
                             //                 return(
-                            //                 <td className="Table-td" key={j}>{weekList[i].day}</td>
+                            //                 <td className="Cal-td" key={j}>{weekList[i].day}</td>
                             //                 )
                             //             })
                             //         }
@@ -223,13 +211,64 @@ function Calender(props)
                 
             </div> 
 
+            <div className="Calender">
+                <div className='Calender-CheckInList'>
+                    <Table bordered hover>
+                        <thead>
+                            <tr>
+                            <th>#</th>
+                            <th>name</th>
+                            <th>uid</th>
+                            </tr>
+                        </thead>
+                        {
+
+                            (selDay!==0)?(
+                                <tbody>
+                                {
+                                checkin[selDay-1].map((e,i)=>{
+                                        let css = "Cal-td-p";
+                                        if(e.uid == userId)
+                                            css = "Cal-td-p-user";
+                                        console.log('Calender_onDateBlock',css);
+
+                                        return(
+                                            <tr key ={i}>
+                                                <td className={css}>{i}</td>
+                                                <td className={css}>{e.name}</td>
+                                                <td className={css}>{e.uid}</td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                                </tbody>
+                            ):null
+                        }
+                    </Table>
+                </div> 
+            </div> 
+
+
+
         </div>
     )
 }
 
 function DateBlock(props){
+
+    const handleOnClick = (e,i) =>
+    {
+        console.log('DateBlock_handleOnClick',e,i);
+        let idx = Number(e.target.value)+1;
+        props.onCreate(idx);
+    }
+
     let curweek = props.week;
     let checkin = props.checkin;
+    let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
+
+
+
     if(checkin)
     return curweek.map((e,i)=>{
         let rt;
@@ -237,23 +276,38 @@ function DateBlock(props){
 
         if(checkin.length>0 && checkin[idx].length>0)
         {
+            let variant = "secondary";
+            if(checkin[idx].filter(e=>e.uid == userId).length > 0)
+                variant = "primary";
+            // if(e.month==='cur')
+            // {
+            //     rt = <td className="Cal-td" key={i}><CheckInButton text={e.day} checkin={checkin[idx]} idx={idx}/></td>;
+            // }
+            // else
+            // {
+            //     rt = <td className="Cal-td-noncur" key={i}><CheckInButton text={e.day} checkin={checkin[idx]} idx={idx}/></td>;
+            // }
             if(e.month==='cur')
             {
-                rt = <td className="Table-td" key={i}><CheckInButton text={e.day} checkin={checkin[idx]}/></td>;
+                rt = <td className="Cal-td" key={i}>
+                <Button className='Cal-td-button' value={idx} onClick={handleOnClick} variant={variant}>{e.day}</Button>
+                </td>;
             }
             else
             {
-                rt = <td className="Table-td-noncur" key={i}><CheckInButton text={e.day} checkin={checkin[idx]}/></td>;
+                rt = <td className="Cal-td-noncur" key={i}>
+                <Button className='Cal-td-button' value={idx} onClick={handleOnClick} variant={variant}>{e.day}</Button>
+                </td>;
             }
         }
         else{
             if(e.month==='cur')
             {
-                rt = <td className="Table-td" key={i}>{e.day}</td>;
+                rt = <td className="Cal-td" key={i}>{e.day}</td>;
             }
             else
             {
-                rt = <td className="Table-td-noncur" key={i}>{e.day}</td>;
+                rt = <td className="Cal-td-noncur" key={i}>{e.day}</td>;
             }
         }
 
@@ -269,29 +323,30 @@ function CheckInButton(props){
     let variant = "secondary";
     if(checkin.filter(e=>e.uid == userId).length > 0)
         variant = "primary";
-    return(
-    <OverlayTrigger
-      trigger="click"
-      placement='bottom'
-      overlay={
-        <Popover id={`popover-positioned-bottom`}>
-          <Popover.Header as="h3">{title}</Popover.Header>
-          <Popover.Body>
-            {
-                checkin.map((e)=>{
-                    return e.uid==userId?
-                    <strong className='Table-td-p-user'>{e.name}</strong>:
-                    <strong className='Table-td-p'>{e.name}</strong>
-                })
-            }
-          </Popover.Body>
-        </Popover>
-      }
+    // return(
+    // // <OverlayTrigger
+    // //   trigger="click"
+    // //   placement='bottom'
+    // //   overlay={
+    // //     <Popover id={`popover-positioned-bottom`}>
+    // //       <Popover.Header as="h3">{title}</Popover.Header>
+    // //       <Popover.Body>
+    // //         {
+    // //             checkin.map((e)=>{
+    // //                 return e.uid==userId?
+    // //                 <strong className='Cal-td-p-user'>{e.name}</strong>:
+    // //                 <strong className='Cal-td-p'>{e.name}</strong>
+    // //             })
+    // //         }
+    // //       </Popover.Body>
+    // //     </Popover>
+    // //   }
 
-    >
-      <Button variant={variant}>{props.text}</Button>
-    </OverlayTrigger>
-    )
+    // // >
+    // //   <Button className='Cal-td-button' variant={variant}>{props.text}</Button>
+    // // </OverlayTrigger>
+    //     <Button className='Cal-td-button' onClick={()=>setSelDay(props.idx)} variant={variant}>{props.text}</Button>
+    // )
 }
 
 

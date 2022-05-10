@@ -14,7 +14,9 @@ import { Link, Route } from 'react-router-dom';
 import Detail from './Detail';
 import MemberList from './page/MemberList';
 import CheckIn from './page/CheckIn';
-import ManagerWindow from './page/ManagerWindow';
+import MngCheckIn from './page/MngCheckIn';
+import MngDeposit from './page/MngDeposit';
+import MngPoint from './page/MngPoint';
 import serverIP from './IP_PORT';
 
 function App() {
@@ -153,9 +155,17 @@ function App() {
                 <Nav.Link as={Link} className="App-nav" to="/">◆ Home </Nav.Link>
                 <Nav.Link as={Link} className="App-nav" to="/Member">◆ Member </Nav.Link>
                 <Nav.Link as={Link} className="App-nav" to="/CheckIn">◆ Check-In </Nav.Link>
+                <Nav.Link as={Link} className="App-nav" to="/CheckIn">◆ Attend </Nav.Link>
                 {
                   userPrivilege==4?(
-                    <Nav.Link as={Link} className="App-nav" to="/Manager">◇ Manager </Nav.Link>
+                    //<Nav.Link as={Link} className="App-nav" to="/Manager">◇ Manager </Nav.Link>
+                    <NavDropdown title="◇ Manager" id="basic-nav-dropdown">
+                    <NavDropdown.Item as={Link} to="/MngCheckIn">CheckIn</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/MngDeposit">Deposit</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/MngPoint">Point</NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                    </NavDropdown>
                   ):null
                 }
                 <NavDropdown title="◆ MyPage" id="basic-nav-dropdown">
@@ -247,9 +257,17 @@ function App() {
             </Route>
             {
               userPrivilege==4?(
-              <Route path="/Manager">
-                <ManagerWindow />
-              </Route>
+              <div>
+                <Route path="/MngCheckIn">
+                  <MngCheckIn />
+                </Route>
+                <Route path="/MngDeposit">
+                  <MngDeposit />
+                </Route>
+                <Route path="/MngPoint">
+                  <MngPoint />
+                </Route>
+              </div>
               ):null
             }
             <Route path="/detail">
@@ -259,6 +277,9 @@ function App() {
           ):null
         }
       </div>
+      <div className="App-bottom">
+        <p>Talk And Play</p>
+      </div> 
     </div>
   );
 }

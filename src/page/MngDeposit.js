@@ -1,13 +1,12 @@
-import './ManagerWindow.scss';
+import './MngDeposit.scss';
 import react,{ useEffect, useState, useRef } from 'react';
-import {ListGroup,Dropdown,FormControl,Table,Button,Modal} from 'react-bootstrap';
-import SearchBar from './SearchBar'
+import {ListGroup,Dropdown,FormControl,Table,Button,Modal,Form} from 'react-bootstrap';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import serverIP from '../IP_PORT';
 
-function ManagerWindow(props)
+function MngDeposit(props)
 {
 
     const [showModal, setShowModal] = useState(false);
@@ -46,6 +45,8 @@ function ManagerWindow(props)
     }]);
 
     const [inDate, setInDate] = useState();
+    const [history, setHistory] = useState('Check-In');
+    const [variance, setVariance] = useState();
 
     let listKey = 0;
     
@@ -68,7 +69,7 @@ function ManagerWindow(props)
         if(member.length<3)
         {
           listKey = 0;
-          console.log('ManagerWindow',"멤버정보 불러오기");
+          console.log('MngDeposit',"멤버정보 불러오기");
     
           fetch(serverIP+"/out_member",{
             method:"post",
@@ -140,6 +141,7 @@ function ManagerWindow(props)
                 console.log('setInName',addName);
                 setInName(addName);
                 setUseName('');
+
             }
         }
         else if(Results.length===0)
@@ -178,6 +180,7 @@ function ManagerWindow(props)
             }
             else if(e.key =='Enter' && useName != '')
             {
+                setResult([]);
                 addName()
             }
         }
@@ -189,6 +192,13 @@ function ManagerWindow(props)
         onSearch(results[e].name);
         document.getElementById('nameinput').focus();
     }
+
+    // let onDropdownonClick = (e)=>{
+    //     console.log('onDropdownonClick',e,results);
+    //     setUseName(results[e].name);
+    //     onSearch(results[e].name);
+    //     document.getElementById('nameinput').focus();
+    // }
 
     let onDropKeyPress = (e)=>{
         console.log('onDropKeyPress',e.key);
@@ -239,14 +249,18 @@ function ManagerWindow(props)
     // checkin:'12:00:00',
     // checkout:null,
     // work:0
+    let onVarianceChange = (e)=>{
+        setVariance(e.target.value);
+    }
 
     let sendQuery = ()=>{
+
         let data = inName.map((e)=>{
-        return {uid:e.uid,name:e.name,point:10,temp:'36.5',date:inDate,checkin:'12:00:00',work:0};
+        return {uid:e.uid,name:e.name,variance:variance,date:inDate,time:moment().format('HH:mm:ss'),history:history};
         })
         console.log('sendQuery',data);
 
-        fetch(serverIP+"/in_checkin", {
+        fetch(serverIP+"/in_deposit", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",
@@ -256,21 +270,26 @@ function ManagerWindow(props)
           .then((res)=>{console.log('sendQuery',res)});
     }
 
+    let onSelect = (e)=>{
+        console.log('onSelect',e,e.target.value);
+        setHistory(e.target.value);
+    } 
+
     return(
         <div>
-            <h3> Manager Window </h3>
+            <h3> Manager Deposit </h3>
         {
             <div>
                 <div className='Manager'>
                     <ListGroup>
                         <ListGroup.Item>
-                            NickName :
+                            Name :
                         </ListGroup.Item>
                     </ListGroup>
                         
                     <div>
                         <FormControl id='nameinput' className='Manager-input-name' value={useName} onChange={onNameChange} onClick={onInputClick} onKeyDown={onInputKeyPress} ></FormControl>
-                        <div className='Manager-dropdown' >
+                        <div className='Manager-dropdown-name' >
                         {
                             (results.length!==0)?(
                                 <Dropdown onSelect={onDropdownonClick}>
@@ -278,7 +297,7 @@ function ManagerWindow(props)
                                         results.map((e,i)=>{
                                             console.log('results.map'+i);
                                             return(
-                                                <Dropdown.Item key={i} eventKey={i} id={'id'+i} href={"#/action-"+i}  onKeyDown={onDropKeyPress} >{e.name}</Dropdown.Item>
+                                                <Dropdown.Item key={i} eventKey={i} id={'id'+i} onKeyDown={onDropKeyPress} >{e.name}</Dropdown.Item>
                                             )
                                         })
                                     }
@@ -305,10 +324,46 @@ function ManagerWindow(props)
                 </div>
 
                 <div className='Manager'>
-                    <div className='Manager-inputList'>
+                    <ListGroup>
                         <ListGroup.Item>
-                            ------
+                            History :
                         </ListGroup.Item>
+                    </ListGroup>
+
+                        {/* <FormControl id='historyinput' className='Manager-input-deposit' value={history} onChange={onNameChange} onClick={onInputClick} onKeyDown={onInputKeyPress} ></FormControl>
+                        <div className='Manager-dropdown-deposit' >
+                        {
+                            (results.length!==0)?(
+                                <Dropdown onSelect={onDropdownonClick}>
+                                    {
+                                        historyList.map((e,i)=>{
+                                            console.log('results.map'+i);
+                                            return(
+                                                <Dropdown.Item key={i} eventKey={i} id={'id'+i} onKeyDown={onDropKeyPress} >{e.name}</Dropdown.Item>
+                                            )
+                                        })
+                                    }
+                                </Dropdown>
+                            ):null
+                        }
+                        </div> */}
+
+                        <Form.Group className='Manager-input-deposit' onChange={onSelect}>
+                            <Form.Select>
+                                <option>Check-In</option>
+                                <option>Deposit</option>
+                            </Form.Select>
+                        </Form.Group>
+                </div>
+
+                <div className='Manager'>
+                    <ListGroup>
+                        <ListGroup.Item>
+                            Cash :
+                        </ListGroup.Item>
+                    </ListGroup>
+                    <div>
+                        <FormControl id='cashinput' className='Manager-input-deposit' value={variance} onChange={onVarianceChange} ></FormControl>
                     </div>
                 </div>
                     
@@ -366,4 +421,4 @@ function ManagerWindow(props)
     )
 }
 
-export default ManagerWindow;
+export default MngDeposit;

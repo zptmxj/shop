@@ -83,3 +83,12 @@ $font_color : rgb(80, 80, 80);
     transform: rotate(360deg);
   }
 }
+
+.App-bottom{
+  background:#cccccc;
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+}

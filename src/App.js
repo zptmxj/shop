@@ -1,28 +1,34 @@
 import logo from './logo.png';
-import show01 from './show01.jpg';
-import show02 from './show02.jpg';
-import show03 from './show03.jpg';
+
 import shoes1 from './shoes1.jpg';
 import shoes2 from './shoes2.jpg';
 import shoes3 from './shoes3.jpg';
 import background from './background.jpg';
 
-import {Navbar, Container, NavDropdown, Nav, Carousel,Button,Form} from 'react-bootstrap';
+import {Navbar, Container, NavDropdown, Nav, Button,Form} from 'react-bootstrap';
 import './App.scss';
 import { useEffect, useState } from 'react';
 import { Link, Route } from 'react-router-dom';
 import Detail from './Detail';
+import MainSlider from './page/MainSlider';
 import MemberList from './page/MemberList';
 import CheckIn from './page/CheckIn';
+import Attend from './page/Attend';
+import TestPage from './page/TestPage';
 import MngCheckIn from './page/MngCheckIn';
 import MngDeposit from './page/MngDeposit';
 import MngPoint from './page/MngPoint';
 import serverIP from './IP_PORT';
 
+import {setStoreMember} from './store'
+import {useDispatch, useSelector} from 'react-redux'
+
+
 function App() {
 
   //const serverIP = 'http://168.126.179.44:3001';
   //const serverIP = 'http://localhost:3001';
+  let dispatch = useDispatch();
 
   let [logId,setlogId] = useState('');
   let [logPw,setlogPw] = useState('');
@@ -70,9 +76,11 @@ function App() {
       .then((json)=>{
         let arr = json.map((e)=>{return e});
         setMember(arr);
+        dispatch(setStoreMember(json));
         console.log('member',member);
       })
     }
+
   },[])
 
   let [ItemName,setItemName] = useState(['name1','name2','name3']);
@@ -155,11 +163,12 @@ function App() {
                 <Nav.Link as={Link} className="App-nav" to="/">◆ Home </Nav.Link>
                 <Nav.Link as={Link} className="App-nav" to="/Member">◆ Member </Nav.Link>
                 <Nav.Link as={Link} className="App-nav" to="/CheckIn">◆ Check-In </Nav.Link>
-                <Nav.Link as={Link} className="App-nav" to="/CheckIn">◆ Attend </Nav.Link>
+                <Nav.Link as={Link} className="App-nav" to="/Attend">◆ Attend </Nav.Link>
                 {
                   userPrivilege==4?(
                     //<Nav.Link as={Link} className="App-nav" to="/Manager">◇ Manager </Nav.Link>
                     <NavDropdown title="◇ Manager" id="basic-nav-dropdown">
+                    <NavDropdown.Item as={Link} to="/TestPage">TestPage</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/MngCheckIn">CheckIn</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/MngDeposit">Deposit</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/MngPoint">Point</NavDropdown.Item>
@@ -186,53 +195,13 @@ function App() {
         }
       </Route>
 
-      <div>
+      <div className="App-middle">
         {
           userId!==null?(
             <div>
             <Route exact path="/">
-              <Carousel>
-                <Carousel.Item interval={8000}>
-                  <div className="App-slide">
-                    <img
-                        className="App-slide-img"
-                      src={show01}
-                      alt="First slide"
-                    />
-                  </div>
-                  <Carousel.Caption>
-                    <h3>First step means meeting.</h3>
-                    <p >Every meeting has a meaning.</p>
-                  </Carousel.Caption>
-                </Carousel.Item>
-                <Carousel.Item interval={8000}>
-                  <div className="App-slide">
-                    <img
-                      className="App-slide-img"
-                      src={show02}
-                      alt="Second slide"
-                    />
-                  </div>
-                  <Carousel.Caption>
-                    <h3 className="App-slide-font">Two steps means pleasure.</h3>
-                    <p className="App-slide-font"> It's a great time to start with a little fun.</p>
-                  </Carousel.Caption>
-                </Carousel.Item>
-                <Carousel.Item interval={8000}>
-                  <div className="App-slide">
-                    <img
-                        className="App-slide-img"
-                      src={show03}
-                      alt="Third slide"
-                    />
-                  </div>
-
-                  <Carousel.Caption>
-                    <h3>Third stage means memory.</h3>
-                    <p>If it's good, it's a memory if it's bad, it's an experience.</p>
-                  </Carousel.Caption>
-                </Carousel.Item>
-              </Carousel>
+              <MainSlider/>
+              
 
               {/* <div className='container'>
                 <div className='row'>
@@ -248,16 +217,23 @@ function App() {
             </Route>
 
             <Route path="/Member">
-              {/* <MemberList member={inData} isInit={isInit}/> */}
               <MemberList/>
             </Route>
 
             <Route path="/CheckIn">
               <CheckIn />
             </Route>
+
+            <Route path="/Attend">
+              <Attend />
+            </Route>
+            
             {
               userPrivilege==4?(
               <div>
+                <Route path="/TestPage">
+                  <TestPage />
+                </Route>
                 <Route path="/MngCheckIn">
                   <MngCheckIn />
                 </Route>

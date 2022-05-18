@@ -36,7 +36,7 @@ function Member(props)
                 <p> / </p>
                 <p className="list-black">{ (props.Year+ 1) - (1900+props.data.age)}</p>
                 <p> / </p>
-                <p className="list-black">{ props.data.adddate.substr(0,10)}</p>
+                <p className="list-black">{ props.data.adddate.substr(2,8)}</p>
 
             </div>
         </div> 

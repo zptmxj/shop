@@ -23,9 +23,9 @@
     min-width: 30px;
     justify-content: center;
     display: flex;
-    padding-left:10px;
-    padding-right:10px;
-    font-size: 20px;
+    padding-left:5px;
+    padding-right:5px;
+    font-size: 18px;
     word-break: keep-all;
 }
 

@@ -1,0 +1,16 @@
+
+.Main-slide{
+  background-color: #e6e6e6;
+  justify-content: center;
+  display: flex;
+  width:100vmax;
+}
+
+.Main-slide-img {
+  width: 100vmin;
+}
+
+$font_color : rgb(80, 80, 80);
+.Main-slide-font {
+  text-shadow: -1px 0 $font_color, 0 1px $font_color, 1px 0 $font_color, 0 -1px $font_color;
+}

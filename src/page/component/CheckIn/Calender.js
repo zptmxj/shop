@@ -1,6 +1,6 @@
 
 import './Calender.scss';
-import {Button,Alert,OverlayTrigger,Popover,Table} from 'react-bootstrap';
+import {Button,Alert,OverlayTrigger,Popover,Table,ListGroup} from 'react-bootstrap';
 import {getMonth, startOfMonth, startOfWeek, addDays,getDate, getDay} from 'date-fns';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import serverIP from '../../../IP_PORT';
@@ -53,7 +53,8 @@ function Calender(props)
         }
         else 
             setCurMonth(curMonth-1);
-            
+
+        setSelDay(0);
         setOnRender(true);
     }
 
@@ -66,6 +67,7 @@ function Calender(props)
         else
             setCurMonth(curMonth+1);
 
+        setSelDay(0);
         setOnRender(true);
     }
 
@@ -150,6 +152,18 @@ function Calender(props)
         setSelDay(n);
     }
 
+    const timeDiff = (rowCheckin,rowCheckout)=>
+    {
+        let day1 = moment(rowCheckin,'hh:mm:ss');
+        let day2 = moment(rowCheckout,'hh:mm:ss');
+        if(day1 > day2)
+        {
+            day1 = moment('01 '+rowCheckin,'DD hh:mm:ss');
+            day2 = moment('02 '+rowCheckout,'DD hh:mm:ss');
+            console.log('day1 > day1');
+        }
+        return moment.duration(day2.diff(day1)).asMinutes();
+    }
     let idx = 0;
 
     return(
@@ -211,6 +225,12 @@ function Calender(props)
                 
             </div> 
 
+            <div className="Calender-TableName">
+                <ListGroup.Item>
+                    {selDay != 0?(moment(checkin[selDay-1][0].date).format('YYYY-MM-DD') + ' / ' + checkin[selDay-1].length +'명'):'---'}
+                </ListGroup.Item>
+            </div> 
+
             <div className="Calender">
                 <div className='Calender-CheckInList'>
                     <Table bordered hover>
@@ -218,7 +238,9 @@ function Calender(props)
                             <tr>
                             <th>#</th>
                             <th>name</th>
-                            <th>uid</th>
+                            <th>point</th>
+                            <th>check-in</th>
+                            <th>check-out</th>
                             </tr>
                         </thead>
                         {
@@ -230,13 +252,21 @@ function Calender(props)
                                         let css = "Cal-td-p";
                                         if(e.uid == userId)
                                             css = "Cal-td-p-user";
+                                        
+                                        let minute = timeDiff(e.checkin,e.checkout);
+
+                                        if(minute<120)
+                                            css = "Cal-td-p-stopby";
+
                                         console.log('Calender_onDateBlock',css);
 
                                         return(
                                             <tr key ={i}>
-                                                <td className={css}>{i}</td>
+                                                <td className={css}>{i+1}</td>
                                                 <td className={css}>{e.name}</td>
-                                                <td className={css}>{e.uid}</td>
+                                                <td className={css}>{e.point}</td>
+                                                <td className={css}>{e.checkin}</td>
+                                                <td className={css}>{e.checkout}</td>
                                             </tr>
                                         )
                                     })
@@ -256,6 +286,18 @@ function Calender(props)
 
 function DateBlock(props){
 
+    const timeDiff = (checkin,checkout)=>
+    {
+        let day1 = moment(checkin,'hh:mm:ss');
+        let day2 = moment(checkout,'hh:mm:ss');
+        if(day1 > day2)
+        {
+            day1 = moment('01 '+checkin,'DD hh:mm:ss');
+            day2 = moment('02 '+checkout,'DD hh:mm:ss');
+            console.log('day1 > day1');
+        }
+        return moment.duration(day2.diff(day1)).asMinutes();
+    }
     const handleOnClick = (e,i) =>
     {
         console.log('DateBlock_handleOnClick',e,i);
@@ -276,27 +318,26 @@ function DateBlock(props){
 
         if(checkin.length>0 && checkin[idx].length>0)
         {
-            let variant = "secondary";
-            if(checkin[idx].filter(e=>e.uid == userId).length > 0)
+            //let variant = "secondary";
+            let variant = "dark";
+            let user = checkin[idx].filter(e=>e.uid == userId);
+            if(user.length > 0)
+            {
                 variant = "primary";
-            // if(e.month==='cur')
-            // {
-            //     rt = <td className="Cal-td" key={i}><CheckInButton text={e.day} checkin={checkin[idx]} idx={idx}/></td>;
-            // }
-            // else
-            // {
-            //     rt = <td className="Cal-td-noncur" key={i}><CheckInButton text={e.day} checkin={checkin[idx]} idx={idx}/></td>;
-            // }
+                if(timeDiff(user[0].checkin,user[0].checkout)<120)
+                    variant = "secondary";
+            }
+
             if(e.month==='cur')
             {
                 rt = <td className="Cal-td" key={i}>
-                <Button className='Cal-td-button' value={idx} onClick={handleOnClick} variant={variant}>{e.day}</Button>
+                <Button  value={idx} onClick={handleOnClick} variant={variant}>{e.day}</Button>
                 </td>;
             }
             else
             {
                 rt = <td className="Cal-td-noncur" key={i}>
-                <Button className='Cal-td-button' value={idx} onClick={handleOnClick} variant={variant}>{e.day}</Button>
+                <Button  value={idx} onClick={handleOnClick} variant={variant}>{e.day}</Button>
                 </td>;
             }
         }
@@ -316,6 +357,9 @@ function DateBlock(props){
 }
 
 function CheckInButton(props){
+
+
+
     let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
     let checkin;
     checkin = props.checkin;

@@ -6,9 +6,12 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import serverIP from '../IP_PORT';
+import {setStoreMember} from '../store'
+import {useSelector} from 'react-redux'
 
 function MngCheckIn(props)
 {
+    let member = useSelector((state)=>{return state.member});
 
     const [showModal, setShowModal] = useState(false);
     const [modelText, setModelText] = useState('');
@@ -17,19 +20,19 @@ function MngCheckIn(props)
     const [useName, setUseName] = useState('');
     const [focusidx, setfocusidx] = useState(-1);
     const [results, setResult] = useState([]);
-    const [member,setMember] = useState([{
-        activity:[0],
-        adddate:'',
-        age:0,
-        deldate:'',
-        fingerkey:'',
-        idx:0,
-        name:'',
-        privilege:0,
-        pw:'',
-        sex:[0],
-        uid:'',
-    },{}]);
+    // const [member,setMember] = useState([{
+    //     activity:[0],
+    //     adddate:'',
+    //     age:0,
+    //     deldate:'',
+    //     fingerkey:'',
+    //     idx:0,
+    //     name:'',
+    //     privilege:0,
+    //     pw:'',
+    //     sex:[0],
+    //     uid:'',
+    // },{}]);
 
     const [inName,setInName] = useState([]);
 
@@ -65,25 +68,25 @@ function MngCheckIn(props)
 
     useEffect(()=>{
         console.log("MemberList_useEffect",member.length);
-        if(member.length<3)
-        {
-          listKey = 0;
-          console.log('MngCheckIn',"멤버정보 불러오기");
+        // if(member.length<3)
+        // {
+        //   listKey = 0;
+        //   console.log('MngCheckIn',"멤버정보 불러오기");
     
-          fetch(serverIP+"/out_member",{
-            method:"post",
-            headers : {
-              "content-type" : "application/json",
-            },
-            body : JSON.stringify(),
-          })
-          .then((res)=>res.json())
-          .then((json)=>{
-            let arr = json.map((e)=>{return e});
-            setMember(arr);
-            console.log('member',member);
-          })
-        }
+        //   fetch(serverIP+"/out_member",{
+        //     method:"post",
+        //     headers : {
+        //       "content-type" : "application/json",
+        //     },
+        //     body : JSON.stringify(),
+        //   })
+        //   .then((res)=>res.json())
+        //   .then((json)=>{
+        //     let arr = json.map((e)=>{return e});
+        //     setMember(arr);
+        //     console.log('member',member);
+        //   })
+        // }
     },[])
 
     useEffect(()=>{

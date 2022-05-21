@@ -11,32 +11,32 @@ function Member(props)
         <div className="list">
             <div className="list-line">
                 <p className="list-black">{props.idx}</p>
-                <div >
+                <div className="list-img">
                 {
                     props.data.privilege===2?
-                    <img className="list-img" src={sub_mg} />:
+                    <img src={sub_mg} width='25px' height='25px'/>:
                     (props.data.privilege===3?
-                    <img className="list-img" src={super_mg} />:
+                    <img src={super_mg} width='25px' height='25px'/>:
                     (props.data.privilege===4?
-                    <img className="list-img" src={eng_mg} />:
+                    <img src={eng_mg} width='25px' height='25px'/>:
                     null
                     ))
                 }
                 </div>
-                <p className="list-black"> / </p>
+                <p> / </p>
                 <p className="list-black">{ props.data.name}</p>
-                <p className="list-black"> / </p>
+                <p> / </p>
                 <div className="list-black">
                 {
                     props.data.sex.data[0]?
-                    <img className="list-img" src={img_girl}/>:
-                    <img className="list-img" src={img_boy}/>
+                    <img src={img_girl} width='30px' height='30px'/>:
+                    <img src={img_boy} width='30px' height='30px'/>
                 }
                 </div>
-                <p className="list-black"> / </p>
+                <p> / </p>
                 <p className="list-black">{ (props.Year+ 1) - (1900+props.data.age)}</p>
-                <p className="list-black"> / </p>
-                <p className="list-black">{ props.data.adddate.substr(0,10)}</p>
+                <p> / </p>
+                <p className="list-black">{ props.data.adddate.substr(2,8)}</p>
 
             </div>
         </div> 

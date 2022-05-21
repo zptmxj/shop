@@ -9,17 +9,11 @@ import store from './store.js'
 
 ReactDOM.render(
   //<React.StrictMode>
-<<<<<<< HEAD
     <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </Provider>,
-=======
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>,
->>>>>>> 9dcd2b29100b22b7f5deaa000e11748f76f63bc4
   //</React.StrictMode>,
   document.getElementById('root'),
 );

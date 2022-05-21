@@ -132,8 +132,14 @@ function Calender(props)
                     for(let j =0;j<7;j++){
                         node = json.filter((e)=>{
                             //console.log("e.date" ,moment(e.date).format('YYYY-MM-DD'),"weekList[i][j].date" ,moment(weekList[i][j].date).format('YYYY-MM-DD'));
-                            if(moment(e.date).format('YYYY-MM-DD') == moment(weekList[i][j].date).format('YYYY-MM-DD')) 
-                            return e
+                            let hour = Number(e.checkin.substring(0,2));
+                            let day = new Date(weekList[i][j].date);
+                            let tomo = new Date(day).setDate(day.getDate()+1);
+                            if(moment(e.date).format('YYYY-MM-DD') == moment(day).format('YYYY-MM-DD') && hour >= 7) 
+                                return e;
+                            else if (moment(e.date).format('YYYY-MM-DD') == moment(tomo).format('YYYY-MM-DD') && hour < 7)
+                                return e;
+
                         });
                         checkindata.push(node);
                     }

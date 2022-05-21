@@ -74,10 +74,11 @@ function Attend(props)
                 {
                     return (attlist[i].filter(e=>e.uid==userId).length>0);
                 });
-                
-                setAttMyData([true,true,true,true,true,true,true,true,true]);
                 setChecklist(attcrunt1);
-                console.log('setChecklist',attcrunt1);
+                let attcrunt2= attcrunt1.slice();
+                setAttMyData(attcrunt2);
+                console.log('setChecklist_attcrunt1',attcrunt1);
+                console.log('setChecklist_test',test);
 
                 json.map((e)=>{
                     if(!uids.includes(e.uid))
@@ -109,7 +110,7 @@ function Attend(props)
         let checked = checklist;
         checked[e] = !checked[e];
         console.log('onClickCheck',checked);
-        setAttMyData(checked);
+        setChecklist(checked);
         setRefresh(!refresh);
         // settest(test+1);
         // console.log('settest',test+1);
@@ -126,15 +127,21 @@ function Attend(props)
     const onAttSend = (e)=>{
         let data = count.map((e,i)=>{
             console.log('onAttSend',checklist[i],attMyData[i]);
+            let workday; 
+            if(i<7)
+                workday = currentWeek[i];
+            else
+                workday = currentWeek[0];
+
             if(checklist[i]!==attMyData[i])
             {
                 if(checklist[i])
-                    return {work:1,uid:userId};
+                    return {work:1,uid:userId,day:workday};
                 else
-                    return {work:-1,uid:userId};
+                    return {work:-1,uid:userId,day:workday};
             }
             else
-                return {work:0,uid:0};
+                return {work:0,uid:0,day:workday};
         })
         
         fetch(serverIP+"/in_attend", {

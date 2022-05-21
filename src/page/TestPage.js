@@ -1,6 +1,6 @@
 //import Calender from './component/CheckIn/Calender';
 import { Form, ProgressBar} from 'react-bootstrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Attend.scss';
 
 function TestPage(props)
@@ -8,8 +8,19 @@ function TestPage(props)
     let count = [1,2,3,4,5];
     const [data01, setData01] = useState('');
     const [data02, setData02] = useState('');
-    const [checklist, setChecklist] = useState([[1],[1],[1],[1],[1]]);
+    const [checklist, setChecklist] = useState([false,false,false,false,false]);
+    const [curlist, setCurlist] = useState([false,false,false,false,false]);
+    const [refresh, setRefresh] = useState(false);
 
+    useEffect(()=>{
+        let tset = [false,false,false,false,false];
+        let tset1 = tset.map(e=>e);
+        
+        setChecklist(tset);
+        setCurlist(tset1);
+        console.log('tset',tset);
+        console.log('tset1',tset1);
+    },[])
 
     const onChange01 = (e)=>{
         setData01(e.target.value);
@@ -29,9 +40,13 @@ function TestPage(props)
 
     const onClickCheck = (e)=>{
         let checked = checklist;
-        checked[e][0] = !checked[e][0];
+        checked[e] = !checked[e];
         setChecklist(checked);
         console.log(checked);
+        setRefresh(!refresh);
+        console.log('checklist',checklist);
+        console.log('curlist',curlist);
+
     }
 
 
@@ -54,7 +69,7 @@ function TestPage(props)
                 {
                     count.map((e,i)=>{
                         return(
-                        <input type='checkbox' id='rd1' onChange={()=>onClickCheck(i)} checked={checklist[i][0]}/>
+                        <Form.Check key ={i} type='checkbox' id='rd1' onChange={()=>onClickCheck(i)} checked={checklist[i]}/>
                         )
                     })
                 }

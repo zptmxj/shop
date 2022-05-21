@@ -20,19 +20,26 @@
 }
 
 .list-black{
-    min-width: 30px;
     justify-content: center;
     display: flex;
+<<<<<<< HEAD
     padding-left:5px;
     padding-right:5px;
     font-size: 18px;
+=======
+    padding-left:1vmin;
+    padding-right:1vmin;
+    font-size: 4vw;
+>>>>>>> 9dcd2b29100b22b7f5deaa000e11748f76f63bc4
     word-break: keep-all;
 }
 
 .list-img{
     display: flex;
-    min-width: 40px;
-    padding-right:10px;
+    width: 5vmin;
+    height: 5vmin;
+    max-width: 30px;
+    max-height: 30px;
     justify-content: center;
 }
   

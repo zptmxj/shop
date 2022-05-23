@@ -14,11 +14,14 @@ import MainSlider from './page/MainSlider';
 import MemberList from './page/MemberList';
 import CheckIn from './page/CheckIn';
 import Attend from './page/Attend';
+import MyCash from './page/MyCash';
+import MyPoint from './page/MyPoint';
 import TestPage from './page/TestPage';
 import MngCheckIn from './page/MngCheckIn';
 import MngDeposit from './page/MngDeposit';
 import MngPoint from './page/MngPoint';
 import serverIP from './IP_PORT';
+
 
 import {setStoreMember} from './store'
 import {useDispatch, useSelector} from 'react-redux'
@@ -178,11 +181,11 @@ function App() {
                   ):null
                 }
                 <NavDropdown title="◆ MyPage" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/MyCash">Cash</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/MyPoint">Point</NavDropdown.Item>
+                  <NavDropdown.Item href="#action/3.3">----</NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                  <NavDropdown.Item href="#action/3.4">----</NavDropdown.Item>
                 </NavDropdown>
                 </Nav>
               </Navbar.Collapse>
@@ -219,13 +222,17 @@ function App() {
             <Route path="/Member">
               <MemberList/>
             </Route>
-
             <Route path="/CheckIn">
               <CheckIn />
             </Route>
-
             <Route path="/Attend">
               <Attend />
+            </Route>
+            <Route path="/MyCash">
+              <MyCash />
+            </Route>
+            <Route path="/MyPoint">
+              <MyPoint />
             </Route>
             
             {

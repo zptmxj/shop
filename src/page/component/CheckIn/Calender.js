@@ -74,8 +74,10 @@ function Calender(props)
     const Rerender = ()=>{
         let weekList = [[],[],[],[],[],[]];
         console.log("Rerender", curYear, curMonth, curDay);
-        let monthStart = startOfMonth(new Date(curYear, curMonth, curDay));
-        let weekStart = startOfWeek(monthStart, {weekStartOn:0});
+        //let monthStart = startOfMonth(new Date(curYear, curMonth, curDay));
+        let monthStart = startOfMonth(new Date(curYear, curMonth, 1));
+        let weekStart = startOfWeek(monthStart,  { weekStartsOn: 0 });
+        console.log("weekStart", weekStart);
 
         if(onRender)
         {

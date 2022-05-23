@@ -1,0 +1,40 @@
+
+.MyCash-top{
+  background:rgb(255, 255, 255);
+  display: flex;
+  color:black;
+  padding-left:5vw;
+  padding-right:5vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.MyCash-top-black{
+  background:rgb(255, 255, 255);
+  padding-top:18px;
+  padding-left:10px;
+  padding-right:10px;
+}
+
+
+.MyCash-td-plus{
+  color:#4a89ff
+}
+
+.MyCash-tr{
+  border-bottom: 1px solid #757575;
+}
+
+.MyCash-tr-member{
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.MyCash-tr:hover{
+  background-color: #dadada;
+}
+
+
+// $font_color : rgb(80, 80, 80);
+// .Main-slide-font {
+//   text-shadow: -1px 0 $font_color, 0 1px $font_color, 1px 0 $font_color, 0 -1px $font_color;
+// }

@@ -410,7 +410,7 @@ function MngPoint(props)
                     <ListGroup.Item>
                             Date :
                     </ListGroup.Item>
-                    <FormControl id='nameinput' className='Manager-input-name' value={inDate}></FormControl>
+                    <FormControl id='nameinput' className='Manager-input-deposit' value={inDate}></FormControl>
                 </div>
 
                 <Button variant="secondary" onClick={sendQuery}>전송</Button>

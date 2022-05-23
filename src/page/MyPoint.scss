@@ -5,7 +5,7 @@
 //   display: flex;
 //   width:100vmax;
 // }
-.Attend-top{
+.MyPoint-top{
   background:rgb(255, 255, 255);
   display: flex;
   color:black;
@@ -15,58 +15,30 @@
   align-items: center;
 }
 
-.Attend-top-black{
+.MyPoint-top-black{
   background:rgb(255, 255, 255);
   padding-top:18px;
   padding-left:10px;
   padding-right:10px;
 }
 
-.Attend-table {
-  width: 90vmin;
-}
-.Attend-th{
-  border-bottom: 3px solid #181818;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-.Attend-th-10 {
-  @extend .Attend-th;
-  width: 10%;
-}
-.Attend-th-20 {
-  @extend .Attend-th;
-  width: 20%;
-}
-.Attend-th-70 {
-  @extend .Attend-th;
-  width: 50%;
+
+.MyPoint-td-plus{
+  color:#4a89ff
 }
 
-.Attend-td{
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.Attend-tr{
+.MyPoint-tr{
   border-bottom: 1px solid #757575;
 }
 
-.Attend-tr-member{
+.MyPoint-tr-member{
   border-bottom: 1px solid #e4e4e4;
 }
 
-.Attend-tr:hover{
+.MyPoint-tr:hover{
   background-color: #dadada;
 }
 
-.Attend-button{
-  Button{
-    margin: 10px;
-  }
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
 
 
 // $font_color : rgb(80, 80, 80);

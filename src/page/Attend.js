@@ -250,7 +250,7 @@ function Attend(props)
                     <thead>
                         <tr>
                             <th className='Attend-th-20'>날짜</th>
-                            <th className='Attend-th-70'>진행률</th>
+                            <th className='Attend-th-70'>참석률</th>
                             <th className='Attend-th-10'>투표</th>
                             <th className='Attend-th-10'>참석</th>
                         </tr>

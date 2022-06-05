@@ -39,21 +39,17 @@ function Attend(props)
         let theDayOfWeek = currentDay.getDay()
         let weeklist = [];
 
-        console.log('theMonth :',theMonth, 'theDate :',theDate, 'theDayOfWeek :',theDayOfWeek);
-
         for(let i = 1 ; i<8; i++)
         {
             let weekday = new Date(theYear, theMonth, theDate + (i - theDayOfWeek));
             weeklist.push(weekday);
         }
         setCurrentWeek(weeklist);
-        console.log('weeklist',weeklist);
         let endday = new Date(weeklist[6]);
         endday.setDate(endday.getDate()+1);
         let daytoday= [weeklist[0],endday];
         let uids = [];
 
-        console.log('daytoday',daytoday);
         console.log('total',total);
         if(reqAtt==false) 
         {
@@ -107,12 +103,21 @@ function Attend(props)
 
                 let attcrunt1 = count.map((e,i)=>
                 {
-                    return (attlist[i].filter(e=>e.uid==userId).length>0);
+                    let attarray = attlist[i].filter(e=>e.uid==userId);
+                    let settime = "19:00:00";
+                    if(i>4) settime = "15:00:00";
+                    if(attarray.length>0)
+                        return  {activity: true, time:attarray[0].atttime};
+                    else
+                        return  {activity: false, time:settime};
+
                 });
                 setChecklist(attcrunt1);
-                let attcrunt2 = attcrunt1.slice();
+                //let attcrunt2 = attcrunt1.slice();
+                let attcrunt2 = attcrunt1.map((e,i)=>{return {activity: e.activity, time: e.time}});
                 setAttMyData(attcrunt2);
                 console.log('attcrunt1',attcrunt1);
+                console.log('attcrunt2',attcrunt2);
 
                 json.map((e)=>{
                     if(!uids.includes(e.uid))
@@ -121,11 +126,13 @@ function Attend(props)
                     }
                 });
                 setTotal(uids.length);
+                let nonAttend = member.filter(mem=>{if(mem.activity&&!uids.includes(mem.uid)) return mem});
+                console.log("nonAttend",nonAttend);
                 setReqAtt(true);
             });
         }
 
-    },[reqAtt,total,refresh])
+    },[reqAtt,total,refresh,curAttend])
 
     const WeekDay = (i)=>{
 
@@ -142,8 +149,8 @@ function Attend(props)
     const onClickCheck = (e)=>{
         // console.log('onClickCheck',e);
         let checked = checklist;
-        checked[e] = !checked[e];
-        console.log('onClickCheck',checked);
+        console.log('onClickCheck',checked,e);
+        checked[e].activity = !checked[e].activity;
         setChecklist(checked);
         setRefresh(!refresh);
         // settest(test+1);
@@ -160,29 +167,39 @@ function Attend(props)
 
     const onAttSend = (e)=>{
         let isChenge = false;
+        console.log('checklist',checklist);
+        console.log('attMyData',attMyData);
         let data = count.map((e,i)=>{
-            console.log('onAttSend',checklist[i],attMyData[i]);
             let workday; 
             if(i<7)
                 workday = currentWeek[i];
             else
                 workday = currentWeek[0];
 
-            if(checklist[i]!==attMyData[i])
+            let rt;
+            if(checklist[i].activity!==attMyData[i].activity)
             {
                 isChenge = true;
-                if(checklist[i])
-                    return {work:1,uid:userId,day:workday};
+                if(checklist[i].activity)
+                    rt = {work:1,uid:userId,day:workday,time:checklist[i].time};
                 else
-                    return {work:-1,uid:userId,day:workday};
+                    rt = {work:-1,uid:userId,day:workday,time:checklist[i].time};
+            }
+            else if(checklist[i].activity && checklist[i].time!==attMyData[i].time)
+            {
+                isChenge = true;
+                rt = {work:2,uid:userId,day:workday,time:checklist[i].time};
             }
             else
-                return {work:0,uid:0,day:workday};
+                rt = {work:0,uid:0,day:workday,time:checklist[i].time};
 
+            return rt;
         })
         
+        console.log('isChenge',isChenge);
         if(isChenge)
         {
+
             fetch(serverIP+"/in_attend", {
                 method : "post", // 통신방법
                 headers : {
@@ -225,11 +242,19 @@ function Attend(props)
         setRefresh(!refresh);
     }
 
+    const setCallBack= (e)=>{
+        console.log("setCallBack",e);
+        setChecklist(e);
+        setRefresh(!refresh);
+    }
+
     return(
         <div>
         {
             <div>
-                <h3> Attend </h3>
+                <div className="title">
+                    <h3> Attend </h3>
+                </div>   
 
                 <div className="Attend-top">
                     <Button onClick={OnPrev} size="lg" variant="secondary">{'<'}</Button>
@@ -261,17 +286,21 @@ function Attend(props)
                                 if(curAttend !=='undefined' && curAttend.length >0)
                                 {
                                     let length = curAttend[i].length;
+                                    let progress;
+                                    if(total<=0)  progress=0;
+                                    else  progress = (100/total)*length;
+
                                     return(
                                         <>
                                         <tr key = {i} className='Attend-tr'>
                                             <td className='Attend-td' onClick={()=>onClickList(i)}>{WeekDay(i)}</td>
-                                            <td className='Attend-td' onClick={()=>onClickList(i)}><ProgressBar now={(100/total)*length} /></td>
+                                            <td className='Attend-td-prog' onClick={()=>onClickList(i)}><ProgressBar now={progress} /></td>
                                             <td className='Attend-td' onClick={()=>onClickList(i)}>{length}</td>
                                             <td className='Attend-td'>
-                                                <Form.Check type='checkbox' id='rd1' onChange={()=>onClickCheck(i)} checked={checklist[i]}></Form.Check>
+                                                <Form.Check type='checkbox' id='rd1' onChange={()=>onClickCheck(i)} checked={checklist[i].activity}></Form.Check>
                                             </td>
                                         </tr>
-                                        <TDATA idx={i} openlist={openlist} curlist={curAttend[i]}/>
+                                        <TDATA idx={i} openlist={openlist} curlist={curAttend} checklist={checklist} userId={userId} setCallBack={setCallBack}/>
                                         </>
 
                                     )
@@ -285,6 +314,7 @@ function Attend(props)
 
                 <div className='Attend-button'>
                     {/* <Button variant="secondary" onClick={onAttCancel}>취소</Button> */}
+
                     <Button variant="success" onClick={onAttSend}>전송</Button>
                 </div>
             </div>
@@ -295,33 +325,55 @@ function Attend(props)
 
 function TDATA(props)
 {
-    let i = props.idx;
-    let curlist = props.curlist;
+    let idx = props.idx;
+    let curlist = props.curlist[idx];
+    let userId = props.userId;
     let rt;
-    if(props.openlist[i] && curlist.length>0)
+
+    const change = (e,j)=>{
+        let currnt = props.checklist;
+        currnt[idx].time = e.target.value+":00";
+        props.setCallBack(currnt);
+    }
+
+    // const TimeTd = ()=>{
+    //     <td></td>
+    //     <td></td>
+    // }
+
+    if(props.openlist[idx] && curlist.length>0)
         rt = curlist.map((e,i)=>{
+        let classN = "Attend-tr";
         if(i<curlist.length-1)
+            classN = "Attend-tr-member";
+
+        let timeArray = String(e.atttime).split(':');
+        let timeStr = "-- --:--";
+        if(idx<7)
         {
-            return (
-                <tr key = {i} className='Attend-tr-member'>
-                    <td></td>
-                    <td>{e.name}</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                )
+            if(timeArray[0]>11)
+            {
+                if(timeArray[0]==12)
+                    timeStr ="오후 " + timeArray[0] + ':' + timeArray[1];
+                else 
+                    timeStr ="오후 " + (timeArray[0]-12) + ':' + timeArray[1];
+
+            }
+            else 
+                timeStr ="오전 " + timeArray[0] + ':' + timeArray[1];
         }
-        else
-        {
-            return (
-                <tr key = {i} className='Attend-tr'>
-                    <td></td>
-                    <td>{e.name}</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                )
-        }
+            
+
+
+        return (
+            <tr key = {i} className={classN}>
+                <td className='Attend-text-right'>{e.name}</td>
+                <td className='Attend-td-prog'>{timeStr}</td>
+                <td colSpan={2} >
+                        {((idx<7)&&(e.uid==userId))?<input className='Attend-input' type="time" key={i} value={props.checklist[idx].time} onChange={(e)=>change(e,i)}/>:null}
+                </td>
+            </tr>
+            )
     })
     return rt;
 

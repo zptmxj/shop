@@ -1,7 +1,9 @@
 //import Calender from './component/CheckIn/Calender';
-import { Form, ProgressBar} from 'react-bootstrap';
+import { Form, Button, InputGroup,FormControl,Dropdown, FormGroup } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
-import './Attend.scss';
+import axios from 'axios';
+import serverIP from '../IP_PORT';
+import './TestPage.scss';
 
 function TestPage(props)
 {
@@ -11,6 +13,10 @@ function TestPage(props)
     const [checklist, setChecklist] = useState([false,false,false,false,false]);
     const [curlist, setCurlist] = useState([false,false,false,false,false]);
     const [refresh, setRefresh] = useState(false);
+    const [imagefile, setImagefile] = useState({
+        file: "",
+        URL: "img/default_image.png",
+      });
 
     useEffect(()=>{
         let tset = [false,false,false,false,false];
@@ -22,10 +28,19 @@ function TestPage(props)
         console.log('tset1',tset1);
     },[])
 
+    useEffect(()=>{
+        // if(!imagefile) return false;
+        // const imgEL = document.querySelector("imgbox");
+        // const reader = new FileReader();
+        // reader.onload = () => (imgEL.getElementsByClassName.backgroundImage = 'url(${reader.result})');
+        // reader.readAsDataURL(imagefile[0]);
+    });
+
     const onChange01 = (e)=>{
         setData01(e.target.value);
     }
     const onClick01 = (e)=>{
+        
         let rt = window.btoa(data01);
         console.log(rt);
     }
@@ -46,8 +61,44 @@ function TestPage(props)
         setRefresh(!refresh);
         console.log('checklist',checklist);
         console.log('curlist',curlist);
-
     }
+
+    const onChangeImg = (e)=>{
+        let upimg = e.target.files[0]; 
+
+        const fileReader = new FileReader();
+
+        if(e.target.files[0]){
+            fileReader.readAsDataURL(e.target.files[0])
+        }
+        fileReader.onload = () => {
+            setImagefile({
+                file: upimg,
+                URL: fileReader.result
+            });
+        }
+    }
+
+    const onSendImg = async (e)=>{
+        const formData= new FormData();
+        formData.append("file",imagefile.file);
+        // await axios({
+        //     method: 'post',
+        //     url: '/in_boardimage',
+        //     data: formData,
+        //     headers: {
+        //       'Content-Type': 'multipart/form-data',
+        //     },
+        //   }).then(()=>{console.log('onSendImg','then')});
+        const config = {
+            Headers:{
+                "content-type":"multipart/form-data"
+            }
+        };
+        console.log('onSendImg',imagefile,formData);
+        await axios.post(serverIP+"/in_boardimage",formData,config);
+    }
+
 
 
     return(
@@ -55,6 +106,8 @@ function TestPage(props)
         {
             <div>
                 <h3> TestPage </h3>
+
+                
 
                 <input value={data01} onChange={onChange01}/>
                 <button onClick={onClick01}>data1</button>
@@ -74,9 +127,15 @@ function TestPage(props)
                     })
                 }
                 </div>
-
-
-
+                <div>
+                <div className='imgbox'></div>
+                <InputGroup className="mb-3">
+                    <FormControl type="file" accept='image/*' aria-label="First name" onChange={onChangeImg} />
+                    <Button variant="outline-secondary" id="button-addon2" onClick={onSendImg}>
+                        Button
+                    </Button>
+                </InputGroup>
+                </div>
             </div>
         }
         </div> 

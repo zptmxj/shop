@@ -1,3 +1,4 @@
+import './CheckIn.scss';
 import Calender from './component/CheckIn/Calender';
 
 function CheckIn(props)
@@ -6,7 +7,9 @@ function CheckIn(props)
         <div>
         {
             <div>
-                <h3> Check-In </h3>
+                <div className="title">
+                    <h3> Check-In </h3>
+                </div>   
                 <Calender />
             </div>
         }

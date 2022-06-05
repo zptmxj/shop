@@ -1,4 +1,5 @@
 import logo from './logo.png';
+import TAPs from './TAPs.svg';
 
 import shoes1 from './shoes1.jpg';
 import shoes2 from './shoes2.jpg';
@@ -14,12 +15,16 @@ import MainSlider from './page/MainSlider';
 import MemberList from './page/MemberList';
 import CheckIn from './page/CheckIn';
 import Attend from './page/Attend';
-import MyCash from './page/MyCash';
-import MyPoint from './page/MyPoint';
+import BoardGame from './page/BoardGame';
+import MyCash from './page/mypage/MyCash';
+import MyPoint from './page/mypage/MyPoint';
+import MyPassword from './page/mypage/MyPassword';
 import TestPage from './page/TestPage';
-import MngCheckIn from './page/MngCheckIn';
-import MngDeposit from './page/MngDeposit';
-import MngPoint from './page/MngPoint';
+import MngCheckIn from './page/manager/MngCheckIn';
+import MngDeposit from './page/manager/MngDeposit';
+import MngPoint from './page/manager/MngPoint';
+import MngGameAdd from './page/manager/MngGameAdd';
+import MngMemberAdd from './page/manager/MngMemberAdd';
 import serverIP from './IP_PORT';
 
 
@@ -63,7 +68,7 @@ function App() {
     console.log("app_useEffect");
     console.log('userId',userId , userName ,userPrivilege);
 
-    if(member[0].activity[0]!==1)
+    if(member[0].activity!==1)
     {
       listKey = 0;
       console.log('App',"멤버정보 불러오기");
@@ -158,34 +163,51 @@ function App() {
           ):(
           <Navbar className="App-header" bg="light" expand="lg">
             <Container >
-              <img className="App-logo" src={logo}  alt='Logo.png'/>
-              <Navbar.Brand href="/">Talk And Play</Navbar.Brand>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
+              <a href="/"><img className="App-logo" src={logo} alt='Logo.png'/></a>
+              <Navbar.Brand className="App-title" href="/">
+              <a href="/"><img className="App-TAPs" src={TAPs} alt='TAPs.png'/></a>
+              {/* <div className="App-title-l mx-3">T &nbsp;A  &nbsp;P  's</div>
+              <div className="App-title-s mx-3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alk
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nd 
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lay
+              </div> */}
+              </Navbar.Brand>
+              <Navbar.Toggle aria-controls="basic-navbar-nav " />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
                 <Nav.Link as={Link} className="App-nav" to="/">◆ Home </Nav.Link>
-                <Nav.Link as={Link} className="App-nav" to="/Member">◆ Member </Nav.Link>
-                <Nav.Link as={Link} className="App-nav" to="/CheckIn">◆ Check-In </Nav.Link>
+                <>
+                {
+                  //userPrivilege>-1?(
+                  <>
+                      <Nav.Link as={Link} className="App-nav" to="/Member">◆ Member </Nav.Link>
+                      <Nav.Link as={Link} className="App-nav" to="/CheckIn">◆ Check-In </Nav.Link>
+                  </>
+                  /// ):null
+                }
+                </>
                 <Nav.Link as={Link} className="App-nav" to="/Attend">◆ Attend </Nav.Link>
+                <Nav.Link as={Link} className="App-nav" to="/Games">◆ Games </Nav.Link>
                 {
                   userPrivilege==4?(
                     //<Nav.Link as={Link} className="App-nav" to="/Manager">◇ Manager </Nav.Link>
-                    <NavDropdown title="◇ Manager" id="basic-nav-dropdown">
+                    <NavDropdown className="App-nav" title="◇ Manager" id="basic-nav-dropdown">
                     <NavDropdown.Item as={Link} to="/TestPage">TestPage</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/MngCheckIn">CheckIn</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/MngDeposit">Deposit</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/MngPoint">Point</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/MngGameAdd">GameAdd</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/MngMemberAdd">MemberAdd</NavDropdown.Item>
                     </NavDropdown>
                   ):null
                 }
-                <NavDropdown title="◆ MyPage" id="basic-nav-dropdown">
+                <NavDropdown className="App-nav" title="◆ MyPage" id="basic-nav-dropdown">
                   <NavDropdown.Item as={Link} to="/MyCash">Cash</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/MyPoint">Point</NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.3">----</NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.4">----</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/MyPassword">Password</NavDropdown.Item>
                 </NavDropdown>
                 </Nav>
               </Navbar.Collapse>
@@ -204,21 +226,8 @@ function App() {
             <div>
             <Route exact path="/">
               <MainSlider/>
-              
-
-              {/* <div className='container'>
-                <div className='row'>
-                  {
-                    ItemName.map((e,i)=>{
-                      return(
-                        <SubItem key={i} name={e} img={ItemImg[i]} price={ItemPrice[i]}/>
-                      )
-                    })
-                  }
-                </div>
-              </div> */}
             </Route>
-
+            
             <Route path="/Member">
               <MemberList/>
             </Route>
@@ -228,12 +237,18 @@ function App() {
             <Route path="/Attend">
               <Attend />
             </Route>
+            <Route path="/Games">
+              <BoardGame/>
+            </Route>
             <Route path="/MyCash">
               <MyCash />
             </Route>
             <Route path="/MyPoint">
               <MyPoint />
             </Route>
+            <Route path="/MyPassword">
+              <MyPassword />
+            </Route>            
             
             {
               userPrivilege==4?(
@@ -250,6 +265,13 @@ function App() {
                 <Route path="/MngPoint">
                   <MngPoint />
                 </Route>
+                <Route path="/MngGameAdd">
+                  <MngGameAdd />
+                </Route>
+                <Route path="/MngMemberAdd">
+                  <MngMemberAdd />
+                </Route>
+                
               </div>
               ):null
             }

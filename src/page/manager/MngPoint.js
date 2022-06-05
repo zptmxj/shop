@@ -1,17 +1,13 @@
-import './MngCheckIn.scss';
+import './MngPoint.scss';
 import react,{ useEffect, useState, useRef } from 'react';
-import {ListGroup,Dropdown,FormControl,Table,Button,Modal} from 'react-bootstrap';
-import SearchBar from './SearchBar'
+import {ListGroup,Dropdown,FormControl,Table,Button,Modal,SplitButton,InputGroup} from 'react-bootstrap';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
-import serverIP from '../IP_PORT';
-import {setStoreMember} from '../store'
-import {useSelector} from 'react-redux'
+import serverIP from '../../IP_PORT';
 
-function MngCheckIn(props)
+function MngPoint(props)
 {
-    let member = useSelector((state)=>{return state.member});
 
     const [showModal, setShowModal] = useState(false);
     const [modelText, setModelText] = useState('');
@@ -20,19 +16,19 @@ function MngCheckIn(props)
     const [useName, setUseName] = useState('');
     const [focusidx, setfocusidx] = useState(-1);
     const [results, setResult] = useState([]);
-    // const [member,setMember] = useState([{
-    //     activity:[0],
-    //     adddate:'',
-    //     age:0,
-    //     deldate:'',
-    //     fingerkey:'',
-    //     idx:0,
-    //     name:'',
-    //     privilege:0,
-    //     pw:'',
-    //     sex:[0],
-    //     uid:'',
-    // },{}]);
+    const [member,setMember] = useState([{
+        activity:[0],
+        adddate:'',
+        age:0,
+        deldate:'',
+        fingerkey:'',
+        idx:0,
+        name:'',
+        privilege:0,
+        pw:'',
+        sex:[0],
+        uid:'',
+    },{}]);
 
     const [inName,setInName] = useState([]);
 
@@ -49,6 +45,8 @@ function MngCheckIn(props)
     }]);
 
     const [inDate, setInDate] = useState();
+    const [history, setHistory] = useState('Check-In');
+    const [variance, setVariance] = useState("10");
 
     let listKey = 0;
     
@@ -68,25 +66,25 @@ function MngCheckIn(props)
 
     useEffect(()=>{
         console.log("MemberList_useEffect",member.length);
-        // if(member.length<3)
-        // {
-        //   listKey = 0;
-        //   console.log('MngCheckIn',"멤버정보 불러오기");
+        if(member.length<3)
+        {
+          listKey = 0;
+          console.log('MngPoint',"멤버정보 불러오기");
     
-        //   fetch(serverIP+"/out_member",{
-        //     method:"post",
-        //     headers : {
-        //       "content-type" : "application/json",
-        //     },
-        //     body : JSON.stringify(),
-        //   })
-        //   .then((res)=>res.json())
-        //   .then((json)=>{
-        //     let arr = json.map((e)=>{return e});
-        //     setMember(arr);
-        //     console.log('member',member);
-        //   })
-        // }
+          fetch(serverIP+"/out_member",{
+            method:"post",
+            headers : {
+              "content-type" : "application/json",
+            },
+            body : JSON.stringify(),
+          })
+          .then((res)=>res.json())
+          .then((json)=>{
+            let arr = json.map((e)=>{return e});
+            setMember(arr);
+            console.log('member',member);
+          })
+        }
     },[])
 
     useEffect(()=>{
@@ -143,6 +141,7 @@ function MngCheckIn(props)
                 console.log('setInName',addName);
                 setInName(addName);
                 setUseName('');
+
             }
         }
         else if(Results.length===0)
@@ -181,6 +180,7 @@ function MngCheckIn(props)
             }
             else if(e.key =='Enter' && useName != '')
             {
+                setResult([]);
                 addName()
             }
         }
@@ -192,6 +192,13 @@ function MngCheckIn(props)
         onSearch(results[e].name);
         document.getElementById('nameinput').focus();
     }
+
+    // let onDropdownonClick = (e)=>{
+    //     console.log('onDropdownonClick',e,results);
+    //     setUseName(results[e].name);
+    //     onSearch(results[e].name);
+    //     document.getElementById('nameinput').focus();
+    // }
 
     let onDropKeyPress = (e)=>{
         console.log('onDropKeyPress',e.key);
@@ -233,23 +240,21 @@ function MngCheckIn(props)
         setInDate(moment(date).format('YYYY-MM-DD'));
     }
 
-    // idx:0,
-    // uid:'0000',
-    // nickname:'',
-    // point:10,
-    // temp:'36.5',
-    // date:'2021-5-07',
-    // checkin:'12:00:00',
-    // checkout:null,
-    // work:0
+    let onHistoryChange = (e)=>{
+        setHistory(e.target.value);
+    }
+    let onVarianceChange = (e)=>{
+        setVariance(e.target.value);
+    }
 
     let sendQuery = ()=>{
+
         let data = inName.map((e)=>{
-        return {uid:e.uid,name:e.name,point:10,temp:'36.5',date:inDate,checkin:'12:00:00',work:0};
+        return {uid:e.uid,name:e.name,variance:variance,date:inDate,time:moment().format('HH:mm:ss'),history:history};
         })
         console.log('sendQuery',data);
 
-        fetch(serverIP+"/in_checkin", {
+        fetch(serverIP+"/in_point", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",
@@ -259,9 +264,16 @@ function MngCheckIn(props)
           .then((res)=>{console.log('sendQuery',res)});
     }
 
+    let onSelect = (e)=>{
+        console.log('onSelect',e,e.target.value);
+        setHistory(e.target.value);
+    } 
+
     return(
         <div>
-            <h3> Manager Check-In </h3>
+            <div className="title">
+                <h3> Manager Point </h3>
+            </div>
         {
             <div>
                 <div className='Manager'>
@@ -272,8 +284,8 @@ function MngCheckIn(props)
                     </ListGroup>
                         
                     <div>
-                        <FormControl id='nameinput' className='Manager-input-name' value={useName} onChange={onNameChange} onClick={onInputClick} onKeyDown={onInputKeyPress} ></FormControl>
-                        <div className='Manager-dropdown' >
+                        <FormControl id='nameinput' className='MngPoint-input-name' value={useName} onChange={onNameChange} onClick={onInputClick} onKeyDown={onInputKeyPress} ></FormControl>
+                        <div className='MngPoint-dropdown-name' >
                         {
                             (results.length!==0)?(
                                 <Dropdown onSelect={onDropdownonClick}>
@@ -281,7 +293,7 @@ function MngCheckIn(props)
                                         results.map((e,i)=>{
                                             console.log('results.map'+i);
                                             return(
-                                                <Dropdown.Item key={i} eventKey={i} id={'id'+i} href={"#/action-"+i}  onKeyDown={onDropKeyPress} >{e.name}</Dropdown.Item>
+                                                <Dropdown.Item key={i} eventKey={i} id={'id'+i} onKeyDown={onDropKeyPress} >{e.name}</Dropdown.Item>
                                             )
                                         })
                                     }
@@ -308,15 +320,7 @@ function MngCheckIn(props)
                 </div>
 
                 <div className='Manager'>
-                    <div className='Manager-inputList'>
-                        <ListGroup.Item>
-                            ------
-                        </ListGroup.Item>
-                    </div>
-                </div>
-                    
-                <div className='Manager'>
-                    <div className='Manager-inputList'>
+                    <div className='MngPoint-inputList'>
 
                         <Table striped bordered hover>
                             <thead>
@@ -349,16 +353,63 @@ function MngCheckIn(props)
                     </div>
                 </div>
 
+                <div className='Manager'>
+                    <InputGroup className='MngPoint-input-deposit'>
+                        <SplitButton
+                        variant="outline-secondary"
+                        title="History :"
+                        id="segmented-button-dropdown-1"
+                        >
+                            <Dropdown.Item onClick={()=>{setHistory("Check-In"); setVariance("10")}}>Check-In (10)</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("Deposit"); setVariance("20")}}>Balance (20)</Dropdown.Item>
+                        </SplitButton>
+                        <FormControl value={history} onChange={onHistoryChange}/>
+                    </InputGroup>
+                    {/* <ListGroup>
+                        <ListGroup.Item>
+                            History :
+                        </ListGroup.Item>
+                    </ListGroup>
+                    <Form.Group className='MngPoint-input-deposit' onChange={onSelect}>
+                        <Form.Select>
+                            <option>Check-In</option>
+                            <option>Deposit</option>
+                            <option>Balance</option>
+                        </Form.Select>
+                    </Form.Group> */}
+                </div>
+
+                <div className='Manager'>
+                    <InputGroup className='MngPoint-input-deposit'>
+                        <SplitButton
+                        variant="outline-secondary"
+                        title="Cash :"
+                        id="segmented-button-dropdown-1"
+                        >
+                            <Dropdown.Item onClick={()=>{setVariance("10")}}>20000</Dropdown.Item>
+                        </SplitButton>
+                        <FormControl value={variance} onChange={onVarianceChange}/>
+                    </InputGroup>
+                    {/* <ListGroup>
+                        <ListGroup.Item>
+                            Point :
+                        </ListGroup.Item>
+                    </ListGroup>
+                    <div>
+                        <FormControl id='cashinput' className='MngPoint-input-deposit' value={variance} onChange={onVarianceChange} ></FormControl>
+                    </div> */}
+                </div>
+
 
                 <div className='Manager'>
                     <Calendar onChange={onDateChange} />
                 </div>
 
                 <div className='Manager'>
-                    <ListGroup.Item>
-                            Date :
-                    </ListGroup.Item>
-                    <FormControl id='nameinput' className='Manager-input-deposit' value={inDate}></FormControl>
+                <InputGroup className='MngPoint-input-deposit'>
+                        <InputGroup.Text id="inputGroup-sizing-default">Date :</InputGroup.Text>
+                        <FormControl  value={inDate} disabled/>
+                    </InputGroup>
                 </div>
 
                 <Button variant="secondary" onClick={sendQuery}>전송</Button>
@@ -369,4 +420,4 @@ function MngCheckIn(props)
     )
 }
 
-export default MngCheckIn;
+export default MngPoint;

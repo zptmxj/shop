@@ -1,4 +1,13 @@
 
+@font-face {
+  font-family: 'tway_sky';
+  src: url('./tway_sky.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'tway_air';
+  src: url('./tway_air.ttf') format('truetype');
+}
+
 
 .App-login{
   background-color: #e6e6e6;
@@ -26,29 +35,57 @@
   text-align: center;
 }
 
+@media (min-width: 992px)
+{
+  .my-mt{
+    margin-top: 20px;
+  };
+}
+
 .App-nav{
+  @extend .my-mt;
   color: #707071;
   text-decoration:none;
 }
 .App-nav:hover{
   color: #4a4a4b;
 }
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
 .App-logo {
-  width: 140px;
-  height: 120px;
-  padding-left:20px;
-  padding-right:20px;
+  width: 90px;
+  height: 110px;
   padding-top:10px;
   padding-bottom:10px;
 }
+.App-TAPs {
+  width: 200px;
+  height: 53px;
+}
+
 .App-header {
   background-color: #F8F9FA;
   display: flex;
+  justify-content:flex-start;
+}
+
+.App-title {
+  padding-top:30px;
+  display: flex;
+  font-family: 'tway_sky';
+  margin-right: 5px;
+}
+
+.App-title-l {
+  
+  font-size: 35px;
+  z-index: 100;
+}
+.App-title-s {
+  padding-top:27px;
+  font-size: 5px;
+  position: absolute;
+  z-index: 200;
+
 }
 
 .App-header-font{

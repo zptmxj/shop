@@ -1,7 +1,7 @@
 //import Calender from './component/CheckIn/Calender';
 import { Form, ProgressBar, Button, Alert, ListGroup, Table } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
-import serverIP from '../IP_PORT';
+import serverIP from '../../IP_PORT';
 import moment from 'moment';
 import './MyCash.scss';
 import {useDispatch, useSelector} from 'react-redux'
@@ -95,8 +95,9 @@ function MyCash(props)
         <div>
         {
             <div>
-                <h3> MyCash </h3>
-
+                <div className="title">
+                    <h3> MyCash </h3>
+                </div>
                 <div className="MyCash-top">
                     <ListGroup>
                         <ListGroup.Item>
@@ -172,6 +173,8 @@ function HISTORY(props)
         string = "참석";
     else if(string == "Deposit")
         string = "입금";
+    else if(string == "Balance")
+        string = "정산";
 
     return (<td >{string}</td>);
 }

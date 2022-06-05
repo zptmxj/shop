@@ -1,10 +1,10 @@
 import './MngDeposit.scss';
 import react,{ useEffect, useState, useRef } from 'react';
-import {ListGroup,Dropdown,FormControl,Table,Button,Modal,Form} from 'react-bootstrap';
+import {ListGroup,Dropdown,FormControl,Table,Button,Modal,InputGroup,SplitButton} from 'react-bootstrap';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
-import serverIP from '../IP_PORT';
+import serverIP from '../../IP_PORT';
 
 function MngDeposit(props)
 {
@@ -252,6 +252,10 @@ function MngDeposit(props)
     let onVarianceChange = (e)=>{
         setVariance(e.target.value);
     }
+    let onHistoryChange = (e)=>{
+        setHistory(e.target.value);
+    }
+    
 
     let sendQuery = ()=>{
 
@@ -277,7 +281,9 @@ function MngDeposit(props)
 
     return(
         <div>
-            <h3> Manager Deposit </h3>
+            <div className="title">
+                <h3> Manager Deposit </h3>
+            </div>           
         {
             <div>
                 <div className='Manager'>
@@ -288,8 +294,8 @@ function MngDeposit(props)
                     </ListGroup>
                         
                     <div>
-                        <FormControl id='nameinput' className='Manager-input-name' value={useName} onChange={onNameChange} onClick={onInputClick} onKeyDown={onInputKeyPress} ></FormControl>
-                        <div className='Manager-dropdown-name' >
+                        <FormControl id='nameinput' className='MngDeposit-input-name' value={useName} onChange={onNameChange} onClick={onInputClick} onKeyDown={onInputKeyPress} ></FormControl>
+                        <div className='MngDeposit-dropdown-name' >
                         {
                             (results.length!==0)?(
                                 <Dropdown onSelect={onDropdownonClick}>
@@ -324,51 +330,7 @@ function MngDeposit(props)
                 </div>
 
                 <div className='Manager'>
-                    <ListGroup>
-                        <ListGroup.Item>
-                            History :
-                        </ListGroup.Item>
-                    </ListGroup>
-
-                        {/* <FormControl id='historyinput' className='Manager-input-deposit' value={history} onChange={onNameChange} onClick={onInputClick} onKeyDown={onInputKeyPress} ></FormControl>
-                        <div className='Manager-dropdown-deposit' >
-                        {
-                            (results.length!==0)?(
-                                <Dropdown onSelect={onDropdownonClick}>
-                                    {
-                                        historyList.map((e,i)=>{
-                                            console.log('results.map'+i);
-                                            return(
-                                                <Dropdown.Item key={i} eventKey={i} id={'id'+i} onKeyDown={onDropKeyPress} >{e.name}</Dropdown.Item>
-                                            )
-                                        })
-                                    }
-                                </Dropdown>
-                            ):null
-                        }
-                        </div> */}
-
-                        <Form.Group className='Manager-input-deposit' onChange={onSelect}>
-                            <Form.Select>
-                                <option>Check-In</option>
-                                <option>Deposit</option>
-                            </Form.Select>
-                        </Form.Group>
-                </div>
-
-                <div className='Manager'>
-                    <ListGroup>
-                        <ListGroup.Item>
-                            Cash :
-                        </ListGroup.Item>
-                    </ListGroup>
-                    <div>
-                        <FormControl id='cashinput' className='Manager-input-deposit' value={variance} onChange={onVarianceChange} ></FormControl>
-                    </div>
-                </div>
-                    
-                <div className='Manager'>
-                    <div className='Manager-inputList'>
+                    <div className='MngDeposit-inputList'>
 
                         <Table striped bordered hover>
                             <thead>
@@ -401,16 +363,65 @@ function MngDeposit(props)
                     </div>
                 </div>
 
+                <div className='Manager'>
+                    <InputGroup className='MngDeposit-input'>
+                        <SplitButton
+                        variant="outline-secondary"
+                        title="History :"
+                        id="segmented-button-dropdown-1"
+                        >
+                            <Dropdown.Item onClick={()=>{setHistory("Deposit")}}>Deposit</Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item onClick={()=>{setHistory("Check-In"); setVariance("-5000")}}>Check-In (-5000)</Dropdown.Item>
+                        </SplitButton>
+                        <FormControl value={history} onChange={onHistoryChange}/>
+                    </InputGroup>
+                        {/* <Form.Group className='deposit-input' onChange={onSelect}>
+                            <Form.Select>
+                                <option>Check-In</option>
+                                <option>Deposit</option>
+                            </Form.Select>
+                        </Form.Group> */}
+                </div>
+
+                <div className='Manager'>
+                    <InputGroup className='MngDeposit-input'>
+                        <SplitButton
+                        variant="outline-secondary"
+                        title="Cash :"
+                        id="segmented-button-dropdown-1"
+                        >
+                            <Dropdown.Item onClick={()=>{setVariance("20000")}}>20000</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setVariance("12000")}}>12000</Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item onClick={()=>{setVariance("-5000")}}>-5000</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setVariance("-6000")}}>-6000</Dropdown.Item>
+                        </SplitButton>
+                        <FormControl value={variance} onChange={onVarianceChange}/>
+                    </InputGroup>
+                    {/* <ListGroup>
+                        <ListGroup.Item>
+                            Cash :
+                        </ListGroup.Item>
+                    </ListGroup>
+                    <div>
+                        <FormControl id='cashinput' className='deposit-input' value={variance} onChange={onVarianceChange} ></FormControl>
+                    </div> */}
+                </div>
 
                 <div className='Manager'>
                     <Calendar onChange={onDateChange} />
                 </div>
 
                 <div className='Manager'>
-                    <ListGroup.Item>
+                    <InputGroup className='MngDeposit-input'>
+                        <InputGroup.Text id="inputGroup-sizing-default">Date :</InputGroup.Text>
+                        <FormControl  value={inDate} disabled/>
+                    </InputGroup>
+                    {/* <ListGroup.Item>
                             Date :
                     </ListGroup.Item>
-                    <FormControl id='nameinput' className='Manager-input-deposit' value={inDate}></FormControl>
+                    <FormControl id='nameinput' className='deposit-input' value={inDate}></FormControl> */}
                 </div>
 
                 <Button variant="secondary" onClick={sendQuery}>전송</Button>

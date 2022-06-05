@@ -17,7 +17,7 @@
 }
 
 
-.Manager-input-name{
+.MngPoint-input-name{
     background:rgb(255, 255, 255);
     display: flex;
     color:black;
@@ -27,7 +27,7 @@
     align-items: center;
 }
 
-.Manager-dropdown-name{
+.MngPoint-dropdown-name{
     background:rgb(255, 255, 255);
     width: 20vw;
     max-width: 300px;
@@ -36,17 +36,17 @@
     z-index: 100;
 }
 
-.Manager-input-deposit{
+.MngPoint-input-deposit{
     background:rgb(255, 255, 255);
     display: flex;
     color:black;
-    width: 50vw;
-    max-width: 400px;
+    width: 70vw;
+    max-width: 500px;
     justify-content: center;
     align-items: center;
 }
 
-.Manager-dropdown-deposit{
+.MngPoint-dropdown-deposit{
     background:rgb(255, 255, 255);
     width: 50vw;
     max-width: 400px;
@@ -55,7 +55,14 @@
     z-index: 100;
 }
 
+.MngPoint-inputList{
+    background:rgb(255, 255, 255);
+    width: 50vw;
+    max-width: 400px;
+    padding-top:10px;
+    padding-bottom:10px;
 
+}
 
 .Calender{
     background:rgb(255, 255, 255);

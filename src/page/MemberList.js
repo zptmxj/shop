@@ -1,3 +1,5 @@
+
+import './MemberList.scss';
 import Member from './component/Member/Member';
 import { useEffect, useState } from 'react';
 import serverIP from '../IP_PORT';
@@ -18,21 +20,8 @@ function MemberList(props)
     let curDate = new Date();
     let Year = curDate.getFullYear();
     
+    let [asset,setAsset] = useState([]);
     let [isInit,setIsInit] = useState(false);
-    // let [member,setMember] = useState([{
-    //     activity:[0],
-    //     adddate:'',
-    //     age:0,
-    //     deldate:'',
-    //     fingerkey:'',
-    //     idx:0,
-    //     name:'',
-    //     nickname:'',
-    //     privilege:0,
-    //     pw:'',
-    //     sex:[0],
-    //     uid:'',
-    // },{}]);
 
     let listKey = 0;
 
@@ -40,38 +29,39 @@ function MemberList(props)
         console.log('useEffect',member);
         //console.log('MemberList',"MemberList_useEffect");
 
-        // if(member[0].activity[0]!==1)
-        // {
-        //   listKey = 0;
-    
-        //   fetch(serverIP+"/out_member",{
-        //     method:"post",
-        //     headers : {
-        //       "content-type" : "application/json",
-        //     },
-        //     body : JSON.stringify(),
-        //   })
-        //   .then((res)=>res.json())
-        //   .then((json)=>{
-        //         console.log('멤버정보 불러오기',json);
-        //         setMember(json);
-        //         dispatch(setStoreMember(json));
-        //         console.log('dispatch',test);
-        //     })
-        // }
+        if(member[0].activity[0]!==1)
+        {
+            let data={uid:"all",order:"SELECT * FROM (SELECT b.uid AS uid, b.name AS name, b.sex AS sex, b.age AS age, b.adddate AS adddate, b.privilege AS privilege, a.total_point AS total_point FROM asset a, member b WHERE a.uid=b.uid AND b.view = 1) a order by total_point DESC"};
+
+            fetch(serverIP+"/out_custom",{
+                method:"post",
+                headers : {
+                "content-type" : "application/json",
+                },
+                body : JSON.stringify(data),
+            })
+            .then((res)=>res.json())
+            .then((json)=>{
+                setAsset(json);
+                console.log('dispatch',json);
+            })
+        }
     },[])
 
     return(
         <div>
         {
             <div>
-            <h3> Member List </h3>
+                <div className="title">
+                    <h3> Member List </h3>
+                </div>   
             {
-                member!==undefined?(
-                member.map((e,i)=>{
+                asset.length>0?(
+                asset.map((e,i)=>{
+                    console.log('dispatch',e);
                     return(
                         <div key={i}>
-                            {e.activity.data[0]? <Member data={e} Year={Year} idx = {++listKey}/>:null}
+                            <Member data={e} Year={Year} idx = {i+1}/>
                         </div>
                     )
                 })):null

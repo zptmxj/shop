@@ -62,6 +62,8 @@ function App() {
 },{}]);
   let listKey = 0;
 
+  let Mnglink = ["/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngGameAdd","/MngMemberAdd"];
+  let Mngtext = ["TestPage","CheckIn","Deposit","Point","GameAdd","MemberAdd"];
 
 
   useEffect(()=>{
@@ -188,19 +190,14 @@ function App() {
                 </>
                 <Nav.Link as={Link} className="App-nav" to="/Attend">◆ Attend </Nav.Link>
                 <Nav.Link as={Link} className="App-nav" to="/Games">◆ Games </Nav.Link>
+                {/* <Nav.Link as={Link} className="App-nav" to="/Manager">◇ Manager </Nav.Link> */}
                 {
-                  userPrivilege==4?(
-                    //<Nav.Link as={Link} className="App-nav" to="/Manager">◇ Manager </Nav.Link>
-                    <NavDropdown className="App-nav" title="◇ Manager" id="basic-nav-dropdown">
-                    <NavDropdown.Item as={Link} to="/TestPage">TestPage</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/MngCheckIn">CheckIn</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/MngDeposit">Deposit</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/MngPoint">Point</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/MngGameAdd">GameAdd</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item as={Link} to="/MngMemberAdd">MemberAdd</NavDropdown.Item>
-                    </NavDropdown>
-                  ):null
+                  userPrivilege>2?(
+                  <NavDropdown className="App-nav" title="◇ Manager" id="basic-nav-dropdown">
+                  {
+                    Mngtext.map((e,i)=>{return <Manager idx={i} link={Mnglink[i]} text={e} Privilege={userPrivilege}/>})
+                  }
+                  </NavDropdown>):null
                 }
                 <NavDropdown className="App-nav" title="◆ MyPage" id="basic-nav-dropdown">
                   <NavDropdown.Item as={Link} to="/MyCash">Cash</NavDropdown.Item>
@@ -251,7 +248,7 @@ function App() {
             </Route>            
             
             {
-              userPrivilege==4?(
+              userPrivilege>3?(
               <div>
                 <Route path="/TestPage">
                   <TestPage />
@@ -268,11 +265,16 @@ function App() {
                 <Route path="/MngGameAdd">
                   <MngGameAdd />
                 </Route>
-                <Route path="/MngMemberAdd">
-                  <MngMemberAdd />
-                </Route>
+
                 
               </div>
+              ):null
+            }
+            {
+              userPrivilege>2?(
+              <Route path="/MngMemberAdd">
+                <MngMemberAdd />
+              </Route>
               ):null
             }
             <Route path="/detail">
@@ -288,6 +290,21 @@ function App() {
     </div>
   );
 }
+
+
+function Manager(props){
+   
+    let privilege = props.Privilege;
+    let link = props.link;
+    let text = props.text;
+    let idx = props.idx;
+    if(idx < 5 && privilege < 4) return;
+
+  return(
+    <NavDropdown.Item as={Link} to={link}>{text}</NavDropdown.Item>
+  )
+}
+
 
 function SubItem(props){
   return(

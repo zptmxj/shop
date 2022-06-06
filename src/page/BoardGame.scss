@@ -51,10 +51,13 @@
 }
 
 .BoardGame-img {
+  width: 25vmin;
+  height: 25vmin;
   max-width: 150px;
   max-height: 150px;
   display: block; 
   margin: 0px auto;
+  object-fit: contain;
 }
 
 .Form-Group{

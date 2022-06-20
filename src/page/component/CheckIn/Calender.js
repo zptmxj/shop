@@ -364,44 +364,6 @@ function DateBlock(props){
     })
 }
 
-function CheckInButton(props){
-
-
-
-    let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
-    let checkin;
-    checkin = props.checkin;
-    let title = moment(checkin[0].date).format('YYYY-MM-DD') + ' / ' + checkin.length +'명'
-    let variant = "secondary";
-    if(checkin.filter(e=>e.uid == userId).length > 0)
-        variant = "primary";
-    // return(
-    // // <OverlayTrigger
-    // //   trigger="click"
-    // //   placement='bottom'
-    // //   overlay={
-    // //     <Popover id={`popover-positioned-bottom`}>
-    // //       <Popover.Header as="h3">{title}</Popover.Header>
-    // //       <Popover.Body>
-    // //         {
-    // //             checkin.map((e)=>{
-    // //                 return e.uid==userId?
-    // //                 <strong className='Cal-td-p-user'>{e.name}</strong>:
-    // //                 <strong className='Cal-td-p'>{e.name}</strong>
-    // //             })
-    // //         }
-    // //       </Popover.Body>
-    // //     </Popover>
-    // //   }
-
-    // // >
-    // //   <Button className='Cal-td-button' variant={variant}>{props.text}</Button>
-    // // </OverlayTrigger>
-    //     <Button className='Cal-td-button' onClick={()=>setSelDay(props.idx)} variant={variant}>{props.text}</Button>
-    // )
-}
-
-
 
 
 export default Calender;

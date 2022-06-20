@@ -1,6 +1,6 @@
 @import "../../node_modules/rfs/scss";
 
-.BoardGame-top{
+.Avatar-top{
   background:rgb(255, 255, 255);
   display: flex;
   color:black;
@@ -10,11 +10,9 @@
   align-items: center;
 }
 
-.BoardGame-top-black{
-  background:rgb(255, 255, 255);
-  padding-top:18px;
-  padding-left:10px;
-  padding-right:10px;
+.Avatar-midle{
+  display: flex;
+  justify-content: center;
 }
 
 .mag-top{
@@ -25,9 +23,16 @@
   padding-top: calc(0.5rem + 1vw);
 }
 
-.pad-top-2{
+.Avatar-pad{
   padding-top: calc(1.0rem + 1vw);
+  display: flex;
+  justify-content: center;
+  width: 23vmin;
   text-align: center;
+}
+.Avatar-pad:hover{
+  @extend .Avatar-pad;
+  background:rgb(233, 233, 233);
 }
 
 .fs-my{
@@ -43,18 +48,38 @@
   font-size: calc(0.5rem + 1.5vw) !important;
 }
 
-.BoardGame-pag {
+.Avatar-pag {
   @extend .pad-top;
   padding-bottom: calc(0.5rem + 1vw);
   display: flex;
   justify-content: center;
 }
 
-.BoardGame-img {
+.Avatar-img {
   width: 25vmin;
   height: 25vmin;
   max-width: 150px;
   max-height: 150px;
+  display: block; 
+  margin: 0px auto;
+  object-fit: contain;
+  opacity: 1;
+  filter: alpha(opacity=50);
+}
+
+.Avatar-img-non {
+  @extend .Avatar-img;
+  opacity: 0.4;
+  filter: alpha(opacity=50);
+}
+
+.Avatar-modal-img {
+  width: 45vmin;
+  height: 45vmin;
+  max-width: 270px;
+  max-height: 270px;
+  padding: 10px;
+  border: 1px solid #a7a7a7;
   display: block; 
   margin: 0px auto;
   object-fit: contain;
@@ -71,6 +96,15 @@
   margin: 0px auto;
 }
 
+.Avatar-modal{
+  position: absolute;
+  z-index: 1100;
+}
+
+.Avatar-mini{
+  position: absolute;
+  z-index: 1200;
+}
 
 
 // @media (min-width: 1200px) {

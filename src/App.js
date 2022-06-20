@@ -12,10 +12,13 @@ import { useEffect, useState } from 'react';
 import { Link, Route } from 'react-router-dom';
 import Detail from './Detail';
 import MainSlider from './page/MainSlider';
+import MainAtt from './page/MainAtt';
 import MemberList from './page/MemberList';
 import CheckIn from './page/CheckIn';
 import Attend from './page/Attend';
 import BoardGame from './page/BoardGame';
+import Avatar from './page/Avatar';
+import Border from './page/Border';
 import MyCash from './page/mypage/MyCash';
 import MyPoint from './page/mypage/MyPoint';
 import MyPassword from './page/mypage/MyPassword';
@@ -25,6 +28,8 @@ import MngDeposit from './page/manager/MngDeposit';
 import MngPoint from './page/manager/MngPoint';
 import MngGameAdd from './page/manager/MngGameAdd';
 import MngMemberAdd from './page/manager/MngMemberAdd';
+import MngMemberMod from './page/manager/MngMemberMod';
+import MngAvatarAdd from './page/manager/MngAvatarAdd';
 import serverIP from './IP_PORT';
 
 
@@ -46,31 +51,18 @@ function App() {
 
   let [isInit,setIsInit] = useState(false);
   let [inData,indataUpdate] = useState(['']);
-  let [member,setMember] = useState([{
-    activity:[0],
-    adddate:'',
-    age:0,
-    deldate:'',
-    fingerkey:'',
-    idx:0,
-    name:'',
-    name:'',
-    privilege:0,
-    pw:'',
-    sex:[0],
-    uid:'',
-},{}]);
+  let [member,setMember] = useState([]);
   let listKey = 0;
 
-  let Mnglink = ["/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngGameAdd","/MngMemberAdd"];
-  let Mngtext = ["TestPage","CheckIn","Deposit","Point","GameAdd","MemberAdd"];
-
+  let Mnglink = ["/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngGameAdd","/MngMemberAdd","/MngMemberMod","/MngAvatarAdd"];
+  let Mngtext = ["TestPage","CheckIn","Deposit","Point","GameAdd","MemberAdd","MemberMod","AvatarAdd"];
+  
 
   useEffect(()=>{
     console.log("app_useEffect");
     console.log('userId',userId , userName ,userPrivilege);
 
-    if(member[0].activity!==1)
+    if(member.length==0)
     {
       listKey = 0;
       console.log('App',"멤버정보 불러오기");
@@ -142,27 +134,27 @@ function App() {
     <div className="App">
       <Route path="/">
         {
-          userId===null?(
-          <div className="App-login">
-              <img className="App-logi-bg" src={background}  alt='Logo.png'/>
-              <Form className='App-logi-form'>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>User ID</Form.Label>
-                  <Form.Control onChange={logIdChange} value={logId} placeholder="User ID" />
-                </Form.Group>
+          // userId===null?(
+          // <div className="App-login">
+          //     <img className="App-logi-bg" src={background}  alt='Logo.png'/>
+          //     <Form className='App-logi-form'>
+          //       <Form.Group className="mb-3" controlId="formBasicEmail">
+          //         <Form.Label>User ID</Form.Label>
+          //         <Form.Control onChange={logIdChange} value={logId} placeholder="User ID" />
+          //       </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control onChange={logPwChange} value={logPw} type="password" placeholder="Password" />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                </Form.Group>
-                <Button onClick={login} variant="primary" >
-                  Login
-                </Button>
-              </Form>
-          </div>
-          ):(
+          //       <Form.Group className="mb-3" controlId="formBasicPassword">
+          //         <Form.Label>Password</Form.Label>
+          //         <Form.Control onChange={logPwChange} value={logPw} type="password" placeholder="Password" />
+          //       </Form.Group>
+          //       <Form.Group className="mb-3" controlId="formBasicCheckbox">
+          //       </Form.Group>
+          //       <Button onClick={login} variant="primary" >
+          //         Login
+          //       </Button>
+          //     </Form>
+          // </div>
+          // ):(
           <Navbar className="App-header" bg="light" expand="lg">
             <Container >
               <a href="/"><img className="App-logo" src={logo} alt='Logo.png'/></a>
@@ -175,45 +167,51 @@ function App() {
               </div> */}
               </Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav " />
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                <Nav.Link as={Link} className="App-nav" to="/">◆ Home </Nav.Link>
-                <>
+              <>
                 {
-                  //userPrivilege>-1?(
-                  <>
-                      <Nav.Link as={Link} className="App-nav" to="/Member">◆ Member </Nav.Link>
-                      <Nav.Link as={Link} className="App-nav" to="/CheckIn">◆ Check-In </Nav.Link>
-                  </>
-                  /// ):null
+                    userId!=null?( 
+                      <>
+                      <Navbar.Collapse id="basic-navbar-nav">
+                      <Nav className="me-auto">
+                        {/* <Nav.Link as={Link} className="App-nav" to="/">◆ Home </Nav.Link> */}
+                        <NavDropdown className="App-nav" title="◆ info" id="basic-nav-dropdown">
+                          <NavDropdown.Item as={Link} to="/Member"> Member </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/CheckIn"> Check-In </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/Games"> Games </NavDropdown.Item>
+                        </NavDropdown>
+                        
+                        <Nav.Link as={Link} className="App-nav" to="/Attend">◆ Attend </Nav.Link>
+                        <NavDropdown className="App-nav" title="◆ Shop" id="basic-nav-dropdown">
+                          <NavDropdown.Item as={Link} to="/Avatar"> Avatar </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/Border"> Border </NavDropdown.Item>
+                        </NavDropdown>
+                        {
+                          userPrivilege>2?(
+                          <NavDropdown className="App-nav" title="◇ Manager" id="basic-nav-dropdown">
+                          {
+                            Mngtext.map((e,i)=>{return <Manager idx={i} link={Mnglink[i]} text={e} Privilege={userPrivilege}/>})
+                          }
+                          </NavDropdown>):null
+                        }
+                        <NavDropdown className="App-nav" title="◆ MyPage" id="basic-nav-dropdown">
+                          <NavDropdown.Item as={Link} to="/MyCash">Cash</NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/MyPoint">Point</NavDropdown.Item>
+                          <NavDropdown.Item href="#action/3.3">----</NavDropdown.Item>
+                          <NavDropdown.Divider />
+                          <NavDropdown.Item as={Link} to="/MyPassword">Password</NavDropdown.Item>
+                        </NavDropdown>
+                      </Nav>
+                    </Navbar.Collapse>
+                    <Navbar.Text>
+                      Signed in as {userName}: <a onClick={logout} href="/">Logout</a>
+                    </Navbar.Text>
+                    </>
+                    ):(<Navbar.Collapse id="basic-navbar-nav"/>)
                 }
-                </>
-                <Nav.Link as={Link} className="App-nav" to="/Attend">◆ Attend </Nav.Link>
-                <Nav.Link as={Link} className="App-nav" to="/Games">◆ Games </Nav.Link>
-                {/* <Nav.Link as={Link} className="App-nav" to="/Manager">◇ Manager </Nav.Link> */}
-                {
-                  userPrivilege>2?(
-                  <NavDropdown className="App-nav" title="◇ Manager" id="basic-nav-dropdown">
-                  {
-                    Mngtext.map((e,i)=>{return <Manager idx={i} link={Mnglink[i]} text={e} Privilege={userPrivilege}/>})
-                  }
-                  </NavDropdown>):null
-                }
-                <NavDropdown className="App-nav" title="◆ MyPage" id="basic-nav-dropdown">
-                  <NavDropdown.Item as={Link} to="/MyCash">Cash</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/MyPoint">Point</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">----</NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item as={Link} to="/MyPassword">Password</NavDropdown.Item>
-                </NavDropdown>
-                </Nav>
-              </Navbar.Collapse>
-              <Navbar.Text>
-                Signed in as {userName}: <a onClick={logout} href="/">Logout</a>
-              </Navbar.Text>
+            </>
             </Container>
           </Navbar>
-          )
+          // )
         }
       </Route>
 
@@ -236,6 +234,12 @@ function App() {
             </Route>
             <Route path="/Games">
               <BoardGame/>
+            </Route>
+            <Route path="/Avatar">
+              <Avatar/>
+            </Route>
+            <Route path="/Border">
+              <Border/>
             </Route>
             <Route path="/MyCash">
               <MyCash />
@@ -265,27 +269,39 @@ function App() {
                 <Route path="/MngGameAdd">
                   <MngGameAdd />
                 </Route>
-
+                <Route path="/MngAvatarAdd">
+                  <MngAvatarAdd />
+                </Route>
                 
               </div>
               ):null
             }
             {
               userPrivilege>2?(
+              <>
               <Route path="/MngMemberAdd">
                 <MngMemberAdd />
               </Route>
+              <Route path="/MngMemberMod">
+                <MngMemberMod />
+              </Route>
+              </>
               ):null
             }
             <Route path="/detail">
               <Detail name = {ItemName} />
             </Route>
           </div>
-          ):null
+          ):(
+            <Route exact path="/">
+              <MainAtt/>
+            </Route>
+            )
         }
       </div>
       <div className="App-bottom">
-        <p>Talk And Play</p>
+        <p className="pt-5">Talk And Play</p>
+        <div className="App-bottom-font">icon creator <a className="App-link" href="https://www.freepik.com" title="Freepik">Freepik</a> from <a className="App-link" href="https://www.flaticon.com/kr/" title="Flaticon">www.flaticon.com</a></div>
       </div> 
     </div>
   );

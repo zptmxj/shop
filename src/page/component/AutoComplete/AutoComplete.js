@@ -1,5 +1,5 @@
 //import Calender from './component/CheckIn/Calender';
-import { FormControl,Dropdown,ToggleButton } from 'react-bootstrap';
+import { FormControl,Dropdown,Form } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import './AutoComplete.scss';
 
@@ -14,9 +14,9 @@ function AutoComplete(props){
         console.log('onDropKeyPress',e.key,e.target.id);
         if(e.type = 'keyDown')
         {
-            if(e.target.id == "DropItme0" && e.key=="ArrowUp")
+            if(e.target.id == "DropItme1" && e.key=="ArrowUp")
             {
-                let element = document.getElementById('formUser');
+                let element = document.getElementById('AutoCompName');
                 window.setTimeout(() => element.focus(), 0);
             }
         }
@@ -37,7 +37,7 @@ function AutoComplete(props){
             }
             if(results.length>0 && e.key=="ArrowDown")
             {
-                document.getElementById('DropItme0').focus();
+                document.getElementById('DropItme1').focus();
             }
         }
     }
@@ -46,6 +46,8 @@ function AutoComplete(props){
         console.log('onItemSelect',eventKey);
         setValue(list[eventKey]);
         setResult([]);
+        let element = document.getElementById('AutoCompName');
+        window.setTimeout(() => element.focus(), 0);
     }
 
     const onDropTextChange = (e)=>{
@@ -65,23 +67,31 @@ function AutoComplete(props){
         return item === keyword.toString().toLowerCase();
     };
 
+    let idx=0;
+
     return(
         <>
         {
+            <Form.Group controlId="AutoCompName">
             <Dropdown show={results.length>0} onSelect={onItemSelect}>
-                <FormControl  controlId="DropInput" placeholder={props.placeholder} value={value} onChange={onDropTextChange} onKeyDown={oninputKeyPress}/>
+                <FormControl  controlId="AutoComp" placeholder={props.placeholder} value={value} onChange={onDropTextChange} onKeyDown={oninputKeyPress}/>
                 <Dropdown.Menu onKeyDown={onDropKeyPress} >
                     {
                         (results.length>0)?list.map((e,i)=>
                         {
                             if(results.includes(e))
-                            return(
-                                <Dropdown.Item key={i} id={"DropItme"+i} eventKey={i} >{e}</Dropdown.Item>
-                            )
+                            {
+                                idx++;
+                                return(
+                                    <Dropdown.Item key={idx} id={"DropItme"+idx} eventKey={i} >{e}</Dropdown.Item>
+                                )
+                            }
                         }):null
                     }
                 </Dropdown.Menu>
-            </Dropdown>    
+            </Dropdown>   
+            </Form.Group>
+
         }
         </>
     )

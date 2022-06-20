@@ -1,7 +1,7 @@
 import './Member.scss';
 import {Form,Col,Row,Table } from 'react-bootstrap';
-import img_boy from './icon-boy.png';
-import img_girl from './icon-girl.png';
+import img_male from './male.png';
+import img_female from './female.png';
 import super_mg from './super-mg.png';
 import sub_mg from './sub-mg.png';
 import eng_mg from './eng-mg.png';
@@ -9,8 +9,12 @@ import eng_mg from './eng-mg.png';
 
 function Member(props)
 {
+    let Year = new Date().getFullYear();
+    console.log("Member_avatar", Year);
+
     let data =props.data;
-    let idx =props.idx;
+    let idx = props.idx;
+    let path = data.path;
 
     return(
         <div className="list">
@@ -35,18 +39,17 @@ function Member(props)
                             idx
                             ))
                         }</td>
-                        <Character sex={data.sex} />
-                        <>{
-                            data.sex==0?
-                            <td className="list-td-m" colSpan={2}>{ data.name }</td>:
-                            <td className="list-td-w" colSpan={2}>{ data.name }</td>
-                        }</>
-                        <td className="list-td" colSpan={2}>{data.total_point+" TP"}</td>
+                        <Character sex={data.sex} path={path} />
+                        <td className="list-td" colSpan={2} onClick={()=>{props.setMemberSel(data.idx)}}>{ data.name }</td>
+                        <td className="list-td">{((Year+1)-data.age)}</td>
+                        <td className="list-td">{data.sex?
+                            <img src={img_female} width='30px' height='30px'/>:
+                            <img src={img_male} width='30px' height='30px'/>
+                        }</td>
                     </tr>
                     <tr>
                         <td className="list-td" colSpan={4}>{"--"}</td>
-                        <td className="list-td">-</td>
-                        <td className="list-td">-</td>
+                        <td className="list-td" colSpan={2}>{data.total_point+" TP"}</td>
                     </tr>
                     <tr>
                         <td className="list-th"></td>
@@ -110,13 +113,15 @@ function Member(props)
 }
 
 function Character(props){
-    let img = img_boy;
-    if(props.sex==1) {
-        img = img_girl;
-    }
+    let img = "http://168.126.179.44:3002/avatars/";
+    let sex = "m/";
+    let path = props.path;
+    if(props.sex==1) sex="w/";
+
+    img = img + sex + path;
     return(
         <td className="list-td">
-            <img src={img} width='30px' height='30px'/>
+            <img src={img} width='40px' height='40px'/>
         </td>
     )
 

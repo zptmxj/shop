@@ -4,10 +4,47 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import serverIP from '../IP_PORT';
 import './TestPage.scss';
+import ReactApexChart from "react-apexcharts"; 
 
 function TestPage(props)
 {
     let count = [1,2,3,4,5];
+    const [data, setData] = useState({
+            series: [{
+              name: 'Series 1',
+              data: [1, 0, 3, 10, 5 ,4],
+            }],
+           
+            options: {
+                fill: {
+                    opacity: 0.3
+                },
+                chart: {
+                    type: 'radar',
+                    toolbar: {
+                        show: false,
+                    }
+                },
+                title: {
+                    text: ""   
+                },
+                yaxis: {
+                    show: false,
+                },
+                xaxis: {
+                    categories: ['추리', '역할', '전략', '조작', '민첩', '도박'],
+                    labels: {
+                        show: true,
+                        style: {
+                            colors: ["#a8a8a8"],
+                            fontSize: "13px",
+                            fontFamily: 'Arial'
+                        }
+                    }
+                }
+            },
+           
+});
     const [data01, setData01] = useState('');
     const [data02, setData02] = useState('');
     const [checklist, setChecklist] = useState([false,false,false,false,false]);
@@ -106,18 +143,16 @@ function TestPage(props)
         {
             <div>
                 <h3> TestPage </h3>
-
                 
+                <div className='ApexChart'>
+                    <ReactApexChart options={data.options} series={data.series} type="radar" height={300}/>
+                </div>
 
                 <input value={data01} onChange={onChange01}/>
                 <button onClick={onClick01}>data1</button>
                 <input value={data02} onChange={onChange02}/>
                 <button onClick={onClick02}>data2</button>
-                <div>
-                    {
-                        console.log('rf')
-                    }
-                </div>
+           
                 <div>
                 {
                     count.map((e,i)=>{

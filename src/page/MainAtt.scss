@@ -1,67 +1,72 @@
 
 
-.Attend-top{
+.MainAtt-top{
   background:rgb(255, 255, 255);
   display: flex;
   color:black;
+  width: 90vmin;
   padding-left:5vw;
   padding-right:5vw;
   justify-content: center;
   align-items: center;
 }
 
-.Attend-top-black{
+.MainAtt-mid{
+  background:rgb(255, 255, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.MainAtt-top-black{
   background:rgb(255, 255, 255);
   padding-left:10px;
   padding-right:10px;
 }
 
-.Attend-table {
+.MainAtt-table {
   width: 90vmin;
+  max-width: 500px;
 }
-.Attend-th{
+.MainAtt-th{
   border-bottom: 3px solid #181818;
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.Attend-th-10 {
-  @extend .Attend-th;
+.MainAtt-th-10 {
+  @extend .MainAtt-th;
   width: 12%;
 }
-.Attend-th-20 {
-  @extend .Attend-th;
+.MainAtt-th-20 {
+  @extend .MainAtt-th;
   width: 20%;
 }
-.Attend-th-70 {
-  @extend .Attend-th;
+.MainAtt-th-70 {
+  @extend .MainAtt-th;
   width: 50%;
 }
 
-.Attend-td{
+.MainAtt-td{
   padding-top: 5px;
   padding-bottom: 5px;
 }
-.Attend-td-prog{
-  @extend .Attend-td;
+.MainAtt-td-prog{
+  @extend .MainAtt-td;
   width:100;
   padding-left: 5px;
   padding-right: 5px;
   //margin-left: 10px;
 }
 
-.Attend-tr{
+.MainAtt-tr{
   border-bottom: 1px solid #757575;
 }
 
-.Attend-tr-member{
+.MainAtt-tr-member{
   border-bottom: 1px solid #e4e4e4;
 }
 
-.Attend-tr:hover{
-  background-color: #dadada;
-}
-
-.Attend-button{
+.MainAtt-button{
   Button{
     margin: 50px;
   }
@@ -69,26 +74,20 @@
   padding-bottom: 5px;
 }
 
-.Attend-text-right{
+.MainAtt-text-right{
   text-align: right;
 }
 
-.Attend-td-input{
-}
 
-.Attend-input{
+.MainAtt-input{
   min-width: 78px;
   width:10vw;
 }
 
-.ApexChart{
-  width: 350px;
-  height: 350px;
-}
 
 
 
 // $font_color : rgb(80, 80, 80);
-// .Main-slide-font {
+// .Main-slide-font {       
 //   text-shadow: -1px 0 $font_color, 0 1px $font_color, 1px 0 $font_color, 0 -1px $font_color;
 // }

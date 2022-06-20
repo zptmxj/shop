@@ -1,63 +1,60 @@
 //import Calender from './component/CheckIn/Calender';
-import { Form, Button, InputGroup,Alert,Col,Row,Table,Dropdown } from 'react-bootstrap';
+import { Form, Button, Alert,FormControl,Col,Row,Table,ToggleButton } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import serverIP from '../../IP_PORT';
 import AutoComplete from '../component/AutoComplete/AutoComplete';
-import {useSelector} from 'react-redux'
-import './MngMemberAdd.scss';
+import './MngMemberMod.scss';
+import {setStoreMember} from '../../store'
+import {useDispatch, useSelector} from 'react-redux'
 
-function MngMemberAdd(props)
+function MngMemberMod(props)
 {
     let member = useSelector((state)=>{return state.member});
+    let dispatch = useDispatch();
 
     const [useinfo, setUseinfo] = useState({name:"---",uid:"----"});
-    const [number, setNumber] = useState("");
+    const [modMember, setModMember] = useState([]);
     const [lastname, setLastname] = useState("");
     const [firstname, setFirstname] = useState("");
     const [birth, setBirth] = useState("");
     const [sex, setSex] = useState("남");
-    const [date, setDate] = useState("");
+    const [memClass, setMemClass] = useState("");
     const [value, setValue] = useState("");
-
+    const [isView, setView] = useState(false);
+    const [isActivity, setActivity] = useState(false);
     const [isAlert, setIsAlert] = useState(false);
+
     const [alertText, setAlertText] = useState("");
     const [alertColor,setAlertColor] = useState("primary");
 
-    const [viewImage, setViewImage] = useState('/noimage.jpg');
-    const [imagefile, setImagefile] = useState({
-        file: "",
-        URL: "img/default_image.png",
-    });
-    const [refresh, setRefresh] = useState(false);
-
     useEffect(()=>{
-        // SELECT MAX(컬럼) FROM 테이블;
-
-    },[])
-
-    useEffect(()=>{
-        // if(!imagefile) return false;
-        // const imgEL = document.querySelector("imgbox");
-        // const reader = new FileReader();
-        // reader.onload = () => (imgEL.getElementsByClassName.backgroundImage = 'url(${reader.result})');
-        // reader.readAsDataURL(imagefile[0]);
-    });
-
-    const getString = (array)=>{
-        let str = '';
-        for(let i =0; i<array.length; i++)
+        if(modMember.length==0)
         {
-            if(array[i] && str.length==0) 
-                str += (i+1);
-            else if(array[i] ) 
-                str += ("," + (i+1) );
+            let mems = member.filter((e)=>{if(e.privilege<3) return e});
+            console.log("mems",mems);
+            setModMember(mems);
         }
-        return str;
+    })
+
+
+    const readMember = ()=>
+    {
+        console.log('App',"멤버정보 불러오기");
+
+        fetch(serverIP+"/out_member",{
+            method:"post",
+            headers : {
+            "content-type" : "application/json",
+            },
+            body : JSON.stringify(),
+        })
+        .then((res)=>res.json())
+        .then((json)=>{
+            dispatch(setStoreMember(json));
+            setModMember([]);
+        })
     }
-
-  
-
 
     let setAlert= (str,sel) =>{
         let alertColor = ["danger","primary"];
@@ -72,20 +69,42 @@ function MngMemberAdd(props)
         return ()=>{ clearTimeout(timer) };
     }
 
+    const onChangeView = (e) =>{
+        console.log("onChangeView",e.target.checked);
+        setView(e.target.checked);
+
+    }
+
+    const onChangeActi = (e) =>{
+        setActivity(e.target.checked);
+        
+    }
+
+    const onEnter = (idx)=>{
+        if(isAlert) return;
+        let mem = modMember[idx];
+        console.log("mems",mem.view,mem.activity);
+
+        setUseinfo(mem);
+        setLastname(mem.last);
+        setFirstname(mem.name);
+        setBirth(mem.age);
+        setSex(mem.sex==0?'남':'여');
+        let mclass = "신입";
+        if(mem.privilege==1) mclass = "일반";
+        else if(mem.privilege==1) mclass = "부방";
+        setMemClass(mclass);
+        setView(mem.view==1);
+        setActivity(mem.activity==1);
+
+    }
 
     const onSend = (idx)=>{
         if(isAlert) return;
 
-        let num = number;
-        let last = lastname;
-        let first = firstname;
-        let bir = birth;
-        let sexinfo = 0;
-        let dateinfo = date;
-
-        if(number.length < 4)
+        if(useinfo.uid == "----")
         {
-            setAlert("번호가 4자리 이하입니다",0);
+            setAlert("지정된 멤버가 없습니다",0);
             return;
         }
         else if(lastname.length == 0)
@@ -103,17 +122,17 @@ function MngMemberAdd(props)
             setAlert("년생이 4자리 이하입니다",0);
             return;
         }
-        else if(date.length == 0)
-        {
-            setAlert("입장시기가 입력되지 않았습니다",0);
-            return;
-        }
+  
+        let sexinfo = 0;
         if(sex == "여")  sexinfo = 1;
-        console.log(num,last,first,bir,sexinfo,dateinfo);
 
-        let data = {uid:number,last:last,name:first,sex:sexinfo,age:birth,adddate:date};
+        let mclass = 0;
+        if(memClass=="일반") mclass = 1;
+        else if(memClass=="부방") mclass = 2;
 
-        fetch(serverIP+"/in_member", {
+        let data = {uid:useinfo.uid,last:lastname,name:firstname,sex:sexinfo,age:birth,privilege:mclass,view:isView,activity:isActivity};
+
+        fetch(serverIP+"/mo_member", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",
@@ -124,7 +143,11 @@ function MngMemberAdd(props)
         .then((json)=>{
             console.log("fetch",json);
             try {
-                if(json.succes) setAlert("성공적으로 입력되었습니다",1);
+                if(json.succes) 
+                {
+                    setAlert("성공적으로 수정 되었습니다",1);
+                    readMember();
+                }
                 else setAlert("서버에서 처리를 실패 했습니다",0);
             }catch (e) {
                 setAlert("서버에서 처리를 실패 했습니다",0);
@@ -133,19 +156,19 @@ function MngMemberAdd(props)
 
     }
 
+
     return(
         <div>
             <div className="title">
-                <h3> Member Add </h3>
+                <h3> Member Modify </h3>
             </div>  
 
-            <Form.Group as={Row} controlId="formUser" className="mb-3">
-                <Col xs={1} className='px-0'/>
-                <Form.Label column xs={2} className="px-0">
-                    번호 :
+            <Form.Group as={Row} controlId="formUser" className="mb-5">
+                <Form.Label column xs={3} className="px-0">
+                    검색 :
                 </Form.Label>
                 <Col xs={3} className='px-0'>
-                    <Form.Control type="text" placeholder="번호 4자" value={number} onChange={(e)=>{setNumber(e.target.value)}} />
+                    <AutoComplete list={modMember.map(e=>e.name)} value={value} setValue={setValue} onEnter={onEnter} placeholder="Enter로 등록"/>
                 </Col>
                 <Col xs={1} className='px-0'>
                 </Col>
@@ -160,7 +183,7 @@ function MngMemberAdd(props)
             </Form.Group>
 
             <div className="MngGame-block">
-                <Form.Group as={Row} controlId="formUser" className="mb-3">
+                <Form.Group as={Row} controlId="form01" className="mb-3">
                     <Col xs={1} className='px-0'/>
                     <Form.Label column xs={2} className="px-0">
                         성 :
@@ -178,7 +201,7 @@ function MngMemberAdd(props)
             </div>
 
             <div className="MngGame-block">
-                <Form.Group as={Row} controlId="formUser" className="mb-3">
+                <Form.Group as={Row} controlId="form02" className="mb-3">
                     <Col xs={1} className='px-0'/>
                     <Form.Label column xs={2} className="px-0">
                         년생 :
@@ -199,19 +222,34 @@ function MngMemberAdd(props)
             </div>
 
             <div className="MngGame-block">
-                <Form.Group as={Row} controlId="formUser" className="mb-3">
-                    <Col xs={5} className='px-0'>
-                        <Form.Label column xs={6} className="px-0">
-                            입장시기 :
-                        </Form.Label>
+                <Form.Group as={Row} controlId="formUser" className="mb-4">
+                    <Col xs={1} className='px-0'/>
+                    <Form.Label column xs={2} className="px-0">
+                        등급 :
+                    </Form.Label>
+                    <Col xs={3} className='px-0'>
+                        <Form.Select id="memClass" value={memClass} onChange={(e)=>{setMemClass(e.target.value)}}>
+                            <option>신입</option>
+                            <option>일반</option>
+                            <option>부방</option>
+                        </Form.Select>
                     </Col>
-                    <Col xs={6} className='px-0'>
-                        <Form.Control type="date" value={date} onChange={(e)=>{setDate(e.target.value)}}/>
-                    </Col>
+   
                 </Form.Group>
             </div>
 
-
+            <div className="MngGame-block">
+                <Form.Group as={Row} controlId="formUser" className="mb-3">
+                    <Col xs={3} className='px-0'/>
+                    <Col xs={4} className='px-0'>
+                        <Form.Check type="checkbox" label=": 목록노출" checked={isView} onChange={onChangeView} />
+                    </Col>
+                    <Col xs={1} className='px-0'/>
+                    <Col xs={3} className='px-0'>
+                        <Form.Check type="checkbox" label=": 로그인" checked={isActivity} onChange={onChangeActi}/>
+                    </Col>
+                </Form.Group>
+            </div>
 
             <div className="MyPw-alert">
                 {
@@ -224,8 +262,9 @@ function MngMemberAdd(props)
             <div className="MyPw-button">
                 <Button variant="secondary" onClick={onSend}>전송</Button>
             </div>
+            
         </div> 
     )
 }
 
-export default MngMemberAdd;
+export default MngMemberMod;

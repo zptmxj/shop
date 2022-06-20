@@ -1,0 +1,333 @@
+@import "../../node_modules/rfs/scss";
+
+.Border-top{
+  background:rgb(255, 255, 255);
+  display: flex;
+  color:black;
+  padding-left:5vw;
+  padding-right:5vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.Border-midle{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mag-top{
+  margin-bottom: calc(1rem + 1vw);
+}
+
+.pad-top{
+  padding-top: calc(0.5rem + 1vw);
+}
+
+.Border-pad{
+  padding-top: calc(1.0rem + 1vw);
+  display: flex;
+  justify-content: center;
+  width: 23vmin;
+  text-align: center;
+}
+.Border-pad:hover{
+  @extend .Border-pad;
+  background:rgb(233, 233, 233);
+}
+
+.fs-my{
+  @extend .pad-top;
+  font-size: calc(0.5rem + 1vw) !important;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.label {
+  font-size: calc(0.5rem + 1.5vw) !important;
+}
+
+.Border-pag {
+  @extend .pad-top;
+  padding-bottom: calc(0.5rem + 1vw);
+  display: flex;
+  justify-content: center;
+}
+
+.Border-img {
+  width: 25vmin;
+  height: 25vmin;
+  max-width: 150px;
+  max-height: 150px;
+  display: block; 
+  margin: 0px auto;
+  object-fit: contain;
+  opacity: 1;
+  filter: alpha(opacity=50);
+}
+
+.Border-img-non {
+  @extend .Border-img;
+  opacity: 0.4;
+  filter: alpha(opacity=50);
+}
+
+.Border-modal-img {
+  width: 45vmin;
+  height: 45vmin;
+  max-width: 270px;
+  max-height: 270px;
+  padding: 10px;
+  border: 1px solid #a7a7a7;
+  display: block; 
+  margin: 0px auto;
+  object-fit: contain;
+}
+
+.Form-Group{
+  border: 1px solid rgb(200, 200, 200);
+  width: 80vmin;
+  max-width: 300;
+  height: 15vh;
+  max-height: 102px;
+  color:black;
+  padding: auto;
+  margin: 0px auto;
+}
+
+.Border-modal{
+  position: absolute;
+  z-index: 1100;
+}
+
+.Border-mini{
+  position: absolute;
+  z-index: 1200;
+}
+
+.Border-rect{
+  border: 1px solid #ebebeb;
+  width: 30px;
+  height: 35px;
+}
+
+.Border-rect:hover{
+  border: 3px solid #a7a7a7;
+}
+
+.Border-color-11{  @extend .Border-rect;  background-color: #0000ff;}
+.Border-color-12{  @extend .Border-rect;  background-color: #0033ff;}
+.Border-color-13{  @extend .Border-rect;  background-color: #0066ff;}
+.Border-color-14{  @extend .Border-rect;  background-color: #0099ff;}
+.Border-color-15{  @extend .Border-rect;  background-color: #00ccff;}
+.Border-color-16{  @extend .Border-rect;  background-color: #00ffff;}
+
+.Border-color-21{  @extend .Border-rect;  background-color: #3300ff;}
+.Border-color-22{  @extend .Border-rect;  background-color: #3333ff;}
+.Border-color-23{  @extend .Border-rect;  background-color: #3366ff;}
+.Border-color-24{  @extend .Border-rect;  background-color: #3399ff;}
+.Border-color-25{  @extend .Border-rect;  background-color: #33ccff;}
+.Border-color-26{  @extend .Border-rect;  background-color: #33ffff;}
+.Border-color-27{  @extend .Border-rect;  background-color: #00ffcc;}
+
+.Border-color-31{  @extend .Border-rect;  background-color: #6600ff;}
+.Border-color-32{  @extend .Border-rect;  background-color: #6633ff;}
+.Border-color-33{  @extend .Border-rect;  background-color: #6666ff;}
+.Border-color-34{  @extend .Border-rect;  background-color: #6699ff;}
+.Border-color-35{  @extend .Border-rect;  background-color: #66ccff;}
+.Border-color-36{  @extend .Border-rect;  background-color: #66ffff;}
+.Border-color-37{  @extend .Border-rect;  background-color: #33ffcc;}
+.Border-color-38{  @extend .Border-rect;  background-color: #00ff99;}
+
+.Border-color-41{  @extend .Border-rect;  background-color: #9900ff;}
+.Border-color-42{  @extend .Border-rect;  background-color: #9933ff;}
+.Border-color-43{  @extend .Border-rect;  background-color: #9966ff;}
+.Border-color-44{  @extend .Border-rect;  background-color: #9999ff;}
+.Border-color-45{  @extend .Border-rect;  background-color: #99ccff;}
+.Border-color-46{  @extend .Border-rect;  background-color: #99ffff;}
+.Border-color-47{  @extend .Border-rect;  background-color: #66ffcc;}
+.Border-color-48{  @extend .Border-rect;  background-color: #33ff99;}
+.Border-color-49{  @extend .Border-rect;  background-color: #00ff66;}
+
+.Border-color-51{  @extend .Border-rect;  background-color: #cc00ff;}
+.Border-color-52{  @extend .Border-rect;  background-color: #cc33ff;}
+.Border-color-53{  @extend .Border-rect;  background-color: #cc66ff;}
+.Border-color-54{  @extend .Border-rect;  background-color: #cc99ff;}
+.Border-color-55{  @extend .Border-rect;  background-color: #ccccff;}
+.Border-color-56{  @extend .Border-rect;  background-color: #ccffff;}
+.Border-color-57{  @extend .Border-rect;  background-color: #99ffcc;}
+.Border-color-58{  @extend .Border-rect;  background-color: #66ff99;}
+.Border-color-59{  @extend .Border-rect;  background-color: #33ff66;}
+.Border-color-510{  @extend .Border-rect;  background-color: #00ff33;}
+
+.Border-color-61{  @extend .Border-rect;  background-color: #ff00ff;}
+.Border-color-62{  @extend .Border-rect;  background-color: #ff33ff;}
+.Border-color-63{  @extend .Border-rect;  background-color: #ff66ff;}
+.Border-color-64{  @extend .Border-rect;  background-color: #ff99ff;}
+.Border-color-65{  @extend .Border-rect;  background-color: #ffccff;}
+.Border-color-66{  @extend .Border-rect;  background-color: #ffffff;}
+.Border-color-67{  @extend .Border-rect;  background-color: #ccffcc;}
+.Border-color-68{  @extend .Border-rect;  background-color: #99ff99;}
+.Border-color-69{  @extend .Border-rect;  background-color: #66ff66;}
+.Border-color-610{  @extend .Border-rect;  background-color: #33ff33;}
+.Border-color-611{  @extend .Border-rect;  background-color: #00ff00;}
+
+.Border-color-71{  @extend .Border-rect;  background-color: #ff00cc;}
+.Border-color-72{  @extend .Border-rect;  background-color: #ff33cc;}
+.Border-color-73{  @extend .Border-rect;  background-color: #ff66cc;}
+.Border-color-74{  @extend .Border-rect;  background-color: #ff99cc;}
+.Border-color-75{  @extend .Border-rect;  background-color: #ffcccc;}
+.Border-color-76{  @extend .Border-rect;  background-color: #ffffcc;}
+.Border-color-77{  @extend .Border-rect;  background-color: #ccff99;}
+.Border-color-78{  @extend .Border-rect;  background-color: #99ff66;}
+.Border-color-79{  @extend .Border-rect;  background-color: #66ff33;}
+.Border-color-710{  @extend .Border-rect;  background-color: #33ff00;}
+
+.Border-color-81{  @extend .Border-rect;  background-color: #ff0099;}
+.Border-color-82{  @extend .Border-rect;  background-color: #ff3399;}
+.Border-color-83{  @extend .Border-rect;  background-color: #ff6699;}
+.Border-color-84{  @extend .Border-rect;  background-color: #ff9999;}
+.Border-color-85{  @extend .Border-rect;  background-color: #ffcc99;}
+.Border-color-86{  @extend .Border-rect;  background-color: #ffff99;}
+.Border-color-87{  @extend .Border-rect;  background-color: #ccff66;}
+.Border-color-88{  @extend .Border-rect;  background-color: #99ff33;}
+.Border-color-89{  @extend .Border-rect;  background-color: #66ff00;}
+
+.Border-color-91{  @extend .Border-rect;  background-color: #ff0066;}
+.Border-color-92{  @extend .Border-rect;  background-color: #ff3366;}
+.Border-color-93{  @extend .Border-rect;  background-color: #ff6666;}
+.Border-color-94{  @extend .Border-rect;  background-color: #ff9966;}
+.Border-color-95{  @extend .Border-rect;  background-color: #ffcc66;}
+.Border-color-96{  @extend .Border-rect;  background-color: #ffff66;}
+.Border-color-97{  @extend .Border-rect;  background-color: #ccff33;}
+.Border-color-98{  @extend .Border-rect;  background-color: #99ff00;}
+
+.Border-color-101{  @extend .Border-rect;  background-color: #ff0033;}
+.Border-color-102{  @extend .Border-rect;  background-color: #ff3333;}
+.Border-color-103{  @extend .Border-rect;  background-color: #ff6633;}
+.Border-color-104{  @extend .Border-rect;  background-color: #ff9933;}
+.Border-color-105{  @extend .Border-rect;  background-color: #ffcc33;}
+.Border-color-106{  @extend .Border-rect;  background-color: #ffff33;}
+.Border-color-107{  @extend .Border-rect;  background-color: #ccff00;}
+
+.Border-color-111{  @extend .Border-rect;  background-color: #ff0000;}
+.Border-color-112{  @extend .Border-rect;  background-color: #ff3300;}
+.Border-color-113{  @extend .Border-rect;  background-color: #ff6600;}
+.Border-color-114{  @extend .Border-rect;  background-color: #ff9900;}
+.Border-color-115{  @extend .Border-rect;  background-color: #ffcc00;}
+.Border-color-116{  @extend .Border-rect;  background-color: #ffff00;}
+
+
+.list-color{
+  width:15vw;
+  max-width: 60px;
+  min-width: 30px;
+  height: 15px;
+}
+
+.list-color-00{  @extend .list-color;  background-color: #e9e9e9;}
+
+.list-color-11{  @extend .list-color;  background-color: #0000ff;}
+.list-color-11{  @extend .list-color;  background-color: #0000ff;}
+.list-color-12{  @extend .list-color;  background-color: #0033ff;}
+.list-color-13{  @extend .list-color;  background-color: #0066ff;}
+.list-color-14{  @extend .list-color;  background-color: #0099ff;}
+.list-color-15{  @extend .list-color;  background-color: #00ccff;}
+.list-color-16{  @extend .list-color;  background-color: #00ffff;}
+
+.list-color-21{  @extend .list-color;  background-color: #3300ff;}
+.list-color-22{  @extend .list-color;  background-color: #3333ff;}
+.list-color-23{  @extend .list-color;  background-color: #3366ff;}
+.list-color-24{  @extend .list-color;  background-color: #3399ff;}
+.list-color-25{  @extend .list-color;  background-color: #33ccff;}
+.list-color-26{  @extend .list-color;  background-color: #33ffff;}
+.list-color-27{  @extend .list-color;  background-color: #00ffcc;}
+
+.list-color-31{  @extend .list-color;  background-color: #6600ff;}
+.list-color-32{  @extend .list-color;  background-color: #6633ff;}
+.list-color-33{  @extend .list-color;  background-color: #6666ff;}
+.list-color-34{  @extend .list-color;  background-color: #6699ff;}
+.list-color-35{  @extend .list-color;  background-color: #66ccff;}
+.list-color-36{  @extend .list-color;  background-color: #66ffff;}
+.list-color-37{  @extend .list-color;  background-color: #33ffcc;}
+.list-color-38{  @extend .list-color;  background-color: #00ff99;}
+
+.list-color-41{  @extend .list-color;  background-color: #9900ff;}
+.list-color-42{  @extend .list-color;  background-color: #9933ff;}
+.list-color-43{  @extend .list-color;  background-color: #9966ff;}
+.list-color-44{  @extend .list-color;  background-color: #9999ff;}
+.list-color-45{  @extend .list-color;  background-color: #99ccff;}
+.list-color-46{  @extend .list-color;  background-color: #99ffff;}
+.list-color-47{  @extend .list-color;  background-color: #66ffcc;}
+.list-color-48{  @extend .list-color;  background-color: #33ff99;}
+.list-color-49{  @extend .list-color;  background-color: #00ff66;}
+
+.list-color-51{  @extend .list-color;  background-color: #cc00ff;}
+.list-color-52{  @extend .list-color;  background-color: #cc33ff;}
+.list-color-53{  @extend .list-color;  background-color: #cc66ff;}
+.list-color-54{  @extend .list-color;  background-color: #cc99ff;}
+.list-color-55{  @extend .list-color;  background-color: #ccccff;}
+.list-color-56{  @extend .list-color;  background-color: #ccffff;}
+.list-color-57{  @extend .list-color;  background-color: #99ffcc;}
+.list-color-58{  @extend .list-color;  background-color: #66ff99;}
+.list-color-59{  @extend .list-color;  background-color: #33ff66;}
+.list-color-510{  @extend .list-color;  background-color: #00ff33;}
+
+.list-color-61{  @extend .list-color;  background-color: #ff00ff;}
+.list-color-62{  @extend .list-color;  background-color: #ff33ff;}
+.list-color-63{  @extend .list-color;  background-color: #ff66ff;}
+.list-color-64{  @extend .list-color;  background-color: #ff99ff;}
+.list-color-65{  @extend .list-color;  background-color: #ffccff;}
+.list-color-66{  @extend .list-color;  background-color: #ffffff;}
+.list-color-67{  @extend .list-color;  background-color: #ccffcc;}
+.list-color-68{  @extend .list-color;  background-color: #99ff99;}
+.list-color-69{  @extend .list-color;  background-color: #66ff66;}
+.list-color-610{  @extend .list-color;  background-color: #33ff33;}
+.list-color-611{  @extend .list-color;  background-color: #00ff00;}
+
+.list-color-71{  @extend .list-color;  background-color: #ff00cc;}
+.list-color-72{  @extend .list-color;  background-color: #ff33cc;}
+.list-color-73{  @extend .list-color;  background-color: #ff66cc;}
+.list-color-74{  @extend .list-color;  background-color: #ff99cc;}
+.list-color-75{  @extend .list-color;  background-color: #ffcccc;}
+.list-color-76{  @extend .list-color;  background-color: #ffffcc;}
+.list-color-77{  @extend .list-color;  background-color: #ccff99;}
+.list-color-78{  @extend .list-color;  background-color: #99ff66;}
+.list-color-79{  @extend .list-color;  background-color: #66ff33;}
+.list-color-710{  @extend .list-color;  background-color: #33ff00;}
+
+.list-color-81{  @extend .list-color;  background-color: #ff0099;}
+.list-color-82{  @extend .list-color;  background-color: #ff3399;}
+.list-color-83{  @extend .list-color;  background-color: #ff6699;}
+.list-color-84{  @extend .list-color;  background-color: #ff9999;}
+.list-color-85{  @extend .list-color;  background-color: #ffcc99;}
+.list-color-86{  @extend .list-color;  background-color: #ffff99;}
+.list-color-87{  @extend .list-color;  background-color: #ccff66;}
+.list-color-88{  @extend .list-color;  background-color: #99ff33;}
+.list-color-89{  @extend .list-color;  background-color: #66ff00;}
+
+.list-color-91{  @extend .list-color;  background-color: #ff0066;}
+.list-color-92{  @extend .list-color;  background-color: #ff3366;}
+.list-color-93{  @extend .list-color;  background-color: #ff6666;}
+.list-color-94{  @extend .list-color;  background-color: #ff9966;}
+.list-color-95{  @extend .list-color;  background-color: #ffcc66;}
+.list-color-96{  @extend .list-color;  background-color: #ffff66;}
+.list-color-97{  @extend .list-color;  background-color: #ccff33;}
+.list-color-98{  @extend .list-color;  background-color: #99ff00;}
+
+.list-color-101{  @extend .list-color;  background-color: #ff0033;}
+.list-color-102{  @extend .list-color;  background-color: #ff3333;}
+.list-color-103{  @extend .list-color;  background-color: #ff6633;}
+.list-color-104{  @extend .list-color;  background-color: #ff9933;}
+.list-color-105{  @extend .list-color;  background-color: #ffcc33;}
+.list-color-106{  @extend .list-color;  background-color: #ffff33;}
+.list-color-107{  @extend .list-color;  background-color: #ccff00;}
+
+.list-color-111{  @extend .list-color;  background-color: #ff0000;}
+.list-color-112{  @extend .list-color;  background-color: #ff3300;}
+.list-color-113{  @extend .list-color;  background-color: #ff6600;}
+.list-color-114{  @extend .list-color;  background-color: #ff9900;}
+.list-color-115{  @extend .list-color;  background-color: #ffcc00;}
+.list-color-116{  @extend .list-color;  background-color: #ffff00;}

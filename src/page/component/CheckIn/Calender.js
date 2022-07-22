@@ -3,7 +3,8 @@ import './Calender.scss';
 import {Button,Alert,OverlayTrigger,Popover,Table,ListGroup} from 'react-bootstrap';
 import {getMonth, startOfMonth, startOfWeek, addDays,getDate, getDay} from 'date-fns';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import serverIP from '../../../IP_PORT';
+import {serverPath} from '../../../IP_PORT';
+import {useDispatch, useSelector} from 'react-redux'
 import moment from 'moment';
 //import styled from 'styled-components';
 
@@ -13,6 +14,8 @@ function Calender(props)
     let Day = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     let Week = [1,2,3,4,5,6];
     let fullDate = new Date();
+    let userData = useSelector((state)=>{return state.data});
+    let [userId,setUserId] = useState(userData.uid);
     let [curYear,setCurYear] = useState(fullDate.getFullYear());
     let [curMonth,setCurMonth] = useState(getMonth(fullDate));
     let [curDay,setCurDay] = useState(getDay(fullDate));
@@ -22,7 +25,7 @@ function Calender(props)
 
     let [checkin,setCheckin] = useState([]);
     let [selDay,setSelDay] = useState(0);
-    let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
+
 
 
 
@@ -117,7 +120,7 @@ function Calender(props)
             let endDay= moment(weekList[5][6].date).format('YYYY-MM-DD');
             console.log('Calender',"체크인 정보 불러오기",startDay,endDay);
             let daytoday= [startDay,endDay];
-            fetch(serverIP+"/out_checkin",{
+            fetch(serverPath()+"/out_checkin",{
               method:"post",
               headers : {
                 "content-type" : "application/json",
@@ -315,7 +318,8 @@ function DateBlock(props){
 
     let curweek = props.week;
     let checkin = props.checkin;
-    let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
+    let userData = useSelector((state)=>{return state.data});
+    let [userId,setUserId] = useState(userData.uid);
 
 
 

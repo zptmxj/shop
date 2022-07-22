@@ -4,7 +4,7 @@ import {ListGroup,Dropdown,FormControl,Table,Button,Modal,SplitButton,InputGroup
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
-import serverIP from '../../IP_PORT';
+import {serverPath} from '../../IP_PORT';
 
 function MngPoint(props)
 {
@@ -71,7 +71,7 @@ function MngPoint(props)
           listKey = 0;
           console.log('MngPoint',"멤버정보 불러오기");
     
-          fetch(serverIP+"/out_member",{
+          fetch(serverPath()+"/out_member",{
             method:"post",
             headers : {
               "content-type" : "application/json",
@@ -254,7 +254,7 @@ function MngPoint(props)
         })
         console.log('sendQuery',data);
 
-        fetch(serverIP+"/in_point", {
+        fetch(serverPath()+"/in_point", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",

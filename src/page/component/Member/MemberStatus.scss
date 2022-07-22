@@ -1,0 +1,35 @@
+
+.memlist-mini{
+    white-space: pre-wrap;
+}
+
+.memlist-input{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toast{
+    width: 70vw;
+    max-width: 300px;
+}
+
+.toast-r{
+    display: flex;
+    justify-content:end;
+}
+.toast-l{
+    display: flex;
+    justify-content:start;
+}
+
+.fs-red{
+    color: rgb(255, 130, 130);
+}
+

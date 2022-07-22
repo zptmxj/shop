@@ -2,7 +2,7 @@ import './BoardGame.scss';
 import React,{useState,useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import {Pagination } from 'react-bootstrap';
-import serverIP from '../IP_PORT';
+import {serverPath} from '../IP_PORT';
 
 function BoardGame()
 {
@@ -16,7 +16,7 @@ function BoardGame()
 
         if(total == -1)
         {
-            fetch(serverIP+"/out_gametotal",{
+            fetch(serverPath()+"/out_gametotal",{
                 method:"post",
                 headers : {
                     "content-type" : "application/json",
@@ -33,7 +33,7 @@ function BoardGame()
         if(games.length == 0)
         {
             let page = [sel*9,9];
-            fetch(serverIP+"/out_boardgame",{
+            fetch(serverPath()+"/out_boardgame",{
                 method:"post",
                 headers : {
                     "content-type" : "application/json",

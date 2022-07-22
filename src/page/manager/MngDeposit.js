@@ -4,7 +4,7 @@ import {ListGroup,Dropdown,FormControl,Table,Button,Modal,InputGroup,SplitButton
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
-import serverIP from '../../IP_PORT';
+import {serverPath} from '../../IP_PORT';
 
 function MngDeposit(props)
 {
@@ -71,7 +71,7 @@ function MngDeposit(props)
           listKey = 0;
           console.log('MngDeposit',"멤버정보 불러오기");
     
-          fetch(serverIP+"/out_member",{
+          fetch(serverPath()+"/out_member",{
             method:"post",
             headers : {
               "content-type" : "application/json",
@@ -264,7 +264,7 @@ function MngDeposit(props)
         })
         console.log('sendQuery',data);
 
-        fetch(serverIP+"/in_deposit", {
+        fetch(serverPath()+"/in_deposit", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",

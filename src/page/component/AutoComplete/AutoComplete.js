@@ -10,6 +10,22 @@ function AutoComplete(props){
     let value = props.value;
     let list = props.list;
 
+    useEffect(()=>{
+        if(props.isEnter)
+        {
+            EnterFunc();
+        }
+    })
+    const EnterFunc = ()=>{
+        props.setIsEnter(false);
+        let useridx = list.indexOf(value);
+        if(useridx != -1)
+        {
+            setResult([]);
+            props.onEnter(useridx);
+        }
+    }
+
     const onDropKeyPress = (e)=>{
         console.log('onDropKeyPress',e.key,e.target.id);
         if(e.type = 'keyDown')
@@ -27,13 +43,7 @@ function AutoComplete(props){
         {
             if(e.key=="Enter")
             {
-                let useridx = list.indexOf(value);
-                console.log('Enter',useridx);
-                if(useridx != -1)
-                {
-                    setResult([]);
-                    props.onEnter(useridx);
-                }
+                EnterFunc();
             }
             if(results.length>0 && e.key=="ArrowDown")
             {

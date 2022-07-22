@@ -2,7 +2,7 @@
 import { Form, Button, InputGroup,Alert,Col,Row,Table,Dropdown } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import serverIP from '../../IP_PORT';
+import {serverPath} from '../../IP_PORT';
 import AutoComplete from '../component/AutoComplete/AutoComplete';
 import {useSelector} from 'react-redux'
 import './MngMemberAdd.scss';
@@ -113,7 +113,7 @@ function MngMemberAdd(props)
 
         let data = {uid:number,last:last,name:first,sex:sexinfo,age:birth,adddate:date};
 
-        fetch(serverIP+"/in_member", {
+        fetch(serverPath()+"/in_member", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",

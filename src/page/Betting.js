@@ -1,11 +1,11 @@
-import './Avatar.scss';
+import './Betting.scss';
 import React,{useState,useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import {Pagination , Modal, Button,Spinner,Alert} from 'react-bootstrap';
 import {serverPath,imagePath} from '../IP_PORT';
 import {useSelector} from 'react-redux'
 
-function Avatar()
+function Betting()
 {
     let member = useSelector((state)=>{return state.member});
     let userData = useSelector((state)=>{return state.data});
@@ -15,7 +15,7 @@ function Avatar()
     const [sel, setsel] = useState(0);
     const [imgNum, setImgNum] = useState(0);
     const [imgPath, setImgPath] = useState('');
-    const [avatars, setAvatars] = useState([]);
+    const [Bettings, setBettings] = useState([]);
     const [sex, setSex] = useState();
     const [modalShow, setModalShow] = useState(false);
     const [miniShow, setMiniShow] = useState(false);
@@ -34,9 +34,9 @@ function Avatar()
         });
         setSex(mem[0].sex);
 
-        if(avatars.length == 0)
+        if(Bettings.length == 0)
         {
-            fetch(serverPath()+"/out_avatar",{
+            fetch(serverPath()+"/out_Betting",{
                 method:"post",
                 headers : {
                     "content-type" : "application/json",
@@ -45,8 +45,8 @@ function Avatar()
             })
             .then((res)=>res.json())
             .then((json)=>{
-                console.log('out_avatar', json);
-                setAvatars(json);
+                console.log('out_Betting', json);
+                setBettings(json);
             })
         }
     });
@@ -70,29 +70,29 @@ function Avatar()
     const onSend = (avt)=>{
         setIsSpinner(true);
 
-        fetch(serverPath()+"/buy_avatar",{
+        fetch(serverPath()+"/buy_Betting",{
             method:"post",
             headers : {
                 "content-type" : "application/json",
             },
-            body : JSON.stringify({avatar:avt.idx, uid:userId,point:avt.point}),
+            body : JSON.stringify({Betting:avt.idx, uid:userId,point:avt.point}),
         })
         .then((res)=>res.json())
         .then((json)=>{
-            console.log('buy_avatar', json);
+            console.log('buy_Betting', json);
             try {
                 if(json.succes=="succes") 
                 {
                     setModalShow(false);
-                    setAvatars([]);
+                    setBettings([]);
                     onMini("구매를 완료했습니다",1);
                 }
                 else 
                 {
                     if(json.err=="lack") 
                         onMini("포인트가 부족합니다",0);
-                    if(json.err=="avatar") 
-                        onMini("서버 에러 : avatar",0);
+                    if(json.err=="Betting") 
+                        onMini("서버 에러 : Betting",0);
                     if(json.err=="asset") 
                         onMini("서버 에러 : asset",0);
                 }
@@ -110,18 +110,18 @@ function Avatar()
     return(
         <div>
             <div className="title">
-                <h3> Avatar </h3>
+                <h3> Betting </h3>
             </div>
-            <AvatarList array={avatars} sel={sel} sex={sex} onClick={(idx,path)=>onModal(idx,path)}/>
-            <div className="Avatar-pag">
-                <MyPagination max={Math.ceil(avatars.length/16)} sel={sel} setValue={(idx)=>(setsel(idx-1))} />
+            <BettingList array={Bettings} sel={sel} sex={sex} onClick={(idx,path)=>onModal(idx,path)}/>
+            <div className="Betting-pag">
+                <MyPagination max={Math.ceil(Bettings.length/16)} sel={sel} setValue={(idx)=>(setsel(idx-1))} />
             </div>
             {
-                avatars.length>0?<MyModal
+                Bettings.length>0?<MyModal
                     show={modalShow}
                     onSend={(avt)=>{onSend(avt)}}
                     onHide={onHide}
-                    avatar={avatars[(sel*16)+imgNum]}
+                    Betting={Bettings[(sel*16)+imgNum]}
                     imgpath={imgPath}
                     isspinner={isSpinner}
                 />:null
@@ -146,11 +146,11 @@ function Avatar()
     )
 }
 
-function AvatarList(props)
+function BettingList(props)
 {
     let sel = props.sel;
     let array = [];
-    console.log("AvatarList",sel);
+    console.log("BettingList",sel);
 
 
     if(props.array.length>0)
@@ -161,27 +161,27 @@ function AvatarList(props)
         for(let i=0; i < max; i++)
             array.push(props.array[(sel*16)+i]);
 
-        console.log("AvatarList",array);
+        console.log("BettingList",array);
 
         return (
             <div className="container mag-top">
-                <div className="Avatar-midle row">
+                <div className="Betting-midle row">
                     {
                         array.map((e,i)=>{
                             console.log("array.map",array);
-                            let path = imagePath()+"/avatars/" + e.path;
-                            let classN = "Avatar-img p-0";
+                            let path = imagePath()+"/Bettings/" + e.path;
+                            let classN = "Betting-img p-0";
                             let uid = "----"
                             let Cilck = ()=>props.onClick(i,path);
                             if(e.uid!=null) 
                             {
-                                classN = "Avatar-img-non p-0";
+                                classN = "Betting-img-non p-0";
                                 uid = e.uid;
                                 Cilck = ()=>{};
                             } 
                             return(
                                 <>
-                                    <div key={i} className="col-3 Avatar-pad ">
+                                    <div key={i} className="col-3 Betting-pad ">
                                         <div>
                                             <img className={classN} onClick={Cilck} src={path} />
                                             <p className="mb-0">{uid}</p>
@@ -212,29 +212,29 @@ function MyModal(props) {
         centered
       >
         <Modal.Header>
-            <h4>Buy Avatar</h4>
+            <h4>Buy Betting</h4>
         </Modal.Header>
         <Modal.Body>
           <div className='row'>
-            <img className="Avatar-modal-img col-7" src={imgpath} />
+            <img className="Betting-modal-img col-7" src={imgpath} />
             <div className='col-5'>
                 <p className="px-1 pt-3">
-                    이름 : {props.avatar.path.substring(2,6)}
+                    이름 : {props.Betting.path.substring(2,6)}
                 </p>
                 <p className="px-1">
-                    가격 : {props.avatar.point}p
+                    가격 : {props.Betting.point}p
                 </p>
             </div>
             <p className="px-3 pt-3 mb-0">
-                * 해당 Avatar는 구매자에게 귀속됩니다.
+                * 해당 Betting는 구매자에게 귀속됩니다.
             </p>
             <p className="px-3 pt-0">
-                * 다른 Avatar구매 시 귀속이 해제됩니다.
+                * 다른 Betting구매 시 귀속이 해제됩니다.
             </p>
           </div>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="primary" onClick={()=>{onSend(props.avatar)}} disabled={isspinner}>
+            <Button variant="primary" onClick={()=>{onSend(props.Betting)}} disabled={isspinner}>
                 {
                     isspinner?<Spinner
                     as="span"
@@ -327,4 +327,4 @@ function MyPagination(props)
     </Pagination>)
 }
 
-export default Avatar;
+export default Betting;

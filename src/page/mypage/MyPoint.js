@@ -1,7 +1,7 @@
 //import Calender from './component/CheckIn/Calender';
 import { Form, ProgressBar, Button, Alert, ListGroup, Table } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
-import serverIP from '../../IP_PORT';
+import {serverPath} from '../../IP_PORT';
 import moment from 'moment';
 import './MyPoint.scss';
 import {useDispatch, useSelector} from 'react-redux'
@@ -10,8 +10,8 @@ function MyPoint(props)
 {
     
     let member = useSelector((state)=>{return state.member});
-
-    let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
+    let userData = useSelector((state)=>{return state.data});
+    let [userId,setUserId] = useState(userData.uid);
     const [mypoint, setMypoint] = useState(0);
     const [historylist, setHistorylist] = useState([]);
 
@@ -43,7 +43,7 @@ function MyPoint(props)
             else
                 setNonNext(false);
 
-            fetch(serverIP+"/out_asset",{
+            fetch(serverPath()+"/out_asset",{
                 method:"post",
                 headers : {
                 "content-type" : "application/json",
@@ -57,7 +57,7 @@ function MyPoint(props)
 
             });
 
-            fetch(serverIP+"/out_mypoint",{
+            fetch(serverPath()+"/out_mypoint",{
                 method:"post",
                 headers : {
                 "content-type" : "application/json",
@@ -149,8 +149,8 @@ function MyPoint(props)
                                 return(
                                     <tr class={color} key = {i} >
                                         <td >{i}</td>
-                                        <HISTORY history={e.history}/>
                                         <td >{moment(e.useday).format('MM/DD')}</td>
+                                        <HISTORY history={e.history}/>
                                         <td >{sign+e.variance}</td>
                                         <td >{e.point}</td>
                                     </tr>

@@ -1,17 +1,18 @@
 //import Calender from './component/CheckIn/Calender';
 import { Form, ProgressBar, Button, Alert} from 'react-bootstrap';
 import { useEffect, useState } from 'react';
-import serverIP from '../IP_PORT';
+import {serverPath,imagePath} from '../IP_PORT';
 import moment from 'moment';
 import './Attend.scss';
 import {useDispatch, useSelector} from 'react-redux'
+import NamePlate from './component/NamePlate/NamePlate'
 
 function Attend(props)
 {
     
     let member = useSelector((state)=>{return state.member});
-
-    let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
+    let userData = useSelector((state)=>{return state.data});
+    let [userId,setUserId] = useState(userData.uid);
 
     let count = [0,1,2,3,4,5,6,7,8];
     const [attMyData, setAttMyData] = useState([true,true,true,true,true,true,true,true,true]);
@@ -30,7 +31,12 @@ function Attend(props)
     const [workDay, setWorkDay] = useState(new Date());
     const [nonNext, setNonNext] = useState(false);
 
+    
     useEffect(()=>{
+        console.log('Attend',member);
+        console.log('Attend',userData);
+
+        
         console.log('Attend',"useEffect");
         let currentDay = workDay;  
         let theYear = currentDay.getFullYear();
@@ -56,7 +62,7 @@ function Attend(props)
             console.log('on /out_attend');
 
             let day = new Date();
-            day.setDate(day.getDate()+1);
+            day.setDate(day.getDate()+7);
             let list = weeklist.filter(e=>{
                 let eDay = moment(e).format('MMDD');
                 let dDay = moment(day).format('MMDD');
@@ -65,7 +71,7 @@ function Attend(props)
             })
             list.length>0?setNonNext(true):setNonNext(false);
 
-            fetch(serverIP+"/out_attend",{
+            fetch(serverPath()+"/out_attend",{
                 method:"post",
                 headers : {
                 "content-type" : "application/json",
@@ -80,7 +86,10 @@ function Attend(props)
                         if(j.uid==e.uid) return e.name;
                     })
                     if(name.length > 0)
+                    {
                         j.name = name[0].name;
+                        j.path = name[0].path;
+                    }
                     return j;
                 })
 
@@ -200,7 +209,7 @@ function Attend(props)
         if(isChenge)
         {
 
-            fetch(serverIP+"/in_attend", {
+            fetch(serverPath()+"/in_attend", {
                 method : "post", // 통신방법
                 headers : {
                 "content-type" : "application/json",
@@ -292,15 +301,15 @@ function Attend(props)
 
                                     return(
                                         <>
-                                        <tr key = {i} className='Attend-tr'>
-                                            <td className='Attend-td' onClick={()=>onClickList(i)}>{WeekDay(i)}</td>
-                                            <td className='Attend-td-prog' onClick={()=>onClickList(i)}><ProgressBar now={progress} /></td>
-                                            <td className='Attend-td' onClick={()=>onClickList(i)}>{length}</td>
-                                            <td className='Attend-td'>
-                                                <Form.Check type='checkbox' id='rd1' onChange={()=>onClickCheck(i)} checked={checklist[i].activity}></Form.Check>
-                                            </td>
-                                        </tr>
-                                        <TDATA idx={i} openlist={openlist} curlist={curAttend} checklist={checklist} userId={userId} setCallBack={setCallBack}/>
+                                            <tr key={i} className='Attend-tr'>
+                                                <td className='Attend-td' onClick={()=>onClickList(i)}>{WeekDay(i)}</td>
+                                                <td className='Attend-td-prog' onClick={()=>onClickList(i)}><ProgressBar now={progress} /></td>
+                                                <td className='Attend-td' onClick={()=>onClickList(i)}>{length}</td>
+                                                <td className='Attend-td'>
+                                                    <Form.Check type='checkbox' id='rd1' onChange={()=>onClickCheck(i)} checked={checklist[i].activity}></Form.Check>
+                                                </td>
+                                            </tr>
+                                            <TDATA idx={i} openlist={openlist} curlist={curAttend} checklist={checklist} userId={userId} setCallBack={setCallBack}/>
                                         </>
 
                                     )
@@ -362,12 +371,14 @@ function TDATA(props)
             else 
                 timeStr ="오전 " + timeArray[0] + ':' + timeArray[1];
         }
-            
-
+        let imgpath = imagePath()+'/avatars/'+e.path;
+        console.log("imgpath",imgpath);
 
         return (
             <tr key = {i} className={classN}>
-                <td className='Attend-text-right'>{e.name}</td>
+                <td className='Attend-text-right'>
+                    <NamePlate mem={e} />
+                </td>
                 <td className='Attend-td-prog'>{timeStr}</td>
                 <td colSpan={2} >
                         {((idx<7)&&(e.uid==userId))?<input className='Attend-input' type="time" key={i} value={props.checklist[idx].time} onChange={(e)=>change(e,i)}/>:null}

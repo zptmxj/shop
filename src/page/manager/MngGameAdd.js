@@ -2,7 +2,7 @@
 import { Form, Button, InputGroup,FormControl,Col,Row,Table,ToggleButton } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import serverIP from '../../IP_PORT';
+import {serverPath} from '../../IP_PORT';
 import AutoComplete from '../component/AutoComplete/AutoComplete';
 import {useSelector} from 'react-redux'
 import './MngGameAdd.scss';
@@ -90,14 +90,14 @@ function MngGameAdd(props)
         let typeinfo = getString(types);
         let abilityinfo = getString(abilitys);
 
-        await axios.post(serverIP+"/in_gameimage",formData,config)
+        await axios.post(serverPath()+"/in_gameimage",formData,config)
         .then((json)=>{
             console.log('gameimage',json.data);
             let data ={uid:useinfo.uid, name:titleinfo, image:json.data.filename, explanation:"",
                         pPlayer:playerinfo, pTime:timeinfo, pAge:"", formation:cominfo, playtype:playinfo,
                         category:typeinfo, ability:abilityinfo, point:10};
             
-            fetch(serverIP+"/in_boardgame", {
+            fetch(serverPath()+"/in_boardgame", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",

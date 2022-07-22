@@ -2,13 +2,14 @@ import './Border.scss';
 import React,{useState,useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import {Pagination , Modal, Button,Spinner,Alert} from 'react-bootstrap';
-import serverIP from '../IP_PORT';
+import {serverPath} from '../IP_PORT';
 import {useSelector} from 'react-redux'
 
 function Border()
 {
     let member = useSelector((state)=>{return state.member});
-    let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
+    let userData = useSelector((state)=>{return state.data});
+    let [userId,setUserId] = useState(userData.uid);
 
     let history = useHistory();
     const [sel, setsel] = useState("list-color-00");
@@ -35,7 +36,7 @@ function Border()
 
         // if(Borders.length == 0)
         // {
-        //     fetch(serverIP+"/out_Border",{
+        //     fetch(serverPath()+"/out_Border",{
         //         method:"post",
         //         headers : {
         //             "content-type" : "application/json",
@@ -67,7 +68,7 @@ function Border()
     const onSend = (avt)=>{
         setIsSpinner(true);
 
-        fetch(serverIP+"/buy_Border",{
+        fetch(serverPath()+"/buy_Border",{
             method:"post",
             headers : {
                 "content-type" : "application/json",

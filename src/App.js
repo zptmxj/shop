@@ -6,7 +6,7 @@ import shoes2 from './shoes2.jpg';
 import shoes3 from './shoes3.jpg';
 import background from './background.jpg';
 
-import {Navbar, Container, NavDropdown, Nav, Button,Form} from 'react-bootstrap';
+import {Navbar, Container, NavDropdown, Nav, NavLink, Button,Form} from 'react-bootstrap';
 import './App.scss';
 import { useEffect, useState } from 'react';
 import { Link, Route } from 'react-router-dom';
@@ -18,6 +18,7 @@ import CheckIn from './page/CheckIn';
 import Attend from './page/Attend';
 import BoardGame from './page/BoardGame';
 import Avatar from './page/Avatar';
+import Betting from './page/Betting';
 import Border from './page/Border';
 import MyCash from './page/mypage/MyCash';
 import MyPoint from './page/mypage/MyPoint';
@@ -30,57 +31,141 @@ import MngGameAdd from './page/manager/MngGameAdd';
 import MngMemberAdd from './page/manager/MngMemberAdd';
 import MngMemberMod from './page/manager/MngMemberMod';
 import MngAvatarAdd from './page/manager/MngAvatarAdd';
-import serverIP from './IP_PORT';
+import {serverPath,imagePath} from './IP_PORT';
 
 
-import {setStoreMember} from './store'
+import {setStoreMember, setStorePlate, setStoreUserData} from './store'
 import {useDispatch, useSelector} from 'react-redux'
 
 
 function App() {
 
-  //const serverIP = 'http://168.126.179.44:3001';
-  //const serverIP = 'http://localhost:3001';
-  let dispatch = useDispatch();
+  const getUserUid = ()=>{
+    let str;
+    str = localStorage.getItem('user_uid');
+    if(str==null)
+      str = sessionStorage.getItem('user_uid');
+    return str;
+  }
+  const getUserName = ()=>{
+    let str;
+    str = localStorage.getItem('user_name');
+    if(str==null)
+      str = sessionStorage.getItem('user_name');
+    return str;
+  }
+  const getPrivilege = ()=>{
+    let str;
+    str = localStorage.getItem('privilege');
+    if(str==null)
+      str = sessionStorage.getItem('privilege');
+    return str;
+  }
 
-  let [logId,setlogId] = useState('');
-  let [logPw,setlogPw] = useState('');
-  let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
-  let [userName,setUserName] = useState(sessionStorage.getItem('user_name'));
-  let [userPrivilege,setUserPrivilege] = useState(sessionStorage.getItem('privilege'));
+  const dispatch = useDispatch();
+  let isfirst = sessionStorage.getItem('firstPage');
+  const [isAutoLogin,setAutoLogin] = useState(localStorage.getItem('autologin'));
+  
+  const [logId,setlogId] = useState('');
+  const [logPw,setlogPw] = useState('');
+  const [userId,setUserId] = useState(getUserUid());
+  const [userName,setUserName] = useState(getUserName());
+  const [userPrivilege,setUserPrivilege] = useState(getPrivilege());
+  const [mycash,setMycash] = useState(0);
+  const [avatars,setAvatars] = useState([]);
+  const [member,setMember] = useState([]);
 
-  let [isInit,setIsInit] = useState(false);
-  let [inData,indataUpdate] = useState(['']);
-  let [member,setMember] = useState([]);
-  let listKey = 0;
-
-  let Mnglink = ["/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngGameAdd","/MngMemberAdd","/MngMemberMod","/MngAvatarAdd"];
-  let Mngtext = ["TestPage","CheckIn","Deposit","Point","GameAdd","MemberAdd","MemberMod","AvatarAdd"];
+  const Mnglink = ["/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngGameAdd","/MngMemberAdd","/MngMemberMod","/MngAvatarAdd"];
+  const Mngtext = ["TestPage","CheckIn","Deposit","Point","GameAdd","MemberAdd","MemberMod","AvatarAdd"];
   
 
   useEffect(()=>{
     console.log("app_useEffect");
     console.log('userId',userId , userName ,userPrivilege);
+    let login = sessionStorage.getItem('login');
+    let first = sessionStorage.getItem('firstPage');
+    let localuid = localStorage.getItem('user_uid');
+    console.log("first:"+first+"/userId:"+userId);
 
-    if(member.length==0)
+    if(first==null&&login==null&&localuid!=null)
     {
-      listKey = 0;
-      console.log('App',"멤버정보 불러오기");
-
-      fetch(serverIP+"/out_member",{
+      console.log("자동로그인 로그");
+      let uidData = {uid:userId,name:userName}
+      fetch(serverPath()+"/in_login",{
         method:"post",
         headers : {
-          "content-type" : "application/json",
+            "content-type" : "application/json",
         },
-        body : JSON.stringify(),
+        body : JSON.stringify(uidData),
       })
-      .then((res)=>res.json())
-      .then((json)=>{
-        let arr = json.map((e)=>{return e});
-        setMember(arr);
-        dispatch(setStoreMember(json));
-        console.log('member',member);
-      })
+    }
+    if(avatars.length == 0)
+    {
+        fetch(serverPath()+"/out_allavatar",{
+            method:"post",
+            headers : {
+                "content-type" : "application/json",
+            },
+            body : JSON.stringify(),
+        })
+        .then((res)=>res.json())
+        .then((avat)=>{
+            console.log('out_avatar', avat);
+            setAvatars(avat);
+
+            console.log('App',"멤버정보 불러오기");
+            let data={uid:"all",order:"SELECT * FROM member JOIN asset USING(uid) order by total_point DESC"};
+
+            fetch(serverPath()+"/out_custom",{
+              method:"post",
+              headers : {
+              "content-type" : "application/json",
+              },
+              body : JSON.stringify(data),
+            })
+            .then((res)=>res.json())
+            .then((json)=>{
+              let myavatar="";
+              setMember(json);
+
+              let asset = json.map((mem,i)=>{
+                  if(mem.uid == userId)
+                    setMycash(mem.cash);
+
+                  let avatar = avat.filter(e=>e.idx==mem.avatar);
+                  let path = "m/m000.png";
+                  if(avatar.length == 0 )
+                  {
+                      if(mem.sex==1) path = "w/w000.png";
+                      else path = "m/m000.png";
+                  }
+                  else{
+                      path = avatar[0].path;
+                      if(mem.uid == userId)
+                        myavatar = avatar[0].path;
+                  }
+                  mem.path = path;
+                  return mem;
+              })
+
+              dispatch(setStoreMember(asset));
+              console.log('member',asset);
+
+              console.log("isAutoLogin",isAutoLogin,"userId",userId,"isfirst",isfirst);
+
+              if(userId != null)
+              {
+                  let userData = {uid:userId , name:userName , privilege:userPrivilege, avatar:myavatar}
+                  dispatch(setStoreUserData(userData));
+              }
+              
+              if(isAutoLogin == "true" && userId!=null && isfirst==null) 
+              {
+                sessionStorage.setItem('firstPage',true);
+                //window.location.replace("/Attend");
+              }
+            })
+        })
     }
 
   },[])
@@ -89,34 +174,38 @@ function App() {
   let [ItemImg,setItemImg] = useState([shoes1,shoes2,shoes3]);
   let [ItemPrice,setItemPrice] = useState(['100','120','210']);
 
-  const login = ()=>{
-    console.log(logId);
-    let user = [logId,logPw];
-    fetch(serverIP+"/out_login",{
-      method:"post",
-      headers : {
-        "content-type" : "application/json",
-      },
-      body : JSON.stringify(user),
-    })
-    .then((res)=>res.json())
-    .then((json)=>{
-      console.log(json);
-      if(json.length == 1)
-      {
-        sessionStorage.setItem('user_uid',json[0].uid);
-        sessionStorage.setItem('user_name',json[0].name);
-        sessionStorage.setItem('privilege',json[0].privilege);
-        window.location.replace("/");
-      }
-    })
+  // const login = ()=>{
+  //   console.log(logId);
+  //   let user = [logId,logPw];
+  //   fetch(serverPath()+"/out_login",{
+  //     method:"post",
+  //     headers : {
+  //       "content-type" : "application/json",
+  //     },
+  //     body : JSON.stringify(user),
+  //   })
+  //   .then((res)=>res.json())
+  //   .then((json)=>{
+  //     console.log(json);
+  //     if(json.length == 1)
+  //     {
+  //       sessionStorage.setItem('user_uid',json[0].uid);
+  //       sessionStorage.setItem('user_name',json[0].name);
+  //       sessionStorage.setItem('privilege',json[0].privilege);
+  //       window.location.replace("/");
+  //     }
+  //   })
+  // }
 
-    //sessionStorage.setItem('user_uid','0773');
-  }
 
+  
   const logout = ()=>{
     sessionStorage.removeItem('user_uid');
+    sessionStorage.removeItem('user_name');
     sessionStorage.removeItem('privilege');
+    localStorage.removeItem('user_uid');
+    localStorage.removeItem('user_name');
+    localStorage.removeItem('privilege');
   }
 
   const logIdChange = (e)=>{
@@ -126,8 +215,6 @@ function App() {
   const logPwChange = (e)=>{
     setlogPw(e.target.value);
   }
-
-
 
 
   return (
@@ -157,14 +244,9 @@ function App() {
           // ):(
           <Navbar className="App-header" bg="light" expand="lg">
             <Container >
-              <a href="/"><img className="App-logo" src={logo} alt='Logo.png'/></a>
+              <a href="/"><img className="App-logo" src={logo} alt='Logo.png'/></a >
               <Navbar.Brand className="App-title" href="/">
-              <a href="/"><img className="App-TAPs" src={TAPs} alt='TAPs.png'/></a>
-              {/* <div className="App-title-l mx-3">T &nbsp;A  &nbsp;P  's</div>
-              <div className="App-title-s mx-3"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alk
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nd 
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lay
-              </div> */}
+                <img className="App-TAPs" src={TAPs} alt='TAPs.png'/>
               </Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav " />
               <>
@@ -181,15 +263,16 @@ function App() {
                         </NavDropdown>
                         
                         <Nav.Link as={Link} className="App-nav" to="/Attend">◆ Attend </Nav.Link>
-                        <NavDropdown className="App-nav" title="◆ Shop" id="basic-nav-dropdown">
+                        <NavDropdown className="App-nav" title="◆ Point" id="basic-nav-dropdown">
                           <NavDropdown.Item as={Link} to="/Avatar"> Avatar </NavDropdown.Item>
-                          <NavDropdown.Item as={Link} to="/Border"> Border </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/Betting"> Betting </NavDropdown.Item>
+                          {/* <NavDropdown.Item as={Link} to="/Border"> Border </NavDropdown.Item> */}
                         </NavDropdown>
                         {
                           userPrivilege>2?(
                           <NavDropdown className="App-nav" title="◇ Manager" id="basic-nav-dropdown">
                           {
-                            Mngtext.map((e,i)=>{return <Manager idx={i} link={Mnglink[i]} text={e} Privilege={userPrivilege}/>})
+                            Mngtext.map((e,i)=>{return <Manager key={i} idx={i} link={Mnglink[i]} text={e} Privilege={userPrivilege}/>})
                           }
                           </NavDropdown>):null
                         }
@@ -204,6 +287,11 @@ function App() {
                     </Navbar.Collapse>
                     <Navbar.Text>
                       Signed in as {userName}: <a onClick={logout} href="/">Logout</a>
+                      <Nav.Link as={Link} to="/MyCash">
+                          {
+                            mycash<=0?<>잔액: <string className='App-font-rad' >{mycash}</string></>:<>잔액: <string className='App-font-blue' >{mycash}</string></>
+                          }
+                      </Nav.Link>
                     </Navbar.Text>
                     </>
                     ):(<Navbar.Collapse id="basic-navbar-nav"/>)
@@ -237,6 +325,9 @@ function App() {
             </Route>
             <Route path="/Avatar">
               <Avatar/>
+            </Route>
+            <Route path="/Betting">
+              <Betting/>
             </Route>
             <Route path="/Border">
               <Border/>

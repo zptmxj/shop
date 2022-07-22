@@ -2,7 +2,7 @@
 import { Form, Button, InputGroup,Alert,Col,Row,Table,Dropdown } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import serverIP from '../../IP_PORT';
+import {serverPath} from '../../IP_PORT';
 import AutoComplete from '../component/AutoComplete/AutoComplete';
 import {useSelector} from 'react-redux'
 import './MngAvatarAdd.scss';
@@ -12,7 +12,7 @@ function MngAvatarAdd(props)
     const [useinfo, setUseinfo] = useState({name:"---",uid:"----"});
     const [number, setNumber] = useState("");
     const [index, setIndex] = useState("");
-    const [cash, setCash] = useState("100");
+    const [point, setPoint] = useState("100");
     const [sex, setSex] = useState("남");
     const [date, setDate] = useState("");
     const [value, setValue] = useState("");
@@ -57,11 +57,11 @@ function MngAvatarAdd(props)
         let s = sex=="남"?0:1;
         let path = (s==0?'m':'w') + ('00' + number).slice(-3) +".png";
 
-        let data = {idx:idx,path:path,cash:cash,sex:s};
+        let data = {idx:idx,path:path,point:point,sex:s};
 
         console.log(data);
 
-        fetch(serverIP+"/in_avatar", {
+        fetch(serverPath()+"/in_avatar", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",
@@ -103,10 +103,10 @@ function MngAvatarAdd(props)
                         <Form.Control type="text" placeholder="idx" value={index} onChange={(e)=>{setIndex(e.target.value)}} />
                     </Col>
                     <Form.Label column xs={2} className="px-0">
-                        cash :
+                    point :
                     </Form.Label>
                     <Col xs={3} className='px-0'>
-                        <Form.Control type="text" placeholder="" value={cash} onChange={(e)=>{setCash(e.target.value)}} />
+                        <Form.Control type="text" placeholder="" value={point} onChange={(e)=>{setPoint(e.target.value)}} />
                     </Col>
                 </Form.Group>
             </div>

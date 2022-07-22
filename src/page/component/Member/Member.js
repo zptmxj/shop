@@ -5,12 +5,15 @@ import img_female from './female.png';
 import super_mg from './super-mg.png';
 import sub_mg from './sub-mg.png';
 import eng_mg from './eng-mg.png';
+import up_mg from './up.png';
+import down_mg from './down.png';
+
+import {serverPath,imagePath} from '../../../IP_PORT';
 
 
 function Member(props)
 {
     let Year = new Date().getFullYear();
-    console.log("Member_avatar", Year);
 
     let data =props.data;
     let idx = props.idx;
@@ -36,7 +39,7 @@ function Member(props)
                             <img src={super_mg} width='25px' height='25px'/>:
                             (data.privilege===4?
                             <img src={eng_mg} width='25px' height='25px'/>:
-                            idx
+                            props.num
                             ))
                         }</td>
                         <Character sex={data.sex} path={path} />
@@ -48,7 +51,12 @@ function Member(props)
                         }</td>
                     </tr>
                     <tr>
-                        <td className="list-td" colSpan={4}>{"--"}</td>
+                        <td className="list-td" colSpan={2}>
+                            <img src={up_mg} width='20px' height='20px'/>{" "+0}
+                        </td>
+                        <td className="list-td" colSpan={2}>
+                            <img src={down_mg} width='20px' height='20px'/>{" "+0}
+                        </td>
                         <td className="list-td" colSpan={2}>{data.total_point+" TP"}</td>
                     </tr>
                     <tr>
@@ -113,12 +121,7 @@ function Member(props)
 }
 
 function Character(props){
-    let img = "http://168.126.179.44:3002/avatars/";
-    let sex = "m/";
-    let path = props.path;
-    if(props.sex==1) sex="w/";
-
-    img = img + sex + path;
+    let img = imagePath() + "/avatars/" + props.path;
     return(
         <td className="list-td">
             <img src={img} width='40px' height='40px'/>

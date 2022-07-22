@@ -2,49 +2,61 @@
 import { Form, Button, InputGroup,FormControl,Dropdown, FormGroup } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import serverIP from '../IP_PORT';
+import {serverPath} from '../IP_PORT';
 import './TestPage.scss';
 import ReactApexChart from "react-apexcharts"; 
+//import {Unity,useUnityContext } from 'react-unity-webgl';
 
 function TestPage(props)
 {
+    // const { unityProvider } = useUnityContext({
+    //     loaderUrl: "Build/WebGl.loader.js",
+    //     dataUrl: "Build/WebGl.data",
+    //     frameworkUrl: "Build/WebGl.framework.js",
+    //     codeUrl: "Build/WebGl.wasm",
+    //   });
+
     let count = [1,2,3,4,5];
-    const [data, setData] = useState({
-            series: [{
-              name: 'Series 1',
-              data: [1, 0, 3, 10, 5 ,4],
-            }],
-           
-            options: {
-                fill: {
-                    opacity: 0.3
-                },
-                chart: {
-                    type: 'radar',
-                    toolbar: {
-                        show: false,
-                    }
-                },
-                title: {
-                    text: ""   
-                },
-                yaxis: {
+    const [series, setSeries] = useState(
+     [{
+        name: 'Series 1',
+        data: [1, 0, 3, 10, 5 ,4],
+      }]
+    );
+
+    const [options, setOptions] = useState({
+            fill: {
+                opacity: 0.3
+            },
+            chart: {
+                type: 'radar',
+                toolbar: {
                     show: false,
-                },
-                xaxis: {
-                    categories: ['추리', '역할', '전략', '조작', '민첩', '도박'],
-                    labels: {
-                        show: true,
-                        style: {
-                            colors: ["#a8a8a8"],
-                            fontSize: "13px",
-                            fontFamily: 'Arial'
-                        }
-                    }
                 }
             },
+            title: {
+                text: ""   
+            },
+            yaxis: {
+                show: false,
+            },
+            xaxis: {
+                categories: ['추리', '역할', '전략', '조작', '민첩', '도박'],
+                labels: {
+                    show: true,
+                    style: {
+                        colors: ["#a8a8a8"],
+                        fontSize: "13px",
+                        fontFamily: 'Arial'
+                    }
+                }
+            }
+    });
+
+    const [data, setData] = useState();
+            
            
-});
+            
     const [data01, setData01] = useState('');
     const [data02, setData02] = useState('');
     const [checklist, setChecklist] = useState([false,false,false,false,false]);
@@ -133,9 +145,19 @@ function TestPage(props)
             }
         };
         console.log('onSendImg',imagefile,formData);
-        await axios.post(serverIP+"/in_boardimage",formData,config);
+        await axios.post(serverPath()+"/in_boardimage",formData,config);
     }
 
+
+    const onApexChartClick01 = (e)=>{
+        
+        let ApexChart = [{
+            ...series,
+            data:[series[0].data[0]+1,series[0].data[1],series[0].data[2],series[0].data[3],series[0].data[4],series[0].data[5]]
+        }];
+        setSeries(ApexChart);
+        console.log(ApexChart);
+    }
 
 
     return(
@@ -144,9 +166,11 @@ function TestPage(props)
             <div>
                 <h3> TestPage </h3>
                 
+                {/* <Unity unityProvider={unityProvider}></Unity> */}
                 <div className='ApexChart'>
-                    <ReactApexChart options={data.options} series={data.series} type="radar" height={300}/>
+                    <ReactApexChart options={options} series={series} type="radar" height={300}/>
                 </div>
+                <button onClick={onApexChartClick01}>ApexChart</button>
 
                 <input value={data01} onChange={onChange01}/>
                 <button onClick={onClick01}>data1</button>

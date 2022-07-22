@@ -1,7 +1,7 @@
 //import Calender from './component/CheckIn/Calender';
 import { Form, ProgressBar, Button, Alert, ListGroup, FormControl } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
-import serverIP from '../../IP_PORT';
+import {serverPath} from '../../IP_PORT';
 import moment from 'moment';
 import './MyPassword.scss';
 import {useDispatch, useSelector} from 'react-redux'
@@ -10,8 +10,8 @@ function MyPassword(props)
 {
     
     let member = useSelector((state)=>{return state.member});
-
-    let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
+    let userData = useSelector((state)=>{return state.data});
+    let [userId,setUserId] = useState(userData.uid);
     const [curPwInput, setCurPwInput] = useState("");
 
     const [changePwInput1, setChangePwInput1] = useState("");
@@ -94,7 +94,7 @@ function MyPassword(props)
         }
 
         let data = [userId,curPwInput,changePwInput1];
-        fetch(serverIP+"/in_pw", {
+        fetch(serverPath()+"/in_pw", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",

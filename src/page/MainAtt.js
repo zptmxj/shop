@@ -1,7 +1,7 @@
 //import Calender from './component/CheckIn/Calender';
 import { Form, ProgressBar, Button, Alert} from 'react-bootstrap';
 import { useEffect, useState } from 'react';
-import serverIP from '../IP_PORT';
+import {serverPath} from '../IP_PORT';
 import moment from 'moment';
 import './MainAtt.scss';
 import {useDispatch, useSelector} from 'react-redux'
@@ -11,8 +11,6 @@ function MainAtt(props)
 {
     
     let member = useSelector((state)=>{return state.member});
-
-    let [userId,setUserId] = useState(sessionStorage.getItem('user_uid'));
 
     let [logId,setlogId] = useState('');
     let [logPw,setlogPw] = useState('');
@@ -32,7 +30,7 @@ function MainAtt(props)
     const [weekname] = useState(['(월)','(화)','(수)','(목)','(금)','(토)','(일)','보류','미참']);
     const [curMainAtt, setCurMainAtt] = useState([]);
     const [workDay, setWorkDay] = useState(new Date());
-    const [nonNext, setNonNext] = useState(false);
+    const [isAutoLogin, setAutoLogin] = useState(false);
 
     useEffect(()=>{
         console.log('MainAtt',"useEffect");
@@ -67,9 +65,8 @@ function MainAtt(props)
                 if(eDay==dDay) 
                     return e;
             })
-            list.length>0?setNonNext(true):setNonNext(false);
 
-            fetch(serverIP+"/out_Attend",{
+            fetch(serverPath()+"/out_Attend",{
                 method:"post",
                 headers : {
                 "content-type" : "application/json",
@@ -105,24 +102,6 @@ function MainAtt(props)
 
                 setCurMainAtt(attlist);
 
-                let attcrunt1 = count.map((e,i)=>
-                {
-                    let attarray = attlist[i].filter(e=>e.uid==userId);
-                    let settime = "19:00:00";
-                    if(i>4) settime = "15:00:00";
-                    if(attarray.length>0)
-                        return  {activity: true, time:attarray[0].atttime};
-                    else
-                        return  {activity: false, time:settime};
-
-                });
-                setChecklist(attcrunt1);
-                //let attcrunt2 = attcrunt1.slice();
-                let attcrunt2 = attcrunt1.map((e,i)=>{return {activity: e.activity, time: e.time}});
-                setAttMyData(attcrunt2);
-                console.log('attcrunt1',attcrunt1);
-                console.log('attcrunt2',attcrunt2);
-
                 json.map((e)=>{
                     if(!uids.includes(e.uid))
                     {
@@ -149,29 +128,13 @@ function MainAtt(props)
         return weekdaystr;
     }
 
-    
-    const onClickCheck = (e)=>{
-        // console.log('onClickCheck',e);
-        let checked = checklist;
-        console.log('onClickCheck',checked,e);
-        checked[e].activity = !checked[e].activity;
-        setChecklist(checked);
-        setRefresh(!refresh);
-        // settest(test+1);
-        // console.log('settest',test+1);
-        // checked.map((e)=>
-        // {
-        //     if(e)
-        // })
-        //setAttData
-    }
 
     const login = (e)=>{
         e.preventDefault();
         console.log(logId);
 
         let user = [logId,logPw];
-        fetch(serverIP+"/out_login",{
+        fetch(serverPath()+"/out_login",{
           method:"post",
           headers : {
             "content-type" : "application/json",
@@ -183,9 +146,17 @@ function MainAtt(props)
           console.log(json);
           if(json.length == 1)
           {
+            if(isAutoLogin)
+            {
+                localStorage.setItem('user_uid',json[0].uid);
+                localStorage.setItem('user_name',json[0].name);
+                localStorage.setItem('privilege',json[0].privilege);
+            }
             sessionStorage.setItem('user_uid',json[0].uid);
             sessionStorage.setItem('user_name',json[0].name);
             sessionStorage.setItem('privilege',json[0].privilege);
+            sessionStorage.setItem('login',true);
+            localStorage.setItem('autologin',isAutoLogin);
             window.location.replace("/");
           }
         })
@@ -200,7 +171,10 @@ function MainAtt(props)
     const logPwChange = (e)=>{
         setlogPw(e.target.value);
     }
-
+    const setCheckLogin = (e)=>{
+        console.log(e.target.checked);
+        setAutoLogin(e.target.checked);
+    }
     return(
         <div>
         {
@@ -212,6 +186,9 @@ function MainAtt(props)
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicPassword">
                             <Form.Control onChange={logPwChange} value={logPw} type="password" placeholder="Password" />
+                        </Form.Group>
+                        <Form.Group className="mb-3 " controlId="formBasicCheckbox">
+                            <Form.Check  type="checkbox" label="로그인 유지" onChange={setCheckLogin} checked={isAutoLogin}></Form.Check>
                         </Form.Group>
                         <Button onClick={login} variant="primary" type="submit">
                             Login

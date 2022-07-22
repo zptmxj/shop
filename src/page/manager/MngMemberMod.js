@@ -2,11 +2,12 @@
 import { Form, Button, Alert,FormControl,Col,Row,Table,ToggleButton } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import serverIP from '../../IP_PORT';
+import {serverPath} from '../../IP_PORT';
 import AutoComplete from '../component/AutoComplete/AutoComplete';
 import './MngMemberMod.scss';
 import {setStoreMember} from '../../store'
 import {useDispatch, useSelector} from 'react-redux'
+
 
 function MngMemberMod(props)
 {
@@ -27,6 +28,7 @@ function MngMemberMod(props)
 
     const [alertText, setAlertText] = useState("");
     const [alertColor,setAlertColor] = useState("primary");
+    const [isEnter,setIsEnter] = useState(false);
 
     useEffect(()=>{
         if(modMember.length==0)
@@ -42,7 +44,7 @@ function MngMemberMod(props)
     {
         console.log('App',"멤버정보 불러오기");
 
-        fetch(serverIP+"/out_member",{
+        fetch(serverPath()+"/out_member",{
             method:"post",
             headers : {
             "content-type" : "application/json",
@@ -96,7 +98,17 @@ function MngMemberMod(props)
         setMemClass(mclass);
         setView(mem.view==1);
         setActivity(mem.activity==1);
+        setIsEnter(false);
+    }
 
+    const onEnterClick = ()=>{
+        // let list = modMember.map(e=>e.name);
+        // let useridx = list.indexOf(value);
+        // if(useridx != -1)
+        // {
+        //     onEnter(useridx);
+        // }
+        setIsEnter(true);
     }
 
     const onSend = (idx)=>{
@@ -132,7 +144,7 @@ function MngMemberMod(props)
 
         let data = {uid:useinfo.uid,last:lastname,name:firstname,sex:sexinfo,age:birth,privilege:mclass,view:isView,activity:isActivity};
 
-        fetch(serverIP+"/mo_member", {
+        fetch(serverPath()+"/mo_member", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",
@@ -157,22 +169,31 @@ function MngMemberMod(props)
     }
 
 
+
     return(
         <div>
             <div className="title">
                 <h3> Member Modify </h3>
             </div>  
 
-            <Form.Group as={Row} controlId="formUser" className="mb-5">
+            <Form.Group as={Row} controlId="formUser" className="mb-4">
                 <Form.Label column xs={3} className="px-0">
                     검색 :
                 </Form.Label>
                 <Col xs={3} className='px-0'>
-                    <AutoComplete list={modMember.map(e=>e.name)} value={value} setValue={setValue} onEnter={onEnter} placeholder="Enter로 등록"/>
+                    <AutoComplete list={modMember.map(e=>e.name)} value={value} setValue={setValue} onEnter={onEnter} isEnter={isEnter} setIsEnter={setIsEnter} placeholder="Enter로 등록"/>
                 </Col>
                 <Col xs={1} className='px-0'>
+                    
                 </Col>
-                <Col xs={4} className='px-0'>
+                <Col xs={3} className='px-0'>
+                    <Button onClick={onEnterClick}>검색</Button>
+                </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} controlId="formUser" className="mb-4">
+                <Col xs={3} />
+                <Col xs={6} >
                     <Table bordered >
                         <tr>
                             <td className='px-0'>{useinfo.name}</td>
@@ -180,6 +201,7 @@ function MngMemberMod(props)
                         </tr>
                     </Table>
                 </Col>
+                <Col xs={3} />
             </Form.Group>
 
             <div className="MngGame-block">

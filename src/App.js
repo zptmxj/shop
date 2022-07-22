@@ -115,6 +115,7 @@ function App() {
 
             console.log('App',"멤버정보 불러오기");
             let data={uid:"all",order:"SELECT * FROM member JOIN asset USING(uid) order by total_point DESC"};
+            //let data={uid:"all",order:"SELECT * FROM member JOIN asset USING(uid) order BY (favor_up+favor_down) DESC, total_point DESC"};
 
             fetch(serverPath()+"/out_custom",{
               method:"post",

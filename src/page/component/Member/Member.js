@@ -21,7 +21,7 @@ function Member(props)
 
     return(
         <div className="list">
-            <table className="list-Table" >
+            <table className="list-Table" onClick={()=>{props.setMemberSel(data.idx)}}>
                 <tbody>
                     <tr>
                         <th className="list-th"></th>
@@ -43,7 +43,7 @@ function Member(props)
                             ))
                         }</td>
                         <Character sex={data.sex} path={path} />
-                        <td className="list-td" colSpan={2} onClick={()=>{props.setMemberSel(data.idx)}}>{ data.name }</td>
+                        <td className="list-td" colSpan={2}>{ data.name }</td>
                         <td className="list-td">{((Year+1)-data.age)}</td>
                         <td className="list-td">{data.sex?
                             <img src={img_female} width='30px' height='30px'/>:
@@ -52,10 +52,10 @@ function Member(props)
                     </tr>
                     <tr>
                         <td className="list-td" colSpan={2}>
-                            <img src={up_mg} width='20px' height='20px'/>{" "+0}
+                            <img src={up_mg} width='20px' height='20px'/>{" "+data.favor_up}
                         </td>
                         <td className="list-td" colSpan={2}>
-                            <img src={down_mg} width='20px' height='20px'/>{" "+0}
+                            <img src={down_mg} width='20px' height='20px'/>{" "+data.favor_down}
                         </td>
                         <td className="list-td" colSpan={2}>{data.total_point+" TP"}</td>
                     </tr>

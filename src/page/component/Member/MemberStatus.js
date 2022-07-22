@@ -8,6 +8,8 @@ import {serverPath,imagePath} from '../../../IP_PORT';
 import { useEffect, useState } from 'react';
 import ReactApexChart from "react-apexcharts"; 
 import {useDispatch, useSelector} from 'react-redux'
+import {setStoreMember, setStorePlate, setStoreUserData} from './../../../store'
+
 import img_rea from './status_rea.png';
 import img_role from './status_role.png';
 import img_stra from './status_stra.png';
@@ -16,6 +18,7 @@ import img_agil from './status_agil.png';
 import img_gamb from './status_gamb.png';
 
 function MemberStatus(props){
+    const dispatch = useDispatch();
 
     const [miniShow, setMiniShow] = useState(false);
     const [miniText, setMiniText] = useState("");
@@ -62,7 +65,34 @@ function MemberStatus(props){
                 setFavordata(all);
                 setIsFavor(true);
             });
+
+            fetch(serverPath()+"/out_asset",{
+                method:"post",
+                headers : {
+                    "content-type" : "application/json",
+                },
+                body : JSON.stringify(uid),
+            })
+            .then((res)=>res.json())
+            .then((asset)=>{
+                console.log("asset",asset);
+                setFavorUp(asset[0].favor_up);
+                setFavorDown(asset[0].favor_down);
+
+                let membercopy = member.map(e=>{return {...e}});
+                let idx = member.findIndex(e=>e.uid == data.uid);
+
+                membercopy[idx].favor_up = asset[0].favor_up;
+                membercopy[idx].favor_down = asset[0].favor_down;
+                //let sortlist = membercopy.sort((a,b)=>(b.favor_up+b.favor_down)-(a.favor_up+a.favor_down))
+                //console.log("sortlist",sortlist);
+                
+                dispatch(setStoreMember(membercopy));
+            });
+
+
         }
+
     })
 
     let text = "투표"
@@ -140,7 +170,7 @@ function MemberStatus(props){
                                 if(json.succes=="succes") 
                                 {
                                     setInputShow(false);
-                                    setIsFavor(true);
+                                    setIsFavor(false);
                                 }
                                 else
                                     setAlertText("서버 에러");
@@ -161,16 +191,14 @@ function MemberStatus(props){
                     console.log("서버에서 처리를 실패 했습니다",e);
                 }
             })
-
-            if(onFavorSend())
-            {
-                setInputShow(false);
-            }
         }
     }
 
-    const onFavorSend = ()=>{
-        
+    const onFavorShow = ()=>{
+        setAlertText("");
+        setInputText("");
+        setFavorValue(0);
+        setInputShow(true);
     }
 
     const onSend = ()=>{
@@ -364,7 +392,7 @@ function MemberStatus(props){
                 </Modal.Footer>
             </Modal>
 
-            <Button className='my-3' onClick={()=>{setAlertText(""); setInputShow(true)}} disabled={userId==data.uid}>메시지 입력</Button>
+            <Button className='my-3' onClick={onFavorShow} disabled={userId==data.uid}>메시지 입력</Button>
             
             <Modal
                 show={inputShow}
@@ -424,7 +452,7 @@ function MemberStatus(props){
                             <Toast >
                                 <Toast.Header closeButton={false}>
                                     <img src={userAvatar} width='20px' height='20px' className="rounded me-2" alt="" />
-                                    <strong className="me-auto">용우</strong>
+                                    <strong className="me-auto">{e.name}</strong>
                                     <img src={icon} width='20px' height='20px'/>
                                     <strong className="me-2">{e.favor}</strong>
                                     <small>{timeForToday(e.date)}</small>
@@ -435,37 +463,7 @@ function MemberStatus(props){
                     )
                 }) 
             }
-            {/* <Toast className="toast mt-3">
-                <Toast.Header closeButton={false}>
-                    <img src={img} width='20px' height='20px' className="rounded me-2" alt="" />
-                    <strong className="me-auto">용우</strong>
-                    <img src={up_mg} width='20px' height='20px'/>
-                    <strong className="me-2">+20</strong>
-                    <small>1분전</small>
-                </Toast.Header>
-            </Toast>
-            <div className="toast-r mt-3">                
-                <Toast >
-                    <Toast.Header closeButton={false}>
-                        <img src={img} width='20px' height='20px' className="rounded me-2" alt="" />
-                        <strong className="me-auto">용우</strong>
-                        <img src={down_mg} width='20px' height='20px'/>
-                        <strong className="me-2">-20</strong>
-                        <small>1분전</small>
-                    </Toast.Header>
-                    <Toast.Body>Hello, world!.</Toast.Body>
-                </Toast>
-            </div>
-            <Toast className="toast mt-3">
-                <Toast.Header closeButton={false}>
-                    <img src={img} width='20px' height='20px' className="rounded me-2" alt="" />
-                    <strong className="me-auto">용우</strong>
-                    <img src={up_mg} width='20px' height='20px'/>
-                    <strong className="me-2">+20</strong>
-                    <small>1분전</small>
-                </Toast.Header>
-                <Toast.Body>Hello, world!.</Toast.Body>
-            </Toast> */}
+  
             <div className='my-5'>
                 <Button  onClick={props.callback}>뒤로</Button>
             </div>

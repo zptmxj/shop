@@ -20,7 +20,7 @@ function MemberList(props)
     console.log('useParams',id);
 
 
-    const member = useSelector((state)=>{return state.member});
+    let member = useSelector((state)=>{return state.member});
     const dispatch = useDispatch();
 
     const curDate = new Date();
@@ -90,7 +90,6 @@ function MemberList(props)
 
 
     useEffect(()=>{
-
         if(allStatus.length==0)
         {
             fetch(serverPath()+"/out_allstatus",{
@@ -165,6 +164,7 @@ function MemberList(props)
     }
 
     const setBackCallback = ()=>{
+        
         setIsButton(false);
         setSel(-1);
         

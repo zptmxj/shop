@@ -1,6 +1,6 @@
-@import "../../node_modules/rfs/scss";
+@import "../../../node_modules/rfs/scss";
 
-.Avatar-top{
+.Animal-top{
   background:rgb(255, 255, 255);
   display: flex;
   color:black;
@@ -10,7 +10,7 @@
   align-items: center;
 }
 
-.Avatar-midle{
+.Animal-midle{
   display: flex;
   justify-content: center;
 }
@@ -23,15 +23,15 @@
   padding-top: calc(0.5rem + 1vw);
 }
 
-.Avatar-pad{
+.Animal-pad{
   padding-top: calc(1.0rem + 1vw);
   display: flex;
   justify-content: center;
   width: 23vmin;
   text-align: center;
 }
-.Avatar-pad:hover{
-  @extend .Avatar-pad;
+.Animal-pad:hover{
+  @extend .Animal-pad;
   background:rgb(233, 233, 233);
 }
 
@@ -48,16 +48,16 @@
   font-size: calc(0.5rem + 1.5vw) !important;
 }
 
-.Avatar-pag {
+.Animal-pag {
   @extend .pad-top;
   padding-bottom: calc(0.5rem + 1vw);
   display: flex;
   justify-content: center;
 }
 
-.Avatar-img {
-  width: 25vmin;
-  height: 25vmin;
+.Animal-img {
+  width: 20vmin;
+  height: 20vmin;
   max-width: 150px;
   max-height: 150px;
   display: block; 
@@ -67,18 +67,17 @@
   filter: alpha(opacity=50);
 }
 
-.Avatar-img-non {
-  @extend .Avatar-img;
+.Animal-img-non {
+  @extend .Animal-img;
   opacity: 0.4;
   filter: alpha(opacity=50);
 }
 
-.Avatar-modal-img {
+.Animal-modal-img {
   width: 45vmin;
   height: 45vmin;
   max-width: 270px;
   max-height: 270px;
-  padding: 10px;
   border: 1px solid #a7a7a7;
   display: block; 
   margin: 0px auto;
@@ -96,7 +95,26 @@
   margin: 0px auto;
 }
 
+.Animal-parent{
+  position: relative;
+  width: 45vmin;
+  height: 45vmin;
+  max-width: 270px;
+  max-height: 270px;
+}
 
+.Animal-child{
+  position:absolute;
+  bottom: 0px; 
+  right: 0px;
+}
+
+.hildimg{
+  width: 20vmin;
+  height: 20vmin;
+  max-width: 100px;
+  max-height: 100px;
+}
 
 // @media (min-width: 1200px) {
 //   .label {

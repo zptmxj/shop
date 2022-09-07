@@ -1,0 +1,53 @@
+@import "../../../node_modules/rfs/scss";
+
+.Avatar-top{
+  background:rgb(255, 255, 255);
+  display: flex;
+  color:black;
+  padding-left:5vw;
+  padding-right:5vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.LeavesLottery-top{
+  background:rgb(255, 255, 255);
+  display: flex;
+  color:black;
+  padding-left:5vw;
+  padding-right:5vw;
+  justify-content: center;
+  align-items: center;
+}
+
+th,td{
+  vertical-align : middle;
+}
+
+.img-wow-enter{
+  opacity: 0;
+}
+.img-wow-enter-active{
+  opacity: 1;
+  transition: all 500ms;
+}
+
+.img-parent{
+  position: relative;
+  width: 190px;
+  height: 300px;
+}
+
+.img-child{
+  position:absolute;
+  top:0px; 
+  left:0px;
+  animation:alternate-reverse 1s;
+}
+
+.scr-canvas {
+  touch-action: none;
+  // background-color: rgba(255, 255, 255, 0);
+  // border-radius: 7px;
+  // box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0px 0px 3px rgba(0, 0, 0, 0.5);
+}

@@ -18,7 +18,8 @@ function Member(props)
     let data =props.data;
     let idx = props.idx;
     let path = data.path;
-
+    let anipath = data.anipath;
+    let aniidx = data.animal;
     return(
         <div className="list">
             <table className="list-Table" onClick={()=>{props.setMemberSel(data.idx)}}>
@@ -42,7 +43,7 @@ function Member(props)
                             props.num
                             ))
                         }</td>
-                        <Character sex={data.sex} path={path} />
+                        <Character sex={data.sex} path={path} anipath={anipath} aniidx={aniidx} />
                         <td className="list-td" colSpan={2}>{ data.name }</td>
                         <td className="list-td">{((Year+1)-data.age)}</td>
                         <td className="list-td">{data.sex?
@@ -57,7 +58,8 @@ function Member(props)
                         <td className="list-td" colSpan={2}>
                             <img src={down_mg} width='20px' height='20px'/>{" "+data.favor_down}
                         </td>
-                        <td className="list-td" colSpan={2}>{data.total_point+" TP"}</td>
+                        <td className="list-td" colSpan={2}>{data.point+" P"}</td>
+                        {/* <td className="list-td" colSpan={2}>{data.total_point+" TP"}</td> */}
                     </tr>
                     <tr>
                         <td className="list-th"></td>
@@ -122,9 +124,17 @@ function Member(props)
 
 function Character(props){
     let img = imagePath() + "/avatars/" + props.path;
+    let aniimg = imagePath() + "/animals/" + props.anipath;
+    console.log("aniimg",aniimg);
+    let aniidx = props.aniidx;
     return(
         <td className="list-td">
-            <img src={img} width='40px' height='40px'/>
+            <div className="flex">
+                <div className="list-parent">
+                    <img className="list-parent-img" src={img}/>
+                    {aniidx>0?<div className="list-child"> <img className="list-child-img" src={aniimg}/> </div>:null}
+                </div>
+            </div>
         </td>
     )
 

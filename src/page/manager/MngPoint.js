@@ -383,7 +383,7 @@ function MngPoint(props)
                     <InputGroup className='MngPoint-input-deposit'>
                         <SplitButton
                         variant="outline-secondary"
-                        title="Cash :"
+                        title="Point :"
                         id="segmented-button-dropdown-1"
                         >
                             <Dropdown.Item onClick={()=>{setVariance("10")}}>20000</Dropdown.Item>

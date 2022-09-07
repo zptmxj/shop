@@ -16,8 +16,8 @@ import down_mg from './component/Member/down.png';
 
 function MemberList(props)
 {
-    const {id} = useParams();
-    console.log('useParams',id);
+    // const {id} = useParams();
+    // console.log('useParams',id);
 
 
     let member = useSelector((state)=>{return state.member});
@@ -90,6 +90,8 @@ function MemberList(props)
 
 
     useEffect(()=>{
+
+
         if(allStatus.length==0)
         {
             fetch(serverPath()+"/out_allstatus",{
@@ -144,6 +146,10 @@ function MemberList(props)
             //window.scrollTo(0,scrollY);
             console.log('window.scrollTo',scrollY);
         }
+        else
+        {
+            window.scrollTo({top:400,behavior:"instant"});
+        }
     })
 
     const setMemberSel = (idx,data)=>{
@@ -164,10 +170,8 @@ function MemberList(props)
     }
 
     const setBackCallback = ()=>{
-        
         setIsButton(false);
         setSel(-1);
-        
     }
 
     const onSend = ()=>{

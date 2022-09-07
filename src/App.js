@@ -17,11 +17,17 @@ import MemberList from './page/MemberList';
 import CheckIn from './page/CheckIn';
 import Attend from './page/Attend';
 import BoardGame from './page/BoardGame';
-import Avatar from './page/Avatar';
-import Betting from './page/Betting';
+import Avatar from './page/point/Avatar';
+import Animal from './page/point/Animal';
+import Betting from './page/point/Betting';
+import Passing from './page/manager/Passing';
 import Border from './page/Border';
 import MyCash from './page/mypage/MyCash';
 import MyPoint from './page/mypage/MyPoint';
+import MyBonus from './page/mypage/MyBonus';
+import MyAnimal from './page/mypage/MyAnimal';
+import MyAvatar from './page/mypage/MyAvatar';
+
 import MyPassword from './page/mypage/MyPassword';
 import TestPage from './page/TestPage';
 import MngCheckIn from './page/manager/MngCheckIn';
@@ -31,6 +37,11 @@ import MngGameAdd from './page/manager/MngGameAdd';
 import MngMemberAdd from './page/manager/MngMemberAdd';
 import MngMemberMod from './page/manager/MngMemberMod';
 import MngAvatarAdd from './page/manager/MngAvatarAdd';
+import MngAnimalAdd from './page/manager/MngAnimalAdd';
+import MonkeyLottery from './page/lottery/MonkeyLottery';
+import LeavesLottery from './page/lottery/LeavesLottery';
+
+
 import {serverPath,imagePath} from './IP_PORT';
 
 
@@ -72,11 +83,14 @@ function App() {
   const [userName,setUserName] = useState(getUserName());
   const [userPrivilege,setUserPrivilege] = useState(getPrivilege());
   const [mycash,setMycash] = useState(0);
+  const [mypoint,setPoint] = useState(0);
   const [avatars,setAvatars] = useState([]);
   const [member,setMember] = useState([]);
+  const [avtidx,setAvtidx] = useState([]);
 
-  const Mnglink = ["/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngGameAdd","/MngMemberAdd","/MngMemberMod","/MngAvatarAdd"];
-  const Mngtext = ["TestPage","CheckIn","Deposit","Point","GameAdd","MemberAdd","MemberMod","AvatarAdd"];
+  
+  const Mnglink = ["/Passing","/","/MngMemberAdd","/MngMemberMod","/","/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngGameAdd","/MngAvatarAdd","MngAnimalAdd"];
+  const Mngtext = ["Passing","/","MemberAdd","MemberMod","/","TestPage","CheckIn","Deposit","Point","GameAdd","AvatarAdd","AnimalAdd"];
   
 
   useEffect(()=>{
@@ -114,7 +128,8 @@ function App() {
             setAvatars(avat);
 
             console.log('App',"멤버정보 불러오기");
-            let data={uid:"all",order:"SELECT * FROM member JOIN asset USING(uid) order by total_point DESC"};
+            //let data={uid:"all",order:"SELECT * FROM member JOIN asset USING(uid) order by point DESC"};
+            let data={uid:"all",order:"SELECT ma.*, av.path, an.path AS anipath, an.name AS aniname FROM (SELECT m.*,a.cash,a.point,a.bonus,a.avatar,a.animal,a.favor_up,a.favor_down FROM member m left join asset a ON m.uid=a.uid order by point DESC) ma LEFT JOIN avatar av ON ma.avatar=av.idx LEFT JOIN animal an ON ma.animal=an.idx"};
             //let data={uid:"all",order:"SELECT * FROM member JOIN asset USING(uid) order BY (favor_up+favor_down) DESC, total_point DESC"};
 
             fetch(serverPath()+"/out_custom",{
@@ -127,18 +142,28 @@ function App() {
             .then((res)=>res.json())
             .then((json)=>{
               let myavatar="";
+              let avtidx = 0;
               setMember(json);
 
               let asset = json.map((mem,i)=>{
                   if(mem.uid == userId)
+                  {
                     setMycash(mem.cash);
+                    setPoint(mem.point);
+                    avtidx = mem.avatar;
+                    // setAvtidx(mem.avatar);
+                  }
 
                   let avatar = avat.filter(e=>e.idx==mem.avatar);
+
                   let path = "m/m000.png";
                   if(avatar.length == 0 )
                   {
                       if(mem.sex==1) path = "w/w000.png";
                       else path = "m/m000.png";
+                      
+                      if(mem.uid == userId)
+                        myavatar = path;
                   }
                   else{
                       path = avatar[0].path;
@@ -148,15 +173,17 @@ function App() {
                   mem.path = path;
                   return mem;
               })
+              //let sortlist = asset.sort((a,b)=>(b.favor_up+b.favor_down)-(a.favor_up+a.favor_down))
 
               dispatch(setStoreMember(asset));
+              //dispatch(setStoreMember(sortlist));
               console.log('member',asset);
 
               console.log("isAutoLogin",isAutoLogin,"userId",userId,"isfirst",isfirst);
 
               if(userId != null)
               {
-                  let userData = {uid:userId , name:userName , privilege:userPrivilege, avatar:myavatar}
+                  let userData = {uid:userId , name:userName , privilege:userPrivilege, avatar:myavatar, avtidx: avtidx}
                   dispatch(setStoreUserData(userData));
               }
               
@@ -266,11 +293,14 @@ function App() {
                         <Nav.Link as={Link} className="App-nav" to="/Attend">◆ Attend </Nav.Link>
                         <NavDropdown className="App-nav" title="◆ Point" id="basic-nav-dropdown">
                           <NavDropdown.Item as={Link} to="/Avatar"> Avatar </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/Animal"> Animal </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/Betting"> Betting </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/LeavesLottery"> LeavesLottery </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/MonkeyLottery"> MonkeyLottery </NavDropdown.Item>
                           {/* <NavDropdown.Item as={Link} to="/Border"> Border </NavDropdown.Item> */}
                         </NavDropdown>
                         {
-                          userPrivilege>2?(
+                          userPrivilege>1?(
                           <NavDropdown className="App-nav" title="◇ Manager" id="basic-nav-dropdown">
                           {
                             Mngtext.map((e,i)=>{return <Manager key={i} idx={i} link={Mnglink[i]} text={e} Privilege={userPrivilege}/>})
@@ -280,6 +310,11 @@ function App() {
                         <NavDropdown className="App-nav" title="◆ MyPage" id="basic-nav-dropdown">
                           <NavDropdown.Item as={Link} to="/MyCash">Cash</NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/MyPoint">Point</NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/MyBonus">Bonus</NavDropdown.Item>
+                          <NavDropdown.Divider />
+                          <NavDropdown.Item as={Link} to="/MyAvatar">Avatar</NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/MyAnimal">Animal</NavDropdown.Item>
+                          
                           <NavDropdown.Item href="#action/3.3">----</NavDropdown.Item>
                           <NavDropdown.Divider />
                           <NavDropdown.Item as={Link} to="/MyPassword">Password</NavDropdown.Item>
@@ -288,9 +323,14 @@ function App() {
                     </Navbar.Collapse>
                     <Navbar.Text>
                       Signed in as {userName}: <a onClick={logout} href="/">Logout</a>
-                      <Nav.Link as={Link} to="/MyCash">
+                      <Nav.Link as={Link} to="/MyCash" className='pb-0'>
                           {
                             mycash<=0?<>잔액: <string className='App-font-rad' >{mycash}</string></>:<>잔액: <string className='App-font-blue' >{mycash}</string></>
+                          }
+                      </Nav.Link>
+                      <Nav.Link as={Link} to="/MyPoint" className='pt-0'>
+                          { 
+                            mypoint<=0?<p className='my-0'>포인트: <string className='App-font-rad' >{mypoint}</string></p>:<p className='my-0'>포인트: <string className='App-font-blue' >{mypoint}</string></p>
                           }
                       </Nav.Link>
                     </Navbar.Text>
@@ -327,8 +367,17 @@ function App() {
             <Route path="/Avatar">
               <Avatar/>
             </Route>
+            <Route path="/Animal">
+              <Animal/>
+            </Route>
             <Route path="/Betting">
               <Betting/>
+            </Route>
+            <Route path="/MonkeyLottery">
+              <MonkeyLottery/>
+            </Route>
+            <Route path="/LeavesLottery">
+              <LeavesLottery/>
             </Route>
             <Route path="/Border">
               <Border/>
@@ -339,10 +388,19 @@ function App() {
             <Route path="/MyPoint">
               <MyPoint />
             </Route>
+            <Route path="/MyBonus">
+              <MyBonus />
+            </Route>
+            <Route path="/MyAvatar">
+              <MyAvatar />
+            </Route>
+            <Route path="/MyAnimal">
+              <MyAnimal />
+            </Route>
             <Route path="/MyPassword">
               <MyPassword />
             </Route>            
-            
+
             {
               userPrivilege>3?(
               <div>
@@ -358,11 +416,15 @@ function App() {
                 <Route path="/MngPoint">
                   <MngPoint />
                 </Route>
+                
                 <Route path="/MngGameAdd">
                   <MngGameAdd />
                 </Route>
                 <Route path="/MngAvatarAdd">
                   <MngAvatarAdd />
+                </Route>
+                <Route path="/MngAnimalAdd">
+                  <MngAnimalAdd />
                 </Route>
                 
               </div>
@@ -379,6 +441,15 @@ function App() {
               </Route>
               </>
               ):null
+            }
+            {
+              userPrivilege>1?(
+                <>
+                  <Route path="/Passing">
+                    <Passing />
+                  </Route>
+                </>
+                ):null
             }
             <Route path="/detail">
               <Detail name = {ItemName} />
@@ -406,11 +477,23 @@ function Manager(props){
     let link = props.link;
     let text = props.text;
     let idx = props.idx;
-    if(idx < 5 && privilege < 4) return;
 
-  return(
-    <NavDropdown.Item as={Link} to={link}>{text}</NavDropdown.Item>
-  )
+    if(privilege < 2) return;
+    if(idx > 0 && privilege == 2) return;
+    if(idx > 3 && privilege == 3) return;
+
+    if(text=="/")
+    {
+      return(
+        <NavDropdown.Divider />
+      )
+    }
+    else
+    {
+      return(
+        <NavDropdown.Item as={Link} to={link}>{text}</NavDropdown.Item>
+      )
+    }
 }
 
 

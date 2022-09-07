@@ -175,7 +175,7 @@ function MngMemberMod(props)
             <div className="title">
                 <h3> Member Modify </h3>
             </div>  
-
+            
             <Form.Group as={Row} controlId="formUser" className="mb-4">
                 <Form.Label column xs={3} className="px-0">
                     검색 :

@@ -2,10 +2,12 @@
 import { Form, Button, InputGroup,FormControl,Dropdown, FormGroup } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {serverPath} from '../IP_PORT';
+import {serverPath,imagePath} from '../IP_PORT';
 import './TestPage.scss';
 import ReactApexChart from "react-apexcharts"; 
 //import {Unity,useUnityContext } from 'react-unity-webgl';
+const img1 = imagePath()+ "/avatars/m/m001.png";
+const img2 = imagePath()+ "/animal/a054.png";
 
 function TestPage(props)
 {
@@ -15,7 +17,11 @@ function TestPage(props)
     //     frameworkUrl: "Build/WebGl.framework.js",
     //     codeUrl: "Build/WebGl.wasm",
     //   });
-
+    const [ctx, setCtx] = useState("");
+    const [touchX, setTouchX] = useState(0);
+    const [touchY, setTouchY] = useState(0);
+    const [painting, setPainting] = useState(false);
+    
     let count = [1,2,3,4,5];
     const [series, setSeries] = useState(
      [{
@@ -75,6 +81,25 @@ function TestPage(props)
         setCurlist(tset1);
         console.log('tset',tset);
         console.log('tset1',tset1);
+        const cvs = document.querySelector("canvas");
+        let tctx = cvs.getContext("2d")
+        setCtx(tctx);
+        tctx.save();
+        tctx.beginPath();
+        tctx.fillStyle='rgba(120,120,120,1)';
+        tctx.fillRect(0,0,cvs.width,cvs.height);
+        tctx.restore();
+        // tctx.save();
+        // tctx.beginPath();
+        // tctx.globalCompositeOperation='destination-out';
+        // tctx.fillStyle='rgba(120,120,120,1)';
+        // tctx.lineWidth = 10;
+        // tctx.moveTo(50, 50);
+        // tctx.lineTo(150, 50);
+        // tctx.stroke();
+        // tctx.restore();
+
+
     },[])
 
     useEffect(()=>{
@@ -159,45 +184,99 @@ function TestPage(props)
         console.log(ApexChart);
     }
 
+    const INITIAL_COLOR = "#2c2c2c";
+    const INITIAL_LINEWIDTH = 5.0;
+    const CANVAS_SIZE = 500;
+
+    function onMouseMove(e) {
+        // const x = tochedX - event.changedTouches[0].pageX;
+        // const y = tochedY - event.changedTouches[0].pageY;
+        
+
+        const x = e.changedTouches[0].pageX - e.target.offsetLeft;
+        const y = e.changedTouches[0].pageY - e.target.offsetTop;
+        console.log("move",x,y);
+        if(painting) {
+            ctx.beginPath();
+            ctx.moveTo(touchX, touchY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.arc(x,y,20,0,Math.PI*2, false)
+            ctx.fill();
+        }
+        setTouchX(x);
+        setTouchY(y);
+    }
+
+    function startPainting(e) { 
+        console.log("start",e);
+        const x = e.changedTouches[0].pageX - e.target.offsetLeft;
+        const y = e.changedTouches[0].pageY - e.target.offsetTop;
+        setTouchX(x);
+        setTouchY(y);
+        console.log("start",x,y);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.globalCompositeOperation='destination-out';
+        ctx.fillStyle='rgba(120,120,120,1)';
+        ctx.lineWidth = 20;
+        
+        setPainting(true);
+    }
+
+    function stopPainting(e) { 
+        console.log("stop"); 
+        ctx.restore();
+
+        setPainting(false);
+    }
 
     return(
         <div>
-        {
-            <div>
-                <h3> TestPage </h3>
-                
-                {/* <Unity unityProvider={unityProvider}></Unity> */}
-                <div className='ApexChart'>
-                    <ReactApexChart options={options} series={series} type="radar" height={300}/>
-                </div>
-                <button onClick={onApexChartClick01}>ApexChart</button>
+            <h3> TestPage </h3>
+            
+            {/* <Unity unityProvider={unityProvider}></Unity> */}
 
-                <input value={data01} onChange={onChange01}/>
-                <button onClick={onClick01}>data1</button>
-                <input value={data02} onChange={onChange02}/>
-                <button onClick={onClick02}>data2</button>
-           
-                <div>
-                {
-                    count.map((e,i)=>{
-                        return(
-                        <Form.Check key ={i} type='checkbox' id='rd1' onChange={()=>onClickCheck(i)} checked={checklist[i]}/>
-                        )
-                    })
-                }
-                </div>
-                <div>
-                <div className='imgbox'></div>
-                <InputGroup className="mb-3">
-                    <FormControl type="file" accept='image/*' aria-label="First name" onChange={onChangeImg} />
-                    <Button variant="outline-secondary" id="button-addon2" onClick={onSendImg}>
-                        Button
-                    </Button>
-                </InputGroup>
+            <div className='flex'>
+                <canvas onTouchStart={startPainting} onTouchMove={onMouseMove} onTouchEnd={stopPainting} id="jsCanvas" width={150} height={100} className="scr-canvas"/>
+            </div>
+
+            <div className='flex'>
+                <div className='img-parent'>
+                    <img src={img1} width='90px' height='90px' />
+                    <div className='img-child'>
+                        <img src={img2} width='40px' height='40px'/>
+                    </div>
                 </div>
             </div>
-        }
-        </div> 
+
+            <button onClick={onApexChartClick01}>ApexChart</button>
+
+            <input value={data01} onChange={onChange01}/>
+            <button onClick={onClick01}>data1</button>
+            <input value={data02} onChange={onChange02}/>
+            <button onClick={onClick02}>data2</button>
+        
+            <div>
+            {
+                count.map((e,i)=>{
+                    return(
+                    <Form.Check key ={i} type='checkbox' id='rd1' onChange={()=>onClickCheck(i)} checked={checklist[i]}/>
+                    )
+                })
+            }
+            </div>
+            <div>
+            <div className='imgbox'></div>
+            <InputGroup className="mb-3">
+                <FormControl type="file" accept='image/*' aria-label="First name" onChange={onChangeImg} />
+                <Button variant="outline-secondary" id="button-addon2" onClick={onSendImg}>
+                    Button
+                </Button>
+            </InputGroup>
+            </div>
+        </div>
     )
 }
 

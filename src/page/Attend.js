@@ -311,7 +311,6 @@ function Attend(props)
                                             </tr>
                                             <TDATA idx={i} openlist={openlist} curlist={curAttend} checklist={checklist} userId={userId} setCallBack={setCallBack}/>
                                         </>
-
                                     )
                                 }
 
@@ -371,8 +370,8 @@ function TDATA(props)
             else 
                 timeStr ="오전 " + timeArray[0] + ':' + timeArray[1];
         }
-        let imgpath = imagePath()+'/avatars/'+e.path;
-        console.log("imgpath",imgpath);
+        //let imgpath = imagePath()+'/avatars/'+e.path;
+        //console.log("imgpath",imgpath);
 
         return (
             <tr key = {i} className={classN}>

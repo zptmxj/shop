@@ -7,6 +7,7 @@ import down_mg from './down.png';
 import {serverPath,imagePath} from '../../../IP_PORT';
 import { useEffect, useState } from 'react';
 import ReactApexChart from "react-apexcharts"; 
+import {useHistory} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import {setStoreMember, setStorePlate, setStoreUserData} from './../../../store'
 
@@ -19,6 +20,7 @@ import img_gamb from './status_gamb.png';
 
 function MemberStatus(props){
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const [miniShow, setMiniShow] = useState(false);
     const [miniText, setMiniText] = useState("");
@@ -46,10 +48,11 @@ function MemberStatus(props){
     const series = props.status.series[0];
     const Year = new Date().getFullYear();
     const img = imagePath()+ "/avatars/" + data.path;
+    const aniimg = imagePath()+ "/animals/" + data.anipath;
     const myavatar = imagePath()+ "/avatars/" + userData.avatar;
 
     useEffect(()=>{
-        console.log("MemberStatus_useEffect");
+        console.log("MemberStatus_useEffect",data);
         if(!isFavor)
         {
             let uid = {uid:data.uid}
@@ -89,11 +92,23 @@ function MemberStatus(props){
                 
                 dispatch(setStoreMember(membercopy));
             });
-
-
         }
 
     })
+
+    useEffect(()=>{
+        let unlisten = history.block((loc,action) => {
+            if (action === 'POP') {
+                props.callback();
+                return false;
+            }
+            return true;
+        });
+
+        return () => {
+            unlisten();
+        };
+    },[])
 
     let text = "투표"
     let classN = "list-td-button-off"
@@ -249,7 +264,6 @@ function MemberStatus(props){
         setStasel([false,false,false,false,false,false]);
         props.onCancel();
     }
-    
 
     const onCheck = (i)=>{
         console.log('onCheck',i);
@@ -263,6 +277,7 @@ function MemberStatus(props){
         setStasel(sels);
         setRefresh(!refresh);
     }
+
     return(
         <div>
             <table className="list-Table" >
@@ -277,7 +292,13 @@ function MemberStatus(props){
                     </tr>
                     <tr>
                         <td className="list-td" rowSpan={2} colSpan={2}>
-                            <img src={img} width='90px' height='90px'/>
+                        <div className="flex">
+                            <div className="Status-parent">
+                                <img className="Status-parent-img" src={img}/>
+                                {data.animal>0?<div className="Status-child"> <img className="Status-child-img" src={aniimg}/> </div>:null}
+                            </div>
+                        </div>
+                            
                         </td>
                         <td className="list-td" colSpan={2} onClick={()=>{props.setMemberSel(data.idx)}}>{ data.name }</td>
                         <td className="list-td">{((Year+1)-data.age)}</td>
@@ -287,8 +308,8 @@ function MemberStatus(props){
                         }</td>
                     </tr>
                     <tr>
-                        <td className="list-td" colSpan={2}>{"--"}</td>
-                        <td className="list-td" colSpan={2}>{data.total_point+" TP"}</td>
+                        <td className="list-td" colSpan={2}>{data.animal>0?data.aniname:"--"}</td>
+                        <td className="list-td" colSpan={2}>{data.point+" P"}</td>
                     </tr>
                     <tr>
                         <td className="list-td" rowSpan={4} colSpan={4}>
@@ -401,11 +422,10 @@ function MemberStatus(props){
                 backdrop={"static"}
                 onHide={()=>{setInputShow(false)}}
                 centered
-                
             >
                 <Modal.Header closeButton>
                     <img src={myavatar} width='40px' height='40px' className="rounded me-2" alt="" />
-                    <strong className="me-auto fs-3">용우</strong>
+                    <strong className="me-auto fs-3">{userName}</strong>
                 </Modal.Header>
                 <Modal.Body >
                     <div className='memlist-input mb-3'>
@@ -435,13 +455,13 @@ function MemberStatus(props){
                 favordata.map((e)=>{
                     let classN = "toast-l mt-3";
                     let icon = up_mg;
-                    let mem = member.map((mem)=>{
+                    
+                    let mem = member.filter((mem)=>{
                         if(e.uid == mem.uid)
                             return mem;
                     })
 
                     let userAvatar = imagePath()+ "/avatars/" + mem[0].path;
-                    console.log("userAvatar",userAvatar);
                     if(e.favor<0)
                     {
                         classN = "toast-r mt-3";
@@ -449,7 +469,7 @@ function MemberStatus(props){
                     }
                     return(
                         <div className={classN}>                
-                            <Toast >
+                            <Toast>
                                 <Toast.Header closeButton={false}>
                                     <img src={userAvatar} width='20px' height='20px' className="rounded me-2" alt="" />
                                     <strong className="me-auto">{e.name}</strong>

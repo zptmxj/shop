@@ -32,4 +32,34 @@
 .fs-red{
     color: rgb(255, 130, 130);
 }
+.fs-blue{
+    color: rgb(50, 50, 255);
+}
+.fs-green{
+    color: rgb(50, 200, 50);
+}
 
+.Status-parent{
+    position: relative;
+    max-width: 90px;
+    max-height: 90px;
+}
+.Status-parent-img{
+    max-width: 90px;
+    max-height: 90px;
+}
+
+.Status-child{
+    position:absolute;
+    display: flex;
+    align-items: center;
+    bottom: 0px; 
+    right: 0px;
+}
+
+.Status-child-img{
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0;
+}

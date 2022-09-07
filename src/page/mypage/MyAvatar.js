@@ -1,21 +1,24 @@
-import './Avatar.scss';
+import './MyAvatar.scss';
 import React,{useState,useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import {Pagination , Modal, Button,Spinner,Alert} from 'react-bootstrap';
-import {serverPath,imagePath} from '../IP_PORT';
-import {useSelector} from 'react-redux'
+import {serverPath,imagePath} from '../../IP_PORT';
+import {useSelector,useDispatch} from 'react-redux'
+import {setStoreMember, setStorePlate, setStoreUserData} from '../../store'
 
-function Avatar()
+function MyAvatar()
 {
+    const dispatch = useDispatch();
     let member = useSelector((state)=>{return state.member});
     let userData = useSelector((state)=>{return state.data});
     let [userId,setUserId] = useState(userData.uid);
+    let [userAvt,setUserAvt] = useState(userData.avtidx);
 
     let history = useHistory();
     const [sel, setsel] = useState(0);
     const [imgNum, setImgNum] = useState(0);
     const [imgPath, setImgPath] = useState('');
-    const [avatars, setAvatars] = useState([]);
+    const [MyAvatars, setMyAvatars] = useState([]);
     const [sex, setSex] = useState();
     const [modalShow, setModalShow] = useState(false);
     const [miniShow, setMiniShow] = useState(false);
@@ -24,30 +27,27 @@ function Avatar()
 
     const [isAlert, setIsAlert] = useState(false);
     const [alertColor,setAlertColor] = useState("primary");
+    const [refresh, setRefresh] = useState(true);
 
     useEffect(()=>{
-        console.log('useEffect', member);
-
-        let mem = member.filter((e)=>{
-            if(e.uid == userId) 
-                return e;
-        });
-        setSex(mem[0].sex);
-
-        if(avatars.length == 0)
+        if(refresh == true)
         {
-            fetch(serverPath()+"/out_avatar",{
+            let avatarPath;
+            setRefresh(false);
+            fetch(serverPath()+"/out_myavatar",{
                 method:"post",
                 headers : {
                     "content-type" : "application/json",
                 },
-                body : JSON.stringify({sex:mem[0].sex}),
+                body : JSON.stringify({uid:userId}),
             })
             .then((res)=>res.json())
             .then((json)=>{
-                console.log('out_avatar', json);
-                setAvatars(json);
+                console.log('out_MyAvatar', json);
+                setMyAvatars(json);
+                avatarPath = json;
             })
+
         }
     });
 
@@ -68,33 +68,44 @@ function Avatar()
 
 
     const onSend = (avt)=>{
-        setIsSpinner(true);
 
-        fetch(serverPath()+"/buy_avatar",{
+        fetch(serverPath()+"/sel_myavatar",{
             method:"post",
             headers : {
                 "content-type" : "application/json",
             },
-            body : JSON.stringify({avatar:avt.idx, uid:userId,point:avt.point}),
+            body : JSON.stringify({sel:avt.idx, uid:userId}),
         })
         .then((res)=>res.json())
         .then((json)=>{
-            console.log('buy_avatar', json);
             try {
                 if(json.succes=="succes") 
                 {
                     setModalShow(false);
-                    setAvatars([]);
-                    onMini("구매를 완료했습니다",1);
+                    setMyAvatars([]);
+                    setUserAvt(avt.idx);
+                    setRefresh(true)
+                    let udata = {...userData};
+                    udata.avatar = avt.path;
+                    udata.avtidx = avt.idx;
+                    dispatch(setStoreUserData(udata));
+
+                    let asset = [...member];
+                    let rt = asset.map((e)=>{
+                        let data = {...e};
+                        if(e.uid == userId)
+                        {
+                            data.avatar = udata.avtidx;
+                            data.path = udata.avatar;
+                        }
+                        return data;
+                    });
+                    console.log("rt",rt);
+                    dispatch(setStoreMember(rt));
                 }
                 else 
                 {
-                    if(json.err=="lack") 
-                        onMini("포인트가 부족합니다",0);
-                    if(json.err=="avatar") 
-                        onMini("서버 에러 : avatar",0);
-                    if(json.err=="asset") 
-                        onMini("서버 에러 : asset",0);
+                    onMini("서버 에러 : asset",0);
                 }
             }catch (e) {
                 onMini("서버에서 처리를 실패 했습니다",0);
@@ -102,26 +113,51 @@ function Avatar()
         })
     }
 
+    const onSale = (avt)=>{
+        fetch(serverPath()+"/sale_avatar",{
+            method:"post",
+            headers : {
+                "content-type" : "application/json",
+            },
+            body : JSON.stringify({sel:avt.idx, uid:userId, point: avt.point}),
+        })
+        .then((res)=>res.json())
+        .then((json)=>{
+            if(json.succes=="succes") 
+            {
+                setModalShow(false);
+                setMyAvatars([]);
+                setRefresh(true)
+            }
+            else 
+            {
+                onMini("서버 에러 : asset",0);
+            }
+        })
+    }
+
     const onHide = ()=>{
         setModalShow(false)
+        setImgNum(0);
     }
 
 
     return(
         <div>
             <div className="title">
-                <h3> Avatar </h3>
+                <h3> MyAvatar </h3>
             </div>
-            <AvatarList array={avatars} sel={sel} sex={sex} onClick={(idx,path)=>onModal(idx,path)}/>
-            <div className="Avatar-pag">
-                <MyPagination max={Math.ceil(avatars.length/16)} sel={sel} setValue={(idx)=>(setsel(idx-1))} />
+            <MyAvatarList array={MyAvatars} sel={sel} sex={sex} userAvt={userAvt} onClick={(idx,path)=>onModal(idx,path)}/>
+            <div className="MyAvatar-pag">
+                <MyPagination max={Math.ceil(MyAvatars.length/16)} sel={sel} setValue={(idx)=>(setsel(idx-1))} />
             </div>
             {
-                avatars.length>0?<MyModal
+                MyAvatars.length>0?<MyModal
                     show={modalShow}
                     onSend={(avt)=>{onSend(avt)}}
                     onHide={onHide}
-                    avatar={avatars[(sel*16)+imgNum]}
+                    onSale={onSale}
+                    MyAvatar={MyAvatars[(sel*16)+imgNum]}
                     imgpath={imgPath}
                     isspinner={isSpinner}
                 />:null
@@ -146,12 +182,10 @@ function Avatar()
     )
 }
 
-function AvatarList(props)
+function MyAvatarList(props)
 {
     let sel = props.sel;
     let array = [];
-    console.log("AvatarList",sel);
-
 
     if(props.array.length>0)
     {
@@ -161,27 +195,24 @@ function AvatarList(props)
         for(let i=0; i < max; i++)
             array.push(props.array[(sel*16)+i]);
 
-        console.log("AvatarList",array);
-
         return (
             <div className="container mag-top">
-                <div className="Avatar-midle row">
+                <div className="MyAvatar-midle row">
                     {
                         array.map((e,i)=>{
-                            console.log("array.map",array);
-                            let path = imagePath()+"/avatars/" + e.path;
-                            let classN = "Avatar-img p-0";
+                            let path = imagePath()+"/Avatars/" + e.path;
+                            let classN = "MyAvatar-img p-0";
                             let uid = "----"
                             let Cilck = ()=>props.onClick(i,path);
-                            if(e.uid!=null) 
+                            if(props.userAvt==e.idx) 
                             {
                                 classN = "Avatar-img-non p-0";
-                                uid = e.uid;
+                                uid = "사용중";
                                 Cilck = ()=>{};
                             } 
                             return(
                                 <>
-                                    <div key={i} className="col-3 Avatar-pad ">
+                                    <div key={i} className="col-3 MyAvatar-pad ">
                                         <div>
                                             <img className={classN} onClick={Cilck} src={path} />
                                             <p className="mb-0">{uid}</p>
@@ -202,6 +233,10 @@ function MyModal(props) {
 
     let imgpath=props.imgpath;
     let onSend=props.onSend;
+    let onHide=props.onHide;
+    let onSale=props.onSale;
+
+    
     let isspinner=props.isspinner;
     return (
       <Modal
@@ -212,41 +247,32 @@ function MyModal(props) {
         centered
       >
         <Modal.Header>
-            <h4>Buy Avatar</h4>
+            <h4>Buy MyAvatar</h4>
         </Modal.Header>
         <Modal.Body>
           <div className='row'>
-            <img className="Avatar-modal-img col-7" src={imgpath} />
+            <img className="MyAvatar-modal-img col-7" src={imgpath} />
             <div className='col-5'>
                 <p className="px-1 pt-3">
-                    이름 : {props.avatar.path.substring(2,6)}
+                    이름 : {props.MyAvatar.path.substring(2,6)}
+                </p>
+                <p className="px-1 mb-1">
+                    구매가 : {props.MyAvatar.point}p
                 </p>
                 <p className="px-1">
-                    가격 : {props.avatar.point}p
+                    판매가 : {props.MyAvatar.point/2}p
                 </p>
             </div>
             <p className="px-3 pt-3 mb-0">
-                * 해당 Avatar는 구매자에게 귀속됩니다.
+                * 사용중인 Avatar만 대표로 표시됩니다.
             </p>
-            <p className="px-3 pt-0">
-                * 다른 Avatar구매 시 귀속이 해제됩니다.
-            </p>
+
           </div>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="primary" onClick={()=>{onSend(props.avatar)}} disabled={isspinner}>
-                {
-                    isspinner?<Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="false"
-                    />:null
-                }
-                구매
-            </Button>
-            <Button onClick={props.onHide} variant="danger" disabled={isspinner}>취소</Button>
+            <Button variant="primary" onClick={()=>{onSend(props.MyAvatar)}} disabled={isspinner}>사용</Button>
+            <Button onClick={()=>{onSale(props.MyAvatar)}} variant="warning" disabled={isspinner}>판매</Button>
+            <Button onClick={onHide} variant="danger" disabled={isspinner}>취소</Button>
         </Modal.Footer>
       </Modal>
     );
@@ -327,4 +353,4 @@ function MyPagination(props)
     </Pagination>)
 }
 
-export default Avatar;
+export default MyAvatar;

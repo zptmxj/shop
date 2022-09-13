@@ -18,10 +18,7 @@ function Attend(props)
     const [attMyData, setAttMyData] = useState([true,true,true,true,true,true,true,true,true]);
     const [checklist, setChecklist] = useState([false,false,false,false,false,false,false,false,false]);
     const [openlist, setOpenlist] = useState([false,false,false,false,false,false,false,false,false]);
-    const [originlist, setOriginlist] = useState([]);
-    const [currentlist, setCurrentlist] = useState([]);
     const [total, setTotal] = useState(0);
-    const [test, settest] = useState(0);
     const [refresh, setRefresh] = useState(false);
     const [reqAtt, setReqAtt] = useState(false);
 
@@ -93,8 +90,6 @@ function Attend(props)
                     return j;
                 })
 
-                setOriginlist(json);
-                setCurrentlist(json);
                 console.log('getAttend',json);
 
                 let attlist = count.map((e,i)=>
@@ -296,6 +291,25 @@ function Attend(props)
                                 {
                                     let length = curAttend[i].length;
                                     let progress;
+                                    let isDisDay = false;
+                                    let isDisHours = false;
+                                    let today = new Date();
+                                    if(i<7) 
+                                    {
+                                        currentWeek[i].setHours(12);
+                                        console.log("i<7",currentWeek[i].getTime(),today.getTime());
+                                        if(currentWeek[i].getDate()<=today.getDate())
+                                            isDisDay = true;
+                                        if(currentWeek[i].getTime()<=today.getTime())
+                                            isDisHours = true;
+                                    }
+                                    else
+                                    {
+                                        console.log("i>=7",currentWeek[0].getDate(),today.getDate());
+                                        if(currentWeek[6].getTime()<today.getTime())
+                                            isDisDay = true;
+                                    }
+
                                     if(total<=0)  progress=0;
                                     else  progress = (100/total)*length;
 
@@ -306,10 +320,10 @@ function Attend(props)
                                                 <td className='Attend-td-prog' onClick={()=>onClickList(i)}><ProgressBar now={progress} /></td>
                                                 <td className='Attend-td' onClick={()=>onClickList(i)}>{length}</td>
                                                 <td className='Attend-td'>
-                                                    <Form.Check type='checkbox' id='rd1' onChange={()=>onClickCheck(i)} checked={checklist[i].activity}></Form.Check>
+                                                    <Form.Check type='checkbox' disabled={isDisDay} onChange={()=>onClickCheck(i)} checked={checklist[i].activity}></Form.Check>
                                                 </td>
                                             </tr>
-                                            <TDATA idx={i} openlist={openlist} curlist={curAttend} checklist={checklist} userId={userId} setCallBack={setCallBack}/>
+                                            <TDATA idx={i} openlist={openlist} curlist={curAttend} checklist={checklist} userId={userId} isDisHours={isDisHours} setCallBack={setCallBack}/>
                                         </>
                                     )
                                 }
@@ -336,6 +350,7 @@ function TDATA(props)
     let idx = props.idx;
     let curlist = props.curlist[idx];
     let userId = props.userId;
+    let isDisHours = props.isDisHours;
     let rt;
 
     const change = (e,j)=>{
@@ -380,7 +395,7 @@ function TDATA(props)
                 </td>
                 <td className='Attend-td-prog'>{timeStr}</td>
                 <td colSpan={2} >
-                        {((idx<7)&&(e.uid==userId))?<input className='Attend-input' type="time" key={i} value={props.checklist[idx].time} onChange={(e)=>change(e,i)}/>:null}
+                        {((idx<7)&&(e.uid==userId))?<input disabled={isDisHours} className='Attend-input' type="time" key={i} value={props.checklist[idx].time} onChange={(e)=>change(e,i)}/>:null}
                 </td>
             </tr>
             )

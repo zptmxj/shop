@@ -358,13 +358,13 @@ function LeavesLottery()
                         </tr>
                         <tr>
                             <td className='px-0'><img src={Lea4_img} width={50} height={50}/></td>
-                            <td className='px-0'>5</td>
+                            <td className='px-0'>10</td>
                             <td className='px-0'>1:125</td>
                             <td className='px-0'>4/500</td>
                         </tr>
                         <tr>
                             <td className='px-0'><img src={Lea3_img} width={50} height={50}/></td>
-                            <td className='px-0'>3</td>
+                            <td className='px-0'>4</td>
                             <td className='px-0'>1:33.3</td>
                             <td className='px-0'>15/500</td>
                         </tr>

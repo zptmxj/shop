@@ -38,6 +38,9 @@ import MngMemberAdd from './page/manager/MngMemberAdd';
 import MngMemberMod from './page/manager/MngMemberMod';
 import MngAvatarAdd from './page/manager/MngAvatarAdd';
 import MngAnimalAdd from './page/manager/MngAnimalAdd';
+import MngAttend from './page/manager/MngAttend';
+
+
 import MonkeyLottery from './page/lottery/MonkeyLottery';
 import LeavesLottery from './page/lottery/LeavesLottery';
 
@@ -89,10 +92,10 @@ function App() {
   const [avtidx,setAvtidx] = useState([]);
 
   
-  const Mnglink = ["/Passing","/","/MngMemberAdd","/MngMemberMod","/","/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngGameAdd","/MngAvatarAdd","MngAnimalAdd"];
-  const Mngtext = ["Passing","/","MemberAdd","MemberMod","/","TestPage","CheckIn","Deposit","Point","GameAdd","AvatarAdd","AnimalAdd"];
+  const Mnglink = ["/Passing","/MngAttend","/","/MngMemberAdd","/MngMemberMod","/","/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngGameAdd","/MngAvatarAdd","MngAnimalAdd"];
+  const Mngtext = ["Passing","Attend","/","MemberAdd","MemberMod","/","TestPage","CheckIn","Deposit","Point","GameAdd","AvatarAdd","AnimalAdd"];
   
-
+  
   useEffect(()=>{
     console.log("app_useEffect");
     console.log('userId',userId , userName ,userPrivilege);
@@ -448,6 +451,9 @@ function App() {
                   <Route path="/Passing">
                     <Passing />
                   </Route>
+                  <Route path="/MngAttend">
+                    <MngAttend />
+                  </Route>
                 </>
                 ):null
             }
@@ -479,8 +485,8 @@ function Manager(props){
     let idx = props.idx;
 
     if(privilege < 2) return;
-    if(idx > 0 && privilege == 2) return;
-    if(idx > 3 && privilege == 3) return;
+    if(idx > 1 && privilege == 2) return;
+    if(idx > 4 && privilege == 3) return;
 
     if(text=="/")
     {

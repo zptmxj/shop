@@ -1,0 +1,167 @@
+@import "../../../node_modules/rfs/scss";
+
+.Racing-top{
+  background:rgb(255, 255, 255);
+  display: flex;
+  color:black;
+  padding-left:5vw;
+  padding-right:5vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.Racing-midle{
+  display: flex;
+  justify-content: center;
+}
+
+.mag-top{
+  margin-bottom: calc(1rem + 1vw);
+}
+
+.pad-top{
+  padding-top: calc(0.5rem + 1vw);
+}
+
+.Racing-pad{
+  padding-top: calc(1.0rem + 1vw);
+  display: flex;
+  justify-content: center;
+  width: 23vmin;
+  text-align: center;
+}
+.Racing-pad:hover{
+  @extend .Racing-pad;
+  background:rgb(233, 233, 233);
+}
+
+.fs-my{
+  @extend .pad-top;
+  font-size: calc(0.5rem + 1vw) !important;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.label {
+  font-size: calc(0.5rem + 1.5vw) !important;
+}
+
+.Racing-pag {
+  @extend .pad-top;
+  padding-bottom: calc(0.5rem + 1vw);
+  display: flex;
+  justify-content: center;
+}
+
+.Racing-img {
+  width: 25vmin;
+  height: 25vmin;
+  max-width: 150px;
+  max-height: 150px;
+  display: block; 
+  margin: 0px auto;
+  object-fit: contain;
+  opacity: 1;
+  filter: alpha(opacity=50);
+}
+
+.Racing-img-non {
+  @extend .Racing-img;
+  opacity: 0.4;
+  filter: alpha(opacity=50);
+}
+
+.Racing-modal-img {
+  width: 45vmin;
+  height: 45vmin;
+  max-width: 270px;
+  max-height: 270px;
+  padding: 10px;
+  border: 1px solid #a7a7a7;
+  display: block; 
+  margin: 0px auto;
+  object-fit: contain;
+}
+
+.Form-Group{
+  border: 1px solid rgb(200, 200, 200);
+  width: 80vmin;
+  max-width: 300;
+  height: 15vh;
+  max-height: 102px;
+  color:black;
+  padding: auto;
+  margin: 0px auto;
+}
+
+.Racing-toast{
+  width: 90vw;
+  max-width: 400px;
+}
+
+.Racing{
+  position: relative;
+  width: 100%;
+  height: 60px;
+}
+
+.Sort-r{
+  display: flex;
+  justify-content:end;
+}
+.Sort-l{
+  display: flex;
+  justify-content:start;
+}
+.Sort-c{
+  display: flex;
+  justify-content:center;
+}
+.Sort-auto{
+  display: flex;
+  justify-content:space-around;
+}
+.Sort-auto2{
+  display: flex;
+  justify-content:space-between;
+}
+
+.z-index-0{
+  pointer-events: none;
+}
+.z-index-10{
+  z-index: 100;
+  background-color:aqua;
+}
+
+.z-index-20{
+  z-index:500;
+  background-color: red;
+}
+
+.Racing-list{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Racing-w{
+  width: 90vw;
+  max-width: 400px;
+}
+
+.Racing-poplist{
+  width: 120px;
+}
+// @media (min-width: 1200px) {
+//   .label {
+//     font-size: 2.5rem !important;
+//   }
+// }
+
+// $font_color : rgb(80, 80, 80);
+// .Main-slide-font {
+//   text-shadow: -1px 0 $font_color, 0 1px $font_color, 1px 0 $font_color, 0 -1px $font_color;
+// }

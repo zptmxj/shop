@@ -81,33 +81,11 @@ function TestPage(props)
         setCurlist(tset1);
         console.log('tset',tset);
         console.log('tset1',tset1);
-        const cvs = document.querySelector("canvas");
-        let tctx = cvs.getContext("2d")
-        setCtx(tctx);
-        tctx.save();
-        tctx.beginPath();
-        tctx.fillStyle='rgba(120,120,120,1)';
-        tctx.fillRect(0,0,cvs.width,cvs.height);
-        tctx.restore();
-        // tctx.save();
-        // tctx.beginPath();
-        // tctx.globalCompositeOperation='destination-out';
-        // tctx.fillStyle='rgba(120,120,120,1)';
-        // tctx.lineWidth = 10;
-        // tctx.moveTo(50, 50);
-        // tctx.lineTo(150, 50);
-        // tctx.stroke();
-        // tctx.restore();
-
 
     },[])
 
     useEffect(()=>{
-        // if(!imagefile) return false;
-        // const imgEL = document.querySelector("imgbox");
-        // const reader = new FileReader();
-        // reader.onload = () => (imgEL.getElementsByClassName.backgroundImage = 'url(${reader.result})');
-        // reader.readAsDataURL(imagefile[0]);
+
     });
 
     const onChange01 = (e)=>{
@@ -238,18 +216,7 @@ function TestPage(props)
             
             {/* <Unity unityProvider={unityProvider}></Unity> */}
 
-            <div className='flex'>
-                <canvas onTouchStart={startPainting} onTouchMove={onMouseMove} onTouchEnd={stopPainting} id="jsCanvas" width={150} height={100} className="scr-canvas"/>
-            </div>
-
-            <div className='flex'>
-                <div className='img-parent'>
-                    <img src={img1} width='90px' height='90px' />
-                    <div className='img-child'>
-                        <img src={img2} width='40px' height='40px'/>
-                    </div>
-                </div>
-            </div>
+         
 
             <button onClick={onApexChartClick01}>ApexChart</button>
 

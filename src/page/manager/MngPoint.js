@@ -406,7 +406,7 @@ function MngPoint(props)
                 </div>
 
                 <div className='Manager'>
-                <InputGroup className='MngPoint-input-deposit'>
+                    <InputGroup className='MngPoint-input-deposit'>
                         <InputGroup.Text id="inputGroup-sizing-default">Date :</InputGroup.Text>
                         <FormControl  value={inDate} disabled/>
                     </InputGroup>

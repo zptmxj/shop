@@ -20,6 +20,7 @@ import BoardGame from './page/BoardGame';
 import Avatar from './page/point/Avatar';
 import Animal from './page/point/Animal';
 import Betting from './page/point/Betting';
+import Racing from './page/point/Racing';
 import Passing from './page/manager/Passing';
 import Border from './page/Border';
 import MyCash from './page/mypage/MyCash';
@@ -298,6 +299,7 @@ function App() {
                           <NavDropdown.Item as={Link} to="/Avatar"> Avatar </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/Animal"> Animal </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/Betting"> Betting </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/Racing"> Racing </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/LeavesLottery"> LeavesLottery </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/MonkeyLottery"> MonkeyLottery </NavDropdown.Item>
                           {/* <NavDropdown.Item as={Link} to="/Border"> Border </NavDropdown.Item> */}
@@ -375,6 +377,9 @@ function App() {
             </Route>
             <Route path="/Betting">
               <Betting/>
+            </Route>
+            <Route path="/Racing">
+              <Racing/>
             </Route>
             <Route path="/MonkeyLottery">
               <MonkeyLottery/>

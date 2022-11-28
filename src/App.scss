@@ -133,11 +133,40 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 70px;
 }
 
-.App-font-rad{
+.App-MyPoint-List{
+  display: flex;
+  justify-content:space-around;
+}
+
+
+.App-MyPoint-Name{
+  display: flex;
+  justify-content: flex-start;
+  font-size: 11pt;
+}
+
+.App-MyPoint{
+  font-size: 9pt;
+}
+
+.App-MyPoint-rad{
+  @extend .App-MyPoint;
   color: #ff0000;
 }
-.App-font-blue{
+
+.App-MyPoint-blue{
+  @extend .App-MyPoint;
   color: #0000ff;
+}
+
+.App-MyPoint-green{
+  @extend .App-MyPoint;
+  color: #009900;
+}
+
+.App-MyPoint-bold{
+  font-weight: 700;
 }

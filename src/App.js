@@ -12,6 +12,8 @@ import { useEffect, useState } from 'react';
 import { Link, Route } from 'react-router-dom';
 import Detail from './Detail';
 import MainSlider from './page/MainSlider';
+import MainShortcuts from './page/MainShortcuts';
+
 import MainAtt from './page/MainAtt';
 import MemberList from './page/MemberList';
 import CheckIn from './page/CheckIn';
@@ -21,11 +23,17 @@ import Avatar from './page/point/Avatar';
 import Animal from './page/point/Animal';
 import Betting from './page/point/Betting';
 import Racing from './page/point/Racing';
+import VCoinMine from './page/point/VCoinMine';
+import VCoin from './page/point/VCoin';
 import Passing from './page/manager/Passing';
+import Exchange from './page/mypage/Exchange';
+import EvScore from './page/mypage/EvScore';
+import EvScoreDv from './page/manager/EvScoreDv';
 import Border from './page/Border';
 import MyCash from './page/mypage/MyCash';
 import MyPoint from './page/mypage/MyPoint';
 import MyBonus from './page/mypage/MyBonus';
+import MyCoin from './page/mypage/MyCoin';
 import MyAnimal from './page/mypage/MyAnimal';
 import MyAvatar from './page/mypage/MyAvatar';
 
@@ -88,13 +96,14 @@ function App() {
   const [userPrivilege,setUserPrivilege] = useState(getPrivilege());
   const [mycash,setMycash] = useState(0);
   const [mypoint,setPoint] = useState(0);
-  const [avatars,setAvatars] = useState([]);
+  const [mybonus,setBonus] = useState(0);
+  // const [avatars,setAvatars] = useState([]);
   const [member,setMember] = useState([]);
   const [avtidx,setAvtidx] = useState([]);
 
   
-  const Mnglink = ["/Passing","/MngAttend","/","/MngMemberAdd","/MngMemberMod","/","/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngGameAdd","/MngAvatarAdd","MngAnimalAdd"];
-  const Mngtext = ["Passing","Attend","/","MemberAdd","MemberMod","/","TestPage","CheckIn","Deposit","Point","GameAdd","AvatarAdd","AnimalAdd"];
+  const Mnglink = ["/Passing","/MngAttend","/","/MngMemberAdd","/MngMemberMod","/","/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/EvScoreDv","/MngGameAdd","/MngAvatarAdd","MngAnimalAdd"];
+  const Mngtext = ["Passing","Attend","/","MemberAdd","MemberMod","/","TestPage","CheckIn","Deposit","Point","EvScoreDv","GameAdd","AvatarAdd","AnimalAdd"];
   
   
   useEffect(()=>{
@@ -117,24 +126,22 @@ function App() {
         body : JSON.stringify(uidData),
       })
     }
-    if(avatars.length == 0)
+    if(member.length == 0)
     {
-        fetch(serverPath()+"/out_allavatar",{
-            method:"post",
-            headers : {
-                "content-type" : "application/json",
-            },
-            body : JSON.stringify(),
-        })
-        .then((res)=>res.json())
-        .then((avat)=>{
-            console.log('out_avatar', avat);
-            setAvatars(avat);
+        // fetch(serverPath()+"/out_allavatar",{
+        //     method:"post",
+        //     headers : {
+        //         "content-type" : "application/json",
+        //     },
+        //     body : JSON.stringify(),
+        // })
+        // .then((res)=>res.json())
+        // .then((avat)=>{
+        //     console.log('out_avatar', avat);
+        //     setAvatars(avat);
 
             console.log('App',"멤버정보 불러오기");
-            //let data={uid:"all",order:"SELECT * FROM member JOIN asset USING(uid) order by point DESC"};
             let data={uid:"all",order:"SELECT ma.*, av.path, an.path AS anipath, an.name AS aniname FROM (SELECT m.*,a.cash,a.point,a.bonus,a.avatar,a.animal,a.favor_up,a.favor_down FROM member m left join asset a ON m.uid=a.uid order by point DESC) ma LEFT JOIN avatar av ON ma.avatar=av.idx LEFT JOIN animal an ON ma.animal=an.idx"};
-            //let data={uid:"all",order:"SELECT * FROM member JOIN asset USING(uid) order BY (favor_up+favor_down) DESC, total_point DESC"};
 
             fetch(serverPath()+"/out_custom",{
               method:"post",
@@ -146,35 +153,30 @@ function App() {
             .then((res)=>res.json())
             .then((json)=>{
               let myavatar="";
+              let myanimal="";
               let avtidx = 0;
+              let aniidx = 0;
               setMember(json);
+              console.log('json',json);
 
               let asset = json.map((mem,i)=>{
+                  // let avatar = avat.filter(e=>e.idx==mem.avatar);
+                  let path = "m/m000.png";
+                  path = mem.path;
+
+                  // mem.path = path;
                   if(mem.uid == userId)
                   {
                     setMycash(mem.cash);
                     setPoint(mem.point);
+                    setBonus(mem.bonus);
                     avtidx = mem.avatar;
+                    aniidx = mem.animal;
+                    myanimal = mem.anipath;
+                    myavatar = path;
                     // setAvtidx(mem.avatar);
                   }
 
-                  let avatar = avat.filter(e=>e.idx==mem.avatar);
-
-                  let path = "m/m000.png";
-                  if(avatar.length == 0 )
-                  {
-                      if(mem.sex==1) path = "w/w000.png";
-                      else path = "m/m000.png";
-                      
-                      if(mem.uid == userId)
-                        myavatar = path;
-                  }
-                  else{
-                      path = avatar[0].path;
-                      if(mem.uid == userId)
-                        myavatar = avatar[0].path;
-                  }
-                  mem.path = path;
                   return mem;
               })
               //let sortlist = asset.sort((a,b)=>(b.favor_up+b.favor_down)-(a.favor_up+a.favor_down))
@@ -187,7 +189,7 @@ function App() {
 
               if(userId != null)
               {
-                  let userData = {uid:userId , name:userName , privilege:userPrivilege, avatar:myavatar, avtidx: avtidx}
+                  let userData = {uid:userId , name:userName , privilege:userPrivilege, avatar:myavatar, avtidx: avtidx, animal:myanimal, aniidx: aniidx}
                   dispatch(setStoreUserData(userData));
               }
               
@@ -197,7 +199,7 @@ function App() {
                 //window.location.replace("/Attend");
               }
             })
-        })
+        // })
     }
 
   },[])
@@ -253,40 +255,19 @@ function App() {
     <div className="App">
       <Route path="/">
         {
-          // userId===null?(
-          // <div className="App-login">
-          //     <img className="App-logi-bg" src={background}  alt='Logo.png'/>
-          //     <Form className='App-logi-form'>
-          //       <Form.Group className="mb-3" controlId="formBasicEmail">
-          //         <Form.Label>User ID</Form.Label>
-          //         <Form.Control onChange={logIdChange} value={logId} placeholder="User ID" />
-          //       </Form.Group>
-
-          //       <Form.Group className="mb-3" controlId="formBasicPassword">
-          //         <Form.Label>Password</Form.Label>
-          //         <Form.Control onChange={logPwChange} value={logPw} type="password" placeholder="Password" />
-          //       </Form.Group>
-          //       <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          //       </Form.Group>
-          //       <Button onClick={login} variant="primary" >
-          //         Login
-          //       </Button>
-          //     </Form>
-          // </div>
-          // ):(
-          <Navbar className="App-header" bg="light" expand="lg">
+          <Navbar className="App-header" bg="light" expand="lg" >
             <Container >
               <a href="/"><img className="App-logo" src={logo} alt='Logo.png'/></a >
               <Navbar.Brand className="App-title" href="/">
                 <img className="App-TAPs" src={TAPs} alt='TAPs.png'/>
               </Navbar.Brand>
-              <Navbar.Toggle aria-controls="basic-navbar-nav " />
+              <Navbar.Toggle aria-controls="basic-navbar-nav "  />
               <>
                 {
                     userId!=null?( 
                       <>
-                      <Navbar.Collapse id="basic-navbar-nav">
-                      <Nav className="me-auto">
+                      <Navbar.Collapse id="basic-navbar-nav" >
+                      <Nav className="me-auto" >
                         {/* <Nav.Link as={Link} className="App-nav" to="/">◆ Home </Nav.Link> */}
                         <NavDropdown className="App-nav" title="◆ info" id="basic-nav-dropdown">
                           <NavDropdown.Item as={Link} to="/Member"> Member </NavDropdown.Item>
@@ -299,6 +280,8 @@ function App() {
                           <NavDropdown.Item as={Link} to="/Avatar"> Avatar </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/Animal"> Animal </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/Betting"> Betting </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/VCoin"> VCoin </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/VCoinMine"> Mining </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/Racing"> Racing </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/LeavesLottery"> LeavesLottery </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/MonkeyLottery"> MonkeyLottery </NavDropdown.Item>
@@ -313,9 +296,13 @@ function App() {
                           </NavDropdown>):null
                         }
                         <NavDropdown className="App-nav" title="◆ MyPage" id="basic-nav-dropdown">
+                          <NavDropdown.Item as={Link} to="/EvScore">EvScore</NavDropdown.Item>
+                          <NavDropdown.Divider />
                           <NavDropdown.Item as={Link} to="/MyCash">Cash</NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/MyPoint">Point</NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/MyBonus">Bonus</NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/MyCoin">MyCoin</NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/Exchange">Exchange</NavDropdown.Item>
                           <NavDropdown.Divider />
                           <NavDropdown.Item as={Link} to="/MyAvatar">Avatar</NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/MyAnimal">Animal</NavDropdown.Item>
@@ -326,18 +313,25 @@ function App() {
                         </NavDropdown>
                       </Nav>
                     </Navbar.Collapse>
-                    <Navbar.Text>
-                      Signed in as {userName}: <a onClick={logout} href="/">Logout</a>
-                      <Nav.Link as={Link} to="/MyCash" className='pb-0'>
+                    <Navbar.Text className='w-100'>
+                    <string className='App-MyPoint-Name'>{`Login: ${userName}:`} <a className='App-MyPoint-Name px-1' onClick={logout} href="/">Logout</a> </string> 
+                        <p className='App-MyPoint-List pt-1 mb-0'>
+                          <string className='App-MyPoint'>{`잔액: `}
                           {
-                            mycash<=0?<>잔액: <string className='App-font-rad' >{mycash}</string></>:<>잔액: <string className='App-font-blue' >{mycash}</string></>
+                            mycash<=0?<string className='App-MyPoint-bold App-MyPoint-rad' >{mycash}</string>:<string className='App-MyPoint-bold App-MyPoint' >{mycash}</string>
                           }
-                      </Nav.Link>
-                      <Nav.Link as={Link} to="/MyPoint" className='pt-0'>
+                          </string>
+                          <string className='App-MyPoint my-0'>{`포인트: `}
                           { 
-                            mypoint<=0?<p className='my-0'>포인트: <string className='App-font-rad' >{mypoint}</string></p>:<p className='my-0'>포인트: <string className='App-font-blue' >{mypoint}</string></p>
+                            mypoint<=0? <string className='App-MyPoint-rad' >{mypoint}</string>:<string className='App-MyPoint-blue' >{mypoint}</string>
                           }
-                      </Nav.Link>
+                          </string>
+                          <string className='App-MyPoint my-0'>{`보너스: `}
+                          { 
+                            mypoint<=0? <string className='App-MyPoint-rad' >{mybonus}</string>:<string className='App-MyPoint-green' >{mybonus}</string>
+                          }
+                          </string>
+                        </p>
                     </Navbar.Text>
                     </>
                     ):(<Navbar.Collapse id="basic-navbar-nav"/>)
@@ -354,7 +348,7 @@ function App() {
           userId!==null?(
             <div>
             <Route exact path="/">
-              <MainSlider/>
+              <MainShortcuts/>
             </Route>
             
             <Route path="/Member">
@@ -381,6 +375,12 @@ function App() {
             <Route path="/Racing">
               <Racing/>
             </Route>
+            <Route path="/VCoinMine">
+              <VCoinMine/>
+            </Route>
+            <Route path="/VCoin">
+              <VCoin/>
+            </Route>
             <Route path="/MonkeyLottery">
               <MonkeyLottery/>
             </Route>
@@ -398,6 +398,15 @@ function App() {
             </Route>
             <Route path="/MyBonus">
               <MyBonus />
+            </Route>
+            <Route path="/MyCoin">
+              <MyCoin />
+            </Route>
+            <Route path="/Exchange">
+              <Exchange />
+            </Route>
+            <Route path="/EvScore">
+              <EvScore />
             </Route>
             <Route path="/MyAvatar">
               <MyAvatar />
@@ -424,7 +433,10 @@ function App() {
                 <Route path="/MngPoint">
                   <MngPoint />
                 </Route>
-                
+                <Route path="/EvScoreDv">
+                  <EvScoreDv />
+                </Route>
+
                 <Route path="/MngGameAdd">
                   <MngGameAdd />
                 </Route>

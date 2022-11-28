@@ -157,7 +157,7 @@ function MngAttend(props)
         let attend = 0;
         if(isInsert) attend=1;
 
-        let data = {uid:fromUser.uid,history:his,date:inDate,attend:attend,isUpdate:isUpdate};
+        let data = {mng:userId, uid:fromUser.uid,history:his,date:inDate,attend:attend,isUpdate:isUpdate};
 
         fetch(serverPath()+"/in_mngattend",{
             method:"post",

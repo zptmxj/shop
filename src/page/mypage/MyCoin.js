@@ -4,16 +4,16 @@ import { Form, ProgressBar, Button, Alert, ListGroup, Table } from 'react-bootst
 import { useEffect, useState } from 'react';
 import {serverPath} from '../../IP_PORT';
 import moment from 'moment';
-import './MyCash.scss';
+import './MyCoin.scss';
 import {useDispatch, useSelector} from 'react-redux'
 
-function MyCash(props)
+function MyCoin(props)
 {
     
     let member = useSelector((state)=>{return state.member});
     let userData = useSelector((state)=>{return state.data});
     let [userId,setUserId] = useState(userData.uid);
-    const [mycash, setMycash] = useState(0);
+    const [myCoins, setMyCoins] = useState([]);
     const [historylist, setHistorylist] = useState([]);
     const [sel, setSel] = useState(0);
 
@@ -23,14 +23,14 @@ function MyCash(props)
     const [nonNext, setNonNext] = useState(false);
 
     useEffect(()=>{
-        console.log('MyCash',"useEffect");
+        console.log('MyCoin',"useEffect");
         let currentDay = workDay;  
         let theYear = currentDay.getFullYear();
         let theMonth = currentDay.getMonth();
 
         if(reqAtt==false) 
         {
-            console.log('on /out_mycash');
+            console.log('on /out_mycoin');
 
             let startDay = new Date(theYear,theMonth,1);
             let endDay = new Date(theYear,theMonth+1,0);
@@ -45,7 +45,7 @@ function MyCash(props)
             else
                 setNonNext(false);
 
-            fetch(serverPath()+"/out_asset",{
+            fetch(serverPath()+"/out_coinassetall",{
                 method:"post",
                 headers : {
                 "content-type" : "application/json",
@@ -54,12 +54,12 @@ function MyCash(props)
             })
             .then((res)=>res.json())
             .then((json)=>{
-                console.log('MyAsset',json.cash);
-                setMycash(json[0].cash);
+                console.log('MyAsset',json);
+                setMyCoins(json);
 
             });
 
-            fetch(serverPath()+"/out_mycash",{
+            fetch(serverPath()+"/out_coinbuy",{
                 method:"post",
                 headers : {
                 "content-type" : "application/json",
@@ -69,7 +69,7 @@ function MyCash(props)
             .then((res)=>res.json())
             .then((json)=>{
                 setHistorylist(json);
-                console.log('getMyCash',json);
+                console.log('getMyCoin',json);
             });
             setReqAtt(true);
         }
@@ -98,24 +98,42 @@ function MyCash(props)
         {
             <div>
                 <div className="title">
-                    <h3> MyCash </h3>
+                    <h3> MyCoin </h3>
                 </div>
-                <div className="MyCash-top">
-                    <ListGroup>
-                        <ListGroup.Item>
-                            MyCash :
-                        </ListGroup.Item>
-                    </ListGroup>
-                    <ListGroup>
-                        <ListGroup.Item>
-                            {mycash + " 원"}
-                        </ListGroup.Item>
-                    </ListGroup>
+                <div className="MyCoin-top mb-5">
+                        <Table striped bordered hover className="MyCoin-width">
+                            <thead>
+                                <tr>
+                                <th>#</th>
+                                <th>코인명</th>
+                                <th>보유 수</th>
+                                <th>평단가</th>
+                                </tr>
+                            </thead>
+                            {
+                                (myCoins.length!==0)?(
+                                    <tbody>
+                                    {
+                                        myCoins.map((e,i)=>{
+                                            return(
+                                                <tr key ={i}>
+                                                    <td>{i}</td>
+                                                    <td>{e.name}</td>
+                                                    <td>{e.ea}</td>
+                                                    <td>{e.average}</td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                    </tbody>
+                                ):null
+                            }
+                        </Table>
                 </div>
 
-                <div className="MyCash-top">
+                <div className="MyCoin-top">
                     <Button onClick={OnPrev} size="lg" variant="secondary">{'<'}</Button>
-                    <div className="MyCash-top-black">
+                    <div className="MyCoin-top-black">
                         <Alert variant="dark" >
                             {
                                 reqAtt?<h4>{moment(workDay).format('MM')+"월"}</h4>:null
@@ -131,11 +149,11 @@ function MyCash(props)
                 <Table bordered>
                     <thead>
                         <tr class="table-dark">
-                            <th >#</th>
                             <th >날짜</th>
-                            <th >내용</th>
+                            <th >코인명</th>
                             <th >변경</th>
-                            <th >잔여</th>
+                            <th >가격</th>
+                            <th >평단가</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -144,28 +162,29 @@ function MyCash(props)
                                 if(i>(sel*50) && i < ((sel+1)*50))
                                 {
                                     let color = "table-danger";
-                                    let sign = "";
-                                    if(e.variance>0)
+                                    let sign1 = "+";
+                                    let sign2 = "-";
+                                    if(e.isbuy==0)
                                     {
-                                        sign = "+";
+                                        sign1 = "-";
+                                        sign2 = "+";
                                         color = "table-primary";
                                     }
                                     return(
                                         <tr class={color} key = {i} >
-                                            <td >{i}</td>
-                                            <td >{moment(e.useday).format('MM/DD')}</td>
-                                            <HISTORY history={e.history}/>
-                                            <td >{sign+e.variance}</td>
-                                            <td >{e.cash}</td>
+                                            <td >{moment(e.date).format('MM/DD')}</td>
+                                            <td >{e.name}</td>
+                                            <td >{sign1+e.variance}</td>
+                                            <td >{sign2+e.bonusall}</td>
+                                            <td >{e.bonusvar}</td>
                                         </tr>
                                     )
                                 }
                             })
                         }
-
                     </tbody>
                 </Table>
-                <div className="MyCash-top">
+                <div className="MyCoin-top">
                     <Pagin max={Math.ceil(historylist.length/50)} sel={sel} setValue={(idx)=>(setSel(idx-1))}/>
                 </div>
             </div>
@@ -176,16 +195,14 @@ function MyCash(props)
 
 function HISTORY(props)
 {
-    let string = props.history;
-    if(string == "Check-In")
-        string = "참석";
-    else if(string == "Deposit")
-        string = "입금";
-    else if(string == "Balance")
-        string = "정산";
+    let string = props.isbuy;
+    if(string == 1)
+        string = "구매";
+    else if(string == 0)
+        string = "판매";
 
     return (<td >{string}</td>);
 }
 
 
-export default MyCash;
+export default MyCoin;

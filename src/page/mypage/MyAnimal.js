@@ -13,10 +13,10 @@ function MyAnimal()
     let member = useSelector((state)=>{return state.member});
     let userData = useSelector((state)=>{return state.data});
     let [userId,setUserId] = useState(userData.uid);
-    let [userAvt,setUserAvt] = useState(userData.avtidx);
+    let [userAni,setUserAni] = useState(userData.aniidx);
 
     let history = useHistory();
-    const [sel, setsel] = useState(0);
+    const [sel, setSel] = useState(0);
     const [imgNum, setImgNum] = useState(0);
     const [imgPath, setImgPath] = useState('');
     const [MyAnimals, setMyAnimals] = useState([]);
@@ -31,6 +31,7 @@ function MyAnimal()
     const [refresh, setRefresh] = useState(true);
 
     useEffect(()=>{
+        console.log("userData",userData);
         if(refresh == true)
         {
             setRefresh(false);
@@ -50,8 +51,6 @@ function MyAnimal()
     });
 
     const onModal = (idx,path)=>{
-        return;
-
         console.log('onModal', idx);
         setModalShow(true);
         setImgNum(idx);
@@ -67,14 +66,14 @@ function MyAnimal()
     } 
 
 
-    const onSend = (avt)=>{
+    const onSend = (ani)=>{
 
-        fetch(serverPath()+"/sel_myavatar",{
+        fetch(serverPath()+"/sel_myanimal",{
             method:"post",
             headers : {
                 "content-type" : "application/json",
             },
-            body : JSON.stringify({sel:avt.idx, uid:userId}),
+            body : JSON.stringify({sel:ani.idx, uid:userId}),
         })
         .then((res)=>res.json())
         .then((json)=>{
@@ -83,11 +82,11 @@ function MyAnimal()
                 {
                     setModalShow(false);
                     setMyAnimals([]);
-                    setUserAvt(avt.idx);
+                    setUserAni(ani.idx);
                     setRefresh(true)
                     let udata = {...userData};
-                    udata.avatar = avt.path;
-                    udata.avtidx = avt.idx;
+                    udata.animal = ani.path;
+                    udata.aniidx = ani.idx;
                     dispatch(setStoreUserData(udata));
 
                     let asset = [...member];
@@ -95,8 +94,9 @@ function MyAnimal()
                         let data = {...e};
                         if(e.uid == userId)
                         {
-                            data.avatar = udata.avtidx;
-                            data.path = udata.avatar;
+                            data.aniname = ani.name;
+                            data.animal = udata.aniidx;
+                            data.anipath = udata.animal;
                         }
                         return data;
                     });
@@ -129,9 +129,9 @@ function MyAnimal()
             <div className="title">
                 <h3> MyAnimal </h3>
             </div>
-            <MyAnimalList array={MyAnimals} sel={sel} sex={sex} userAvt={userAvt} onClick={(idx,path)=>onModal(idx,path)}/>
+                <MyAnimalList array={MyAnimals} sel={sel} sex={sex} userAni={userAni} onClick={(idx,path)=>onModal(idx,path)}/>
             <div className="MyAnimal-pag">
-                <MyPagination max={Math.ceil(MyAnimals.length/16)} sel={sel} setValue={(idx)=>(setsel(idx-1))} />
+                <MyPagination max={Math.ceil(MyAnimals.length/16)} sel={sel} setValue={(idx)=>(setSel(idx-1))} />
             </div>
             {
                 MyAnimals.length>0?<MyModal
@@ -186,9 +186,9 @@ function MyAnimalList(props)
                             let classN = "MyAnimal-img p-0";
                             let uid = "----"
                             let Cilck = ()=>props.onClick(i,path);
-                            if(props.userAvt==e.idx) 
+                            if(props.userAni==e.idx) 
                             {
-                                classN = "Avatar-img-non p-0";
+                                classN = "MyAnimal-img-non p-0";
                                 uid = "사용중";
                                 Cilck = ()=>{};
                             } 

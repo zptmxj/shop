@@ -7,7 +7,7 @@ import {serverPath} from '../IP_PORT';
 function BoardGame()
 {
     let history = useHistory();
-    const [sel, setsel] = useState(0);
+    const [sel, setSel] = useState(0);
     const [games, setGames] = useState([]);
     const [total, setTotal] = useState(-1);
 
@@ -55,7 +55,7 @@ function BoardGame()
             </div>
             <GameList array={games} idx={0}/>
             <div className="BoardGame-pag">
-                <MyPagination max={Math.ceil(total/9)} sel={sel} setValue={(idx)=>(setGames([]),setsel(idx-1))}/>
+                <MyPagination max={Math.ceil(total/9)} sel={sel} setValue={(idx)=>(setGames([]),setSel(idx-1))}/>
             </div>
         </div> 
     )

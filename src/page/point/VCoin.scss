@@ -1,11 +1,11 @@
 @import "../../../node_modules/rfs/scss";
 
-.Racing-body{
+.VCoin-body{
   width: 100vw;
   max-width: 500px;
 }
 
-.Racing-top{
+.VCoin-top{
   background:rgb(255, 255, 255);
   display: flex;
   color:black;
@@ -15,7 +15,7 @@
   align-items: center;
 }
 
-.Racing-midle{
+.VCoin-midle{
   display: flex;
   justify-content: center;
 }
@@ -28,15 +28,15 @@
   padding-top: calc(0.5rem + 1vw);
 }
 
-.Racing-pad{
+.VCoin-pad{
   padding-top: calc(1.0rem + 1vw);
   display: flex;
   justify-content: center;
   width: 23vmin;
   text-align: center;
 }
-.Racing-pad:hover{
-  @extend .Racing-pad;
+.VCoin-pad:hover{
+  @extend .VCoin-pad;
   background:rgb(233, 233, 233);
 }
 
@@ -53,45 +53,32 @@
   font-size: calc(0.5rem + 1.5vw) !important;
 }
 
-.Racing-pag {
+.VCoin-pag {
   @extend .pad-top;
   padding-bottom: calc(0.5rem + 1vw);
   display: flex;
   justify-content: center;
 }
 
-.Racing-img {
+.VCoin-img {
   width: 25vmin;
   height: 25vmin;
   max-width: 150px;
   max-height: 150px;
-  // border: 3px solid #7a7a7a;
-  // border-radius: 55px;
-  // box-shadow: 3px 3px 3px #a7a7a7;
-
+  display: block; 
+  margin: 0px auto;
+  object-fit: contain;
+  opacity: 1;
+  filter: alpha(opacity=50);
 }
 
-.Racing-animal-img {
-  width: 14vmin;
-  height: 14vmin;
-  max-width: 70px;
-  max-height: 70px;
-  border: 1px solid #a7a7a7;
-  border-radius: 10px;
-  box-shadow: 3px 3px 3px #a7a7a7;
-}
-.Racing-animal-img:hover {
-  background-color: #e9e9e9;
-  // box-shadow: 0px 0px 0px;
-}
-
-.Racing-img-non {
-  @extend .Racing-img;
+.VCoin-img-non {
+  @extend .VCoin-img;
   opacity: 0.4;
   filter: alpha(opacity=50);
 }
 
-.Racing-modal-img {
+.VCoin-modal-img {
   width: 45vmin;
   height: 45vmin;
   max-width: 270px;
@@ -114,34 +101,69 @@
   margin: 0px auto;
 }
 
-.Racing-toast{
+.VCoin-toast{
   width: 90vw;
   max-width: 400px;
 }
 
-// .Racing{
+// .VCoin{
 //   position: relative;
 //   width: 100%;
 //   height: 60px;
 // }
 
-.Racing-list{
+.Sort-r{
+  display: flex;
+  justify-content:end;
+}
+.Sort-l{
+  display: flex;
+  justify-content:start;
+}
+.Sort-c{
+  display: flex;
+  justify-content:center;
+}
+.Sort-auto{
+  display: flex;
+  justify-content:space-around;
+}
+.Sort-auto2{
+  display: flex;
+  justify-content:space-between;
+}
+
+.z-index-0{
+  pointer-events: none;
+}
+.z-index-10{
+  z-index: 100;
+  background-color:aqua;
+}
+
+.z-index-20{
+  z-index:500;
+  background-color: red;
+}
+
+.VCoin-list{
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.Racing-w{
+.VCoin-w{
   width: 90vw;
   max-width: 400px;
 }
 
-.Racing-poplist{
+.VCoin-poplist{
   width: 120px;
 }
 
-.MyCoin-RacingWidth{
+.MyCoin-VCoinWidth{
   width: 100vw;
+  max-width: 500px;
 }
 
 // @media (min-width: 1200px) {

@@ -12,7 +12,7 @@ function Border()
     let [userId,setUserId] = useState(userData.uid);
 
     let history = useHistory();
-    const [sel, setsel] = useState("list-color-00");
+    const [sel, setSel] = useState("list-color-00");
     const [modalShow, setModalShow] = useState(false);
     const [miniShow, setMiniShow] = useState(false);
     const [miniText, setMiniText] = useState("");
@@ -105,7 +105,7 @@ function Border()
 
     const onCollback = (idx)=>{
         console.log(idx);
-        setsel("list-color-"+idx);
+        setSel("list-color-"+idx);
     }
 
     

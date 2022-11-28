@@ -294,18 +294,19 @@ function Attend(props)
                                     let isDisDay = false;
                                     let isDisHours = false;
                                     let today = new Date();
+                                    let curDate = currentWeek[i];
                                     if(i<7) 
                                     {
-                                        currentWeek[i].setHours(12);
-                                        console.log("i<7",currentWeek[i].getTime(),today.getTime());
-                                        if(currentWeek[i].getDate()<=today.getDate())
+                                        //console.log("i<7",currentWeek[i].getTime(),today.getTime());
+                                        if(curDate.getTime()<=today.getTime())
                                             isDisDay = true;
-                                        if(currentWeek[i].getTime()<=today.getTime())
+
+                                        curDate.setHours(12);
+                                        if(curDate.getTime()<=today.getTime())
                                             isDisHours = true;
                                     }
                                     else
                                     {
-                                        console.log("i>=7",currentWeek[0].getDate(),today.getDate());
                                         if(currentWeek[6].getTime()<today.getTime())
                                             isDisDay = true;
                                     }

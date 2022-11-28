@@ -1,4 +1,5 @@
 //import Calender from './component/CheckIn/Calender';
+import Pagin from '../component/Pagin/Pagin';
 import { Form, ProgressBar, Button, Alert, ListGroup, Table } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import {serverPath} from '../../IP_PORT';
@@ -14,6 +15,7 @@ function MyBonus(props)
     let [userId,setUserId] = useState(userData.uid);
     const [myBonus, setMyBonus] = useState(0);
     const [historylist, setHistorylist] = useState([]);
+    const [sel, setSel] = useState(0);
 
     const [reqAtt, setReqAtt] = useState(false);
 
@@ -139,27 +141,33 @@ function MyBonus(props)
                     <tbody>
                         {
                             historylist.map((e,i)=>{
-                                let color = "table-danger";
-                                let sign = "";
-                                if(e.variance>0)
+                                if(i>(sel*50) && i < ((sel+1)*50))
                                 {
-                                    sign = "+";
-                                    color = "table-primary";
+                                    let color = "table-danger";
+                                    let sign = "";
+                                    if(e.variance>0)
+                                    {
+                                        sign = "+";
+                                        color = "table-primary";
+                                    }
+                                    return(
+                                        <tr class={color} key = {i} >
+                                            <td >{i}</td>
+                                            <td >{moment(e.useday).format('MM/DD')}</td>
+                                            <HISTORY history={e.history}/>
+                                            <td >{sign+e.variance}</td>
+                                            <td >{e.Bonus}</td>
+                                        </tr>
+                                    )
                                 }
-                                return(
-                                    <tr class={color} key = {i} >
-                                        <td >{i}</td>
-                                        <td >{moment(e.useday).format('MM/DD')}</td>
-                                        <HISTORY history={e.history}/>
-                                        <td >{sign+e.variance}</td>
-                                        <td >{e.Bonus}</td>
-                                    </tr>
-                                )
                             })
                         }
 
                     </tbody>
                 </Table>
+                <div className="MyBonus-top">
+                    <Pagin max={Math.ceil(historylist.length/50)} sel={sel} setValue={(idx)=>(setSel(idx-1))}/>
+                </div>
             </div>
         }
         </div> 

@@ -15,7 +15,7 @@ function MyAvatar()
     let [userAvt,setUserAvt] = useState(userData.avtidx);
 
     let history = useHistory();
-    const [sel, setsel] = useState(0);
+    const [sel, setSel] = useState(0);
     const [imgNum, setImgNum] = useState(0);
     const [imgPath, setImgPath] = useState('');
     const [MyAvatars, setMyAvatars] = useState([]);
@@ -149,7 +149,7 @@ function MyAvatar()
             </div>
             <MyAvatarList array={MyAvatars} sel={sel} sex={sex} userAvt={userAvt} onClick={(idx,path)=>onModal(idx,path)}/>
             <div className="MyAvatar-pag">
-                <MyPagination max={Math.ceil(MyAvatars.length/16)} sel={sel} setValue={(idx)=>(setsel(idx-1))} />
+                <MyPagination max={Math.ceil(MyAvatars.length/16)} sel={sel} setValue={(idx)=>(setSel(idx-1))} />
             </div>
             {
                 MyAvatars.length>0?<MyModal

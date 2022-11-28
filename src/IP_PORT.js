@@ -3,13 +3,18 @@ const serverIP = '168.126.179.44';
 //const serverPath = 'localhost';
 const serverPORT = '3001';
 const imagePORT = '3002';
+const vcoinPORT = '3003';
 
 function serverPath(){
     return 'http://'+serverIP+':'+serverPORT;
+}
+
+function vcoinPath(){
+    return 'http://'+serverIP+':'+vcoinPORT;
 }
 
 function imagePath(){
     return 'http://'+serverIP+':'+imagePORT;
 }
 
-export {serverPath,imagePath};
+export {serverPath,imagePath,vcoinPath};

@@ -63,6 +63,9 @@ function TestPage(props)
             
            
             
+    const [data00, setData00] = useState('');
+    const [testData, setTestData] = useState('');
+    const [outdata00, setOutData00] = useState('');
     const [data01, setData01] = useState('');
     const [data02, setData02] = useState('');
     const [checklist, setChecklist] = useState([false,false,false,false,false]);
@@ -81,12 +84,26 @@ function TestPage(props)
         setCurlist(tset1);
         console.log('tset',tset);
         console.log('tset1',tset1);
+        
 
     },[])
 
-    useEffect(()=>{
 
-    });
+
+    const onClick00 = ()=>{
+        fetch(serverPath()+"/out_test",{
+            method:"post",
+            headers : {
+                "content-type" : "application/json",
+            },
+            body : JSON.stringify({text:data00}),
+        })
+        .then((res)=>res.json())
+        .then((json)=>{
+            console.log('out_test', json);
+            setOutData00(json.text);
+        })
+    }
 
     const onChange01 = (e)=>{
         setData01(e.target.value);
@@ -113,6 +130,23 @@ function TestPage(props)
         setRefresh(!refresh);
         console.log('checklist',checklist);
         console.log('curlist',curlist);
+    }
+
+    const onTestButton = (e)=>{
+      
+        //fetch("https://api.coinpaprika.com//tickers?quotes=USD"
+
+        const options = {method: 'GET', headers: {accept: 'application/json'}};
+
+        fetch('https://api.bithumb.com/public/ticker/ALL_KRW', options)
+          .then(response => response.json())
+          .then(json => 
+            {
+                console.log(json);
+                console.log(json.data.BTC);
+
+            })
+          .catch(err => console.error(err));
     }
 
     const onChangeImg = (e)=>{
@@ -203,6 +237,45 @@ function TestPage(props)
         setPainting(true);
     }
 
+
+    const [svgCvs, setSvgCvs] = useState("");
+
+    useEffect(()=>{
+        console.log("testSVG");
+        const CORNER_RADIUS = 5;
+        let width = 150; 
+        let height = 150; 
+
+        let container = document.getElementById("ContainerBox");
+
+        console.log("childNodes",container.hasChildNodes(),svgCvs);
+        console.log("ContainerBox",container);
+
+        if(container.hasChildNodes())
+            container.removeChild(svgCvs);
+
+        let baseImage_ = createSvgElement("g",{rx:CORNER_RADIUS,ry:CORNER_RADIUS,x:10,y:10,width:width,height:height,fill:"#101010",stroke:"solid"},container);
+        setSvgCvs(baseImage_);
+        let miniImage_ = createSvgElement("path",{d:getLEDiconPath(30,30,50,50,10),fill:"#ffffff",stroke:"blue"},baseImage_);
+    },[]);
+
+    function createSvgElement(a,b,c)
+    {
+        a=document.createElementNS("http://www.w3.org/2000/svg",a);
+        for(var d in b)
+            a.setAttribute(d,b[d]);
+
+        document.body.runtimeStyle&&(a.runtimeStyle=a.currentStyle=a.style);
+
+        c&&c.appendChild(a);
+        return a
+    };
+
+    function getLEDiconPath(a,b,c,d,e){
+        var f = "M"+(a+c/2)+" "+b+" L"+(a+e)+" "+b+"  Q"+a+" "+b+" "+a+" "+(b+e)+" L"+a+" "+(b+d-e)+" Q"+a+" "+(b+d)+" "+(a+e)+" "+(b+d)+" L"+(a+c-e)+" "+(b+d)+" Q"+(a+c)+" "+(b+d)+" "+(a+c)+" "+(b+d-e)+" L"+(a+c)+" "+(b+e)+" Q"+(a+c)+" "+b+" "+(a+c-e)+" "+b+" L"+(a+c/2)+" "+b
+        return f;
+    };
+
     function stopPainting(e) { 
         console.log("stop"); 
         ctx.restore();
@@ -214,10 +287,25 @@ function TestPage(props)
         <div>
             <h3> TestPage </h3>
             
+            <div>
+                <svg  className='testImg' width="100" height="100" id='ContainerBox'>
+                </svg>
+            </div>
+
+            <svg class="octicon octicon-star v-align-text-bottom"
+                viewBox="0 0 14 16" version="1.1"
+                width="14" height="16" aria-hidden="true" fill="#0D6EFD">
+
+                <path fill-rule="evenodd"
+                    d="M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14">
+                </path>
+            </svg>
+
             {/* <Unity unityProvider={unityProvider}></Unity> */}
 
-         
-
+            <input value={data00} onChange={(e)=>setData00(e.target.value)}/>
+            <button onClick={onClick00}>data0</button>
+            <p>{outdata00}</p>
             <button onClick={onApexChartClick01}>ApexChart</button>
 
             <input value={data01} onChange={onChange01}/>
@@ -242,6 +330,12 @@ function TestPage(props)
                     Button
                 </Button>
             </InputGroup>
+
+
+            <Button variant="outline-secondary" id="button-addon2" onClick={onTestButton}>
+                    Button
+            </Button>
+            
             </div>
         </div>
     )

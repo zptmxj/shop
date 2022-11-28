@@ -1,0 +1,26 @@
+
+.Main-Shortcuts{
+  background-color: #ffffff;
+  justify-content: center;
+  display: flex;
+  width:100;
+}
+
+.Main-Shortcuts-img {
+  width: 100vmin;
+}
+
+$font_color : rgb(80, 80, 80);
+.Main-Shortcuts-font {
+  text-shadow: -1px 0 $font_color, 0 1px $font_color, 1px 0 $font_color, 0 -1px $font_color;
+}
+
+.Main-Shortcuts-img {
+  width: 14vmin;
+  height: 14vmin;
+  max-width: 70px;
+  max-height: 70px;
+  border: 1px solid #a7a7a7;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px #a7a7a7;
+}

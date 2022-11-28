@@ -3,16 +3,19 @@ import React,{useState,useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import {Pagination , Modal, Button,Spinner,Alert} from 'react-bootstrap';
 import {serverPath,imagePath} from '../../IP_PORT';
-import {useSelector} from 'react-redux'
+import {useSelector,useDispatch} from 'react-redux'
+import {setStoreMember, setStorePlate, setStoreUserData} from '../../store'
 
 function Avatar()
 {
+    const dispatch = useDispatch();
+
     let member = useSelector((state)=>{return state.member});
     let userData = useSelector((state)=>{return state.data});
     let [userId,setUserId] = useState(userData.uid);
 
     let history = useHistory();
-    const [sel, setsel] = useState(0);
+    const [sel, setSel] = useState(0);
     const [imgNum, setImgNum] = useState(0);
     const [imgPath, setImgPath] = useState('');
     const [avatars, setAvatars] = useState([]);
@@ -85,6 +88,25 @@ function Avatar()
                 {
                     setModalShow(false);
                     setAvatars([]);
+
+                    let udata = {...userData};
+                    udata.avatar = avt.path;
+                    udata.avtidx = avt.idx;
+                    dispatch(setStoreUserData(udata));
+
+                    let asset = [...member];
+                    let rt = asset.map((e)=>{
+                        let data = {...e};
+                        if(e.uid == userId)
+                        {
+                            data.avatar = udata.avtidx;
+                            data.path = udata.avatar;
+                        }
+                        return data;
+                    });
+                    console.log("rt",rt);
+                    dispatch(setStoreMember(rt));
+
                     onMini("구매를 완료했습니다",1);
                 }
                 else 
@@ -115,7 +137,7 @@ function Avatar()
             </div>
             <AvatarList array={avatars} sel={sel} sex={sex} onClick={(idx,path)=>onModal(idx,path)}/>
             <div className="Avatar-pag">
-                <MyPagination max={Math.ceil(avatars.length/16)} sel={sel} setValue={(idx)=>(setsel(idx-1))} />
+                <MyPagination max={Math.ceil(avatars.length/16)} sel={sel} setValue={(idx)=>(setSel(idx-1))} />
             </div>
             {
                 avatars.length>0?<MyModal
@@ -169,7 +191,6 @@ function AvatarList(props)
                 <div className="Avatar-midle row">
                     {
                         array.map((e,i)=>{
-                            console.log("array.map",array);
                             let path = imagePath()+"/avatars/" + e.path;
                             let classN = "Avatar-img p-0";
                             let uid = "----"
@@ -180,6 +201,8 @@ function AvatarList(props)
                                 uid = e.uid;
                                 Cilck = ()=>{};
                             } 
+
+                            if(e.point!=0)
                             return(
                                 <>
                                     <div key={i} className="col-3 Avatar-pad ">

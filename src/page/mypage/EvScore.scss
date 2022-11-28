@@ -1,0 +1,63 @@
+
+.EvScore-base{
+  justify-content: center;
+}
+
+.EvScore-text{
+    display: flex;
+    color:black;
+    width: 90vw;
+    max-width: 500px;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.EvScore-form{
+    display: flex;
+    color:black;
+    width: 90vw;
+    max-width: 500px;
+    justify-content: center;
+    align-items: center;
+}
+  
+.EvScore-block{
+    width: 90vw;
+    max-width: 500px;
+}
+
+.EvScore-td{
+  width: 10vw;
+  max-width: 200px;
+}
+  
+
+.EvScore-Range{
+  width: 70vw;
+  max-width: 300px;
+}
+  
+.mt-6{
+  margin-top: 60px;
+}
+
+.mt-7{
+  margin-top: 70px;
+}
+
+.mt-8{
+  margin-top: 80px;
+}
+
+.EvScore-alert{
+  display: flex;
+  width: 80vw;
+  max-width: 300px;
+  margin-top: 30px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

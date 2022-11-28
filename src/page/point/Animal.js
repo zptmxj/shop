@@ -3,17 +3,20 @@ import React,{useState,useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import {Pagination , Modal, Button,Spinner,Alert} from 'react-bootstrap';
 import {serverPath,imagePath} from '../../IP_PORT';
-import {useSelector} from 'react-redux'
+import {useSelector,useDispatch} from 'react-redux'
+import {setStoreMember, setStorePlate, setStoreUserData} from '../../store'
 
 function Animal()
 {
+    const dispatch = useDispatch();
+
     let member = useSelector((state)=>{return state.member});
     let userData = useSelector((state)=>{return state.data});
     let [userId,setUserId] = useState(userData.uid);
     const [userimgPath] = useState(imagePath()+"/avatars/"+userData.avatar);
 
     let history = useHistory();
-    const [sel, setsel] = useState(0);
+    const [sel, setSel] = useState(0);
     const [imgNum, setImgNum] = useState(0);
     const [imgPath, setImgPath] = useState('');
     const [Animals, setAnimals] = useState([]);
@@ -69,7 +72,7 @@ function Animal()
     } 
 
 
-    const onSend = (avt)=>{
+    const onSend = (ani)=>{
         //setIsSpinner(true);
 
         fetch(serverPath()+"/buy_animal",{
@@ -77,7 +80,7 @@ function Animal()
             headers : {
                 "content-type" : "application/json",
             },
-            body : JSON.stringify({animal:avt.idx, uid:userId, point:avt.point}),
+            body : JSON.stringify({animal:ani.idx, uid:userId, point:ani.point}),
         })
         .then((res)=>res.json())
         .then((json)=>{
@@ -87,6 +90,26 @@ function Animal()
                 {
                     setModalShow(false);
                     setAnimals([]);
+
+                    let udata = {...userData};
+                    udata.animal = ani.path;
+                    udata.aniidx = ani.idx;
+                    dispatch(setStoreUserData(udata));
+
+                    let asset = [...member];
+                    let rt = asset.map((e)=>{
+                        let data = {...e};
+                        if(e.uid == userId)
+                        {
+                            data.aniname = ani.name;
+                            data.animal = udata.aniidx;
+                            data.anipath = udata.animal;
+                        }
+                        return data;
+                    });
+                    console.log("rt",rt);
+                    dispatch(setStoreMember(rt));
+
                     onMini("구매를 완료했습니다",1);
                 }
                 else 
@@ -117,7 +140,7 @@ function Animal()
             </div>
             <AnimalList array={Animals} sel={sel} sex={sex} onClick={(idx,path)=>onModal(idx,path)}/>
             <div className="Animal-pag">
-                <MyPagination max={Math.ceil(Animals.length/16)} sel={sel} setValue={(idx)=>(setsel(idx-1))} />
+                <MyPagination max={Math.ceil(Animals.length/16)} sel={sel} setValue={(idx)=>(setSel(idx-1))} />
             </div>
             {
                 Animals.length>0?<MyModal
@@ -178,7 +201,7 @@ function AnimalList(props)
                             let uid = "----";
                             let pay = e.point+"p";
                             let Cilck = ()=>props.onClick(i,path);
-                            if(e.uid!=null) 
+                            if(e.uid!=null && e.uid!="2222") 
                             {
                                 classN = "Animal-img-non p-0";
                                 uid = e.uid;

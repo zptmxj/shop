@@ -41,6 +41,7 @@ function MemberStatus(props){
     const [favordata, setFavordata] = useState([]);
     const [favorUp, setFavorUp] = useState(0);
     const [favorDown, setFavorDown] = useState(0);
+    const [btnReady, setBtnReady] = useState(true);
 
 
     const data = props.data;
@@ -118,6 +119,11 @@ function MemberStatus(props){
         text="입력";
     } 
 
+    const setAlertTextfun = (t)=>{
+        setBtnReady(true);
+        setAlertText(t)
+    }
+
     function timeForToday(value) {
         const today = new Date();
         const timeValue = new Date(value);
@@ -154,8 +160,10 @@ function MemberStatus(props){
     }
 
     const onFavorOk = ()=>{
-        if(favorValue==0) setAlertText("하트를 0으로 올릴 수는 없습니다.")
+        if(!btnReady) return;
+        if(favorValue==0) setAlertTextfun("하트를 0으로 올릴 수는 없습니다.")
         else {
+            setBtnReady(false);
             let pay = {uid:userId , pay:Math.abs(favorValue)};
 
             fetch(serverPath()+"/check_point",{
@@ -188,21 +196,21 @@ function MemberStatus(props){
                                     setIsFavor(false);
                                 }
                                 else
-                                    setAlertText("서버 에러");
+                                    setAlertTextfun("서버 에러");
                             }catch (e) {
-                                setAlertText("서버에서 처리를 실패 했습니다");
+                                setAlertTextfun("서버에서 처리를 실패 했습니다");
                             }
                         })
                     }
                     else 
                     {
                         if(json.err=="lack") 
-                            setAlertText("포인트가 부족합니다");
+                            setAlertTextfun("포인트가 부족합니다");
                         else
-                            setAlertText("서버 에러");
+                            setAlertTextfun("서버 에러");
                     }
                 }catch (e) {
-                    setAlertText("서버에서 처리를 실패 했습니다");
+                    setAlertTextfun("서버에서 처리를 실패 했습니다");
                     console.log("서버에서 처리를 실패 했습니다",e);
                 }
             })
@@ -210,7 +218,7 @@ function MemberStatus(props){
     }
 
     const onFavorShow = ()=>{
-        setAlertText("");
+        setAlertTextfun("");
         setInputText("");
         setFavorValue(0);
         setInputShow(true);

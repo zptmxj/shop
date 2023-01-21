@@ -313,7 +313,7 @@ function App() {
                         </NavDropdown>
                       </Nav>
                     </Navbar.Collapse>
-                    <Navbar.Text className='w-100'>
+                    <Navbar.Text className='width-point'>
                     <string className='App-MyPoint-Name'>{`Login: ${userName}:`} <a className='App-MyPoint-Name px-1' onClick={logout} href="/">Logout</a> </string> 
                         <p className='App-MyPoint-List pt-1 mb-0'>
                           <string className='App-MyPoint'>{`잔액: `}
@@ -346,9 +346,10 @@ function App() {
       <div className="App-middle">
         {
           userId!==null?(
-            <div>
+            <div className="w-100">
             <Route exact path="/">
               <MainShortcuts/>
+              {/* <MainSlider/> */}
             </Route>
             
             <Route path="/Member">

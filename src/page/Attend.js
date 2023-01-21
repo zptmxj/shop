@@ -275,65 +275,67 @@ function Attend(props)
                     }
                 </div>
                 
-                <table className='Attend-table'>
-                    <thead>
-                        <tr>
-                            <th className='Attend-th-20'>날짜</th>
-                            <th className='Attend-th-70'>참석률</th>
-                            <th className='Attend-th-10'>투표</th>
-                            <th className='Attend-th-10'>참석</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            count.map((e,i)=>{
-                                if(curAttend !=='undefined' && curAttend.length >0)
-                                {
-                                    let length = curAttend[i].length;
-                                    let progress;
-                                    let isDisDay = false;
-                                    let isDisHours = false;
-                                    let today = new Date();
-                                    let curDate = currentWeek[i];
-                                    if(i<7) 
+                <div className="Attend-middle">
+                    <table className='Attend-table'>
+                        <thead>
+                            <tr>
+                                <th className='Attend-th-20'>날짜</th>
+                                <th className='Attend-th-70'>참석률</th>
+                                <th className='Attend-th-10'>투표</th>
+                                <th className='Attend-th-10'>참석</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                count.map((e,i)=>{
+                                    if(curAttend !=='undefined' && curAttend.length >0)
                                     {
-                                        //console.log("i<7",currentWeek[i].getTime(),today.getTime());
-                                        if(curDate.getTime()<=today.getTime())
-                                            isDisDay = true;
+                                        let length = curAttend[i].length;
+                                        let progress;
+                                        let isDisDay = false;
+                                        let isDisHours = false;
+                                        let today = new Date();
+                                        let curDate = currentWeek[i];
+                                        if(i<7) 
+                                        {
+                                            //console.log("i<7",currentWeek[i].getTime(),today.getTime());
+                                            if(curDate.getTime()<=today.getTime())
+                                                isDisDay = true;
 
-                                        curDate.setHours(12);
-                                        if(curDate.getTime()<=today.getTime())
-                                            isDisHours = true;
+                                            curDate.setHours(12);
+                                            if(curDate.getTime()<=today.getTime())
+                                                isDisHours = true;
+                                        }
+                                        else
+                                        {
+                                            if(currentWeek[6].getTime()<today.getTime())
+                                                isDisDay = true;
+                                        }
+
+                                        if(total<=0)  progress=0;
+                                        else  progress = (100/total)*length;
+
+                                        return(
+                                            <>
+                                                <tr key={i} className='Attend-tr'>
+                                                    <td className='Attend-td' onClick={()=>onClickList(i)}>{WeekDay(i)}</td>
+                                                    <td className='Attend-td-prog' onClick={()=>onClickList(i)}><ProgressBar now={progress} /></td>
+                                                    <td className='Attend-td' onClick={()=>onClickList(i)}>{length}</td>
+                                                    <td className='Attend-td'>
+                                                        <Form.Check type='checkbox' disabled={isDisDay} onChange={()=>onClickCheck(i)} checked={checklist[i].activity}></Form.Check>
+                                                    </td>
+                                                </tr>
+                                                <TDATA idx={i} openlist={openlist} curlist={curAttend} checklist={checklist} userId={userId} isDisHours={isDisHours} setCallBack={setCallBack}/>
+                                            </>
+                                        )
                                     }
-                                    else
-                                    {
-                                        if(currentWeek[6].getTime()<today.getTime())
-                                            isDisDay = true;
-                                    }
 
-                                    if(total<=0)  progress=0;
-                                    else  progress = (100/total)*length;
+                                })
+                            }
 
-                                    return(
-                                        <>
-                                            <tr key={i} className='Attend-tr'>
-                                                <td className='Attend-td' onClick={()=>onClickList(i)}>{WeekDay(i)}</td>
-                                                <td className='Attend-td-prog' onClick={()=>onClickList(i)}><ProgressBar now={progress} /></td>
-                                                <td className='Attend-td' onClick={()=>onClickList(i)}>{length}</td>
-                                                <td className='Attend-td'>
-                                                    <Form.Check type='checkbox' disabled={isDisDay} onChange={()=>onClickCheck(i)} checked={checklist[i].activity}></Form.Check>
-                                                </td>
-                                            </tr>
-                                            <TDATA idx={i} openlist={openlist} curlist={curAttend} checklist={checklist} userId={userId} isDisHours={isDisHours} setCallBack={setCallBack}/>
-                                        </>
-                                    )
-                                }
-
-                            })
-                        }
-
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div className='Attend-button'>
                     {/* <Button variant="secondary" onClick={onAttCancel}>취소</Button> */}

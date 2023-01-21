@@ -288,213 +288,218 @@ function MemberStatus(props){
 
     return(
         <div>
-            <table className="list-Table" >
-                <tbody>
-                    <tr>
-                        <th className="list-th"></th>
-                        <th className="list-th"></th>
-                        <th className="list-th"></th>
-                        <th className="list-th"></th>
-                        <th className="list-th"></th>
-                        <th className="list-th"></th>
-                    </tr>
-                    <tr>
-                        <td className="list-td" rowSpan={2} colSpan={2}>
-                        <div className="flex">
-                            <div className="Status-parent">
-                                <img className="Status-parent-img" src={img}/>
-                                {data.animal>0?<div className="Status-child"> <img className="Status-child-img" src={aniimg}/> </div>:null}
-                            </div>
-                        </div>
-                            
-                        </td>
-                        <td className="list-td" colSpan={2} onClick={()=>{props.setMemberSel(data.idx)}}>{ data.name }</td>
-                        <td className="list-td">{((Year+1)-data.age)}</td>
-                        <td className="list-td">{data.sex?
-                            <img src={img_female} width='30px' height='30px'/>:
-                            <img src={img_male} width='30px' height='30px'/>
-                        }</td>
-                    </tr>
-                    <tr>
-                        <td className="list-td" colSpan={2}>{data.animal>0?data.aniname:"--"}</td>
-                        <td className="list-td" colSpan={2}>{data.point+" P"}</td>
-                    </tr>
-                    <tr>
-                        <td className="list-td" rowSpan={4} colSpan={4}>
-                                <ReactApexChart options={props.status.options} series={props.status.series} type="radar" height={180}/>
-                        </td>
-                        <td className="list-td" colSpan={1}>
-                            <img src={img_rea} className="memlist-status-sel mr-1" width='20px' height='20px'/>
-                            {isButton?
-                            <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>추리</Tooltip>}>
-                            <input type='checkbox' id='rd1' onChange={()=>onCheck(0)} checked={stasel[0]}/>
-                            </OverlayTrigger>:<>{series.data[0]}</>
-                            }
-                        </td>
-                        <td className="list-td" colSpan={1}>
-                            <img src={img_role} className="mr-1" width='20px' height='20px'/>
-                            {isButton?
-                            <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>역할</Tooltip>}>
-                            <input type='checkbox' id='rd1' onChange={()=>onCheck(1)} checked={stasel[1]}/>
-                            </OverlayTrigger>:<>{series.data[1]}</>
-                            }
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="list-td" colSpan={1}>
-                            <img src={img_stra} className="mr-1" width='20px' height='20px'/>
-                            {isButton?
-                            <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>전략</Tooltip>}>
-                            <input type='checkbox' id='rd1' onChange={()=>onCheck(2)} checked={stasel[2]}/>
-                            </OverlayTrigger>:<>{series.data[2]}</>
-                            }
-                        </td>
-                        <td className="list-td" colSpan={1}>
-                            <img src={img_oper} className="mr-1" width='20px' height='20px'/>
-                            {isButton?
-                            <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>조작</Tooltip>}>
-                            <input type='checkbox' id='rd1' onChange={()=>onCheck(3)} checked={stasel[3]}/>
-                            </OverlayTrigger>:<>{series.data[3]}</>
-                            }
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="list-td" colSpan={1}>
-                            <img src={img_agil} className="mr-1" width='20px' height='20px'/>
-                            {isButton?
-                            <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>민첩</Tooltip>}>
-                            <input type='checkbox' id='rd1' onChange={()=>onCheck(4)} checked={stasel[4]}/>
-                            </OverlayTrigger>:<>{series.data[4]}</>
-                            }
-                        </td>
-                        <td className="list-td" colSpan={1}>
-                            <img src={img_gamb} className="mr-1" width='20px' height='20px'/>
-                            {isButton?
-                            <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>도박</Tooltip>}>
-                            <input type='checkbox' id='rd1' onChange={()=>onCheck(5)} checked={stasel[5]}/>
-                            </OverlayTrigger>:<>{series.data[5]}</>
-                            }
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="list-td" colSpan={2}>
-                            <Button className={classN} onClick={onSend} disabled={userId==data.uid}>{text}</Button>
-                            {isButton?<Button className="list-td-button" variant="danger" onClick={onCancel}>취소</Button>:null}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="list-td" colSpan={3}>
+            <div className="memberStatus">
+            <div>
+                <table className="list-Table" >
+                    <tbody>
+                        <tr>
+                            <th className="list-th"></th>
+                            <th className="list-th"></th>
+                            <th className="list-th"></th>
+                            <th className="list-th"></th>
+                            <th className="list-th"></th>
+                            <th className="list-th"></th>
+                        </tr>
+                        <tr>
+                            <td className="list-td" rowSpan={2} colSpan={2}>
                             <div className="flex">
-                                <img src={up_mg} width='30px' height='30px'/>
-                                <p className="px-3 my-0">{favorUp}</p>
+                                <div className="Status-parent">
+                                    <img className="Status-parent-img" src={img}/>
+                                    {data.animal>0?<div className="Status-child"> <img className="Status-child-img" src={aniimg}/> </div>:null}
+                                </div>
                             </div>
-                        </td>
-                        <td className="list-td" colSpan={3}>
-                            <div className="flex">
-                                <img src={down_mg} width='30px' height='30px'/>
-                                <p className="px-3 my-0">{favorDown}</p>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="list-th"></td>
-                        <td className="list-th"></td>
-                        <td className="list-th"></td>
-                        <td className="list-th"></td>
-                        <td className="list-th"></td>
-                        <td className="list-th"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <Modal
-                show={miniShow}
-                size="sm"
-                aria-labelledby="contained-modal-title-vcenter"
-                backdrop={"static"}
-                centered
-            >
-                <Modal.Body className='memlist-mini'>
-                    <p>{miniText}</p>
-                </Modal.Body>
-                <Modal.Footer>
-                <Button variant={alertColor} onClick={onMiniOk}>확인</Button>
-                </Modal.Footer>
-            </Modal>
+                                
+                            </td>
+                            <td className="list-td" colSpan={2} onClick={()=>{props.setMemberSel(data.idx)}}>{ data.name }</td>
+                            <td className="list-td">{((Year+1)-data.age)}</td>
+                            <td className="list-td">{data.sex?
+                                <img src={img_female} width='30px' height='30px'/>:
+                                <img src={img_male} width='30px' height='30px'/>
+                            }</td>
+                        </tr>
+                        <tr>
+                            <td className="list-td" colSpan={2}>{data.animal>0?data.aniname:"--"}</td>
+                            <td className="list-td" colSpan={2}>{data.point+" P"}</td>
+                        </tr>
+                        <tr>
+                            <td className="list-td" rowSpan={4} colSpan={4}>
+                                    <ReactApexChart options={props.status.options} series={props.status.series} type="radar" height={180}/>
+                            </td>
+                            <td className="list-td" colSpan={1}>
+                                <img src={img_rea} className="memlist-status-sel mr-1" width='20px' height='20px'/>
+                                {isButton?
+                                <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>추리</Tooltip>}>
+                                <input type='checkbox' id='rd1' onChange={()=>onCheck(0)} checked={stasel[0]}/>
+                                </OverlayTrigger>:<>{series.data[0]}</>
+                                }
+                            </td>
+                            <td className="list-td" colSpan={1}>
+                                <img src={img_role} className="mr-1" width='20px' height='20px'/>
+                                {isButton?
+                                <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>역할</Tooltip>}>
+                                <input type='checkbox' id='rd1' onChange={()=>onCheck(1)} checked={stasel[1]}/>
+                                </OverlayTrigger>:<>{series.data[1]}</>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="list-td" colSpan={1}>
+                                <img src={img_stra} className="mr-1" width='20px' height='20px'/>
+                                {isButton?
+                                <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>전략</Tooltip>}>
+                                <input type='checkbox' id='rd1' onChange={()=>onCheck(2)} checked={stasel[2]}/>
+                                </OverlayTrigger>:<>{series.data[2]}</>
+                                }
+                            </td>
+                            <td className="list-td" colSpan={1}>
+                                <img src={img_oper} className="mr-1" width='20px' height='20px'/>
+                                {isButton?
+                                <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>조작</Tooltip>}>
+                                <input type='checkbox' id='rd1' onChange={()=>onCheck(3)} checked={stasel[3]}/>
+                                </OverlayTrigger>:<>{series.data[3]}</>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="list-td" colSpan={1}>
+                                <img src={img_agil} className="mr-1" width='20px' height='20px'/>
+                                {isButton?
+                                <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>민첩</Tooltip>}>
+                                <input type='checkbox' id='rd1' onChange={()=>onCheck(4)} checked={stasel[4]}/>
+                                </OverlayTrigger>:<>{series.data[4]}</>
+                                }
+                            </td>
+                            <td className="list-td" colSpan={1}>
+                                <img src={img_gamb} className="mr-1" width='20px' height='20px'/>
+                                {isButton?
+                                <OverlayTrigger key="top" placement="top" overlay={<Tooltip id={'rea'}>도박</Tooltip>}>
+                                <input type='checkbox' id='rd1' onChange={()=>onCheck(5)} checked={stasel[5]}/>
+                                </OverlayTrigger>:<>{series.data[5]}</>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="list-td" colSpan={2}>
+                                <Button className={classN} onClick={onSend} disabled={userId==data.uid}>{text}</Button>
+                                {isButton?<Button className="list-td-button" variant="danger" onClick={onCancel}>취소</Button>:null}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="list-td" colSpan={3}>
+                                <div className="flex">
+                                    <img src={up_mg} width='30px' height='30px'/>
+                                    <p className="px-3 my-0">{favorUp}</p>
+                                </div>
+                            </td>
+                            <td className="list-td" colSpan={3}>
+                                <div className="flex">
+                                    <img src={down_mg} width='30px' height='30px'/>
+                                    <p className="px-3 my-0">{favorDown}</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="list-th"></td>
+                            <td className="list-th"></td>
+                            <td className="list-th"></td>
+                            <td className="list-th"></td>
+                            <td className="list-th"></td>
+                            <td className="list-th"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <Modal
+                    show={miniShow}
+                    size="sm"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    backdrop={"static"}
+                    centered
+                >
+                    <Modal.Body className='memlist-mini'>
+                        <p>{miniText}</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    <Button variant={alertColor} onClick={onMiniOk}>확인</Button>
+                    </Modal.Footer>
+                </Modal>
 
-            <Button className='my-3' onClick={onFavorShow} disabled={userId==data.uid}>메시지 입력</Button>
-            
-            <Modal
-                show={inputShow}
-                size="sm"
-                aria-labelledby="contained-modal-title-vcenter"
-                backdrop={"static"}
-                onHide={()=>{setInputShow(false)}}
-                centered
-            >
-                <Modal.Header closeButton>
-                    <img src={myavatar} width='40px' height='40px' className="rounded me-2" alt="" />
-                    <strong className="me-auto fs-3">{userName}</strong>
-                </Modal.Header>
-                <Modal.Body >
-                    <div className='memlist-input mb-3'>
+                <Button className='my-3' onClick={onFavorShow} disabled={userId==data.uid}>메시지 입력</Button>
+                
+                <Modal
+                    show={inputShow}
+                    size="sm"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    backdrop={"static"}
+                    onHide={()=>{setInputShow(false)}}
+                    centered
+                >
+                    <Modal.Header closeButton>
+                        <img src={myavatar} width='40px' height='40px' className="rounded me-2" alt="" />
+                        <strong className="me-auto fs-3">{userName}</strong>
+                    </Modal.Header>
+                    <Modal.Body >
+                        <div className='memlist-input mb-3'>
+                            {
+                                favorValue>=0?
+                                <img src={up_mg} width='40px' height='40px' className="rounded me-2" alt="" />:
+                                <img src={down_mg} width='40px' height='40px' className="rounded me-2" alt="" />
+                            }
+                            <strong className="fs-3">{favorValue}</strong>
+                        </div>
+                        <Form.Range step={10} min={-50} max={50} value={favorValue} onChange={(e)=>{console.log("onChange",e.target.value); setFavorValue(e.target.value)}} className="fs-3"/>
+                        <small className="me-auto">* 수치만큼 Point를 사용합니다</small>
+                    </Modal.Body>
+                    <Modal.Body className='memlist-mini'>
+                        <Form>
+                            <Form.Control as="textarea" value={inputText} onChange={(e)=>{if(e.target.value.length<41)setInputText(e.target.value)}} />
+                        </Form>
+                        <small>{inputText.length + "/40"}</small>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <small className="me-auto fs-red">{alertText}</small>
+                        <Button variant={alertColor} onClick={onFavorOk}>올리기</Button>
+                    </Modal.Footer>
+                </Modal>
+
+                {
+                    favordata.map((e)=>{
+                        let classN = "toast-l mt-3";
+                        let icon = up_mg;
+                        
+                        let mem = member.filter((mem)=>{
+                            if(e.uid == mem.uid)
+                                return mem;
+                        })
+
+                        let userAvatar = imagePath()+ "/avatars/" + mem[0].path;
+                        if(e.favor<0)
                         {
-                            favorValue>=0?
-                            <img src={up_mg} width='40px' height='40px' className="rounded me-2" alt="" />:
-                            <img src={down_mg} width='40px' height='40px' className="rounded me-2" alt="" />
+                            classN = "toast-r mt-3";
+                            icon = down_mg;
                         }
-                        <strong className="fs-3">{favorValue}</strong>
-                    </div>
-                    <Form.Range step={10} min={-50} max={50} value={favorValue} onChange={(e)=>{console.log("onChange",e.target.value); setFavorValue(e.target.value)}} className="fs-3"/>
-                    <small className="me-auto">* 수치만큼 Point를 사용합니다</small>
-                </Modal.Body>
-                <Modal.Body className='memlist-mini'>
-                    <Form>
-                        <Form.Control as="textarea" value={inputText} onChange={(e)=>{if(e.target.value.length<41)setInputText(e.target.value)}} />
-                    </Form>
-                    <small>{inputText.length + "/40"}</small>
-                </Modal.Body>
-                <Modal.Footer>
-                    <small className="me-auto fs-red">{alertText}</small>
-                    <Button variant={alertColor} onClick={onFavorOk}>올리기</Button>
-                </Modal.Footer>
-            </Modal>
-
-            {
-                favordata.map((e)=>{
-                    let classN = "toast-l mt-3";
-                    let icon = up_mg;
-                    
-                    let mem = member.filter((mem)=>{
-                        if(e.uid == mem.uid)
-                            return mem;
-                    })
-
-                    let userAvatar = imagePath()+ "/avatars/" + mem[0].path;
-                    if(e.favor<0)
-                    {
-                        classN = "toast-r mt-3";
-                        icon = down_mg;
-                    }
-                    return(
-                        <div className={classN}>                
-                            <Toast>
-                                <Toast.Header closeButton={false}>
-                                    <img src={userAvatar} width='20px' height='20px' className="rounded me-2" alt="" />
-                                    <strong className="me-auto">{e.name}</strong>
-                                    <img src={icon} width='20px' height='20px'/>
-                                    <strong className="me-2">{e.favor}</strong>
-                                    <small>{timeForToday(e.date)}</small>
-                                </Toast.Header>
-                                <Toast.Body>{e.text}</Toast.Body>
-                            </Toast>
-                        </div>
-                    )
-                }) 
-            }
-  
-            <div className='my-5'>
-                <Button  onClick={props.callback}>뒤로</Button>
+                        return(
+                            <div className={classN}>                
+                                <Toast>
+                                    <Toast.Header closeButton={false}>
+                                        <img src={userAvatar} width='20px' height='20px' className="rounded me-2" alt="" />
+                                        <strong className="me-auto">{e.name}</strong>
+                                        <img src={icon} width='20px' height='20px'/>
+                                        <strong className="me-2">{e.favor}</strong>
+                                        <small>{timeForToday(e.date)}</small>
+                                    </Toast.Header>
+                                    <Toast.Body>{e.text}</Toast.Body>
+                                </Toast>
+                            </div>
+                        )
+                    }) 
+                }
+    
+                <div className='my-5'>
+                    <Button  onClick={props.callback}>뒤로</Button>
+                </div>
             </div>
+            </div>
+
         </div>
     )
 }

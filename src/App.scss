@@ -95,7 +95,7 @@
 
 .App-middle {
   display: flex;
-  min-height: 80vh;
+  min-height: 100vh;
   justify-content: center;
 }
 
@@ -141,6 +141,15 @@
   justify-content:space-around;
 }
 
+@media (min-width: 990px) { 
+  .width-point{
+    width: 150px;
+  }
+}
+
+.width-point{
+  width: 100vw;
+}
 
 .App-MyPoint-Name{
   display: flex;

@@ -2,6 +2,12 @@
 .memlist-mini{
     white-space: pre-wrap;
 }
+.memberStatus{
+    display: flex;
+    justify-content: center;
+    padding-left:5vw;
+    padding-right:5vw;
+}
 
 .memlist-input{
     display: flex;

@@ -2,7 +2,7 @@ import './BoardGame.scss';
 import React,{useState,useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import {Pagination } from 'react-bootstrap';
-import {serverPath} from '../IP_PORT';
+import {serverPath,imagePath} from '../IP_PORT';
 
 function BoardGame()
 {
@@ -74,7 +74,7 @@ function GameList(props)
                     array.map((e,i)=>{
                         return(
                             <div key={i} className="col-4 pad-top-2 ">
-                                <img src={"http://168.126.179.44:3002/images/"+array[i].image} className="BoardGame-img p-0"/>
+                                <img src={imagePath()+"/images/"+array[i].image} className="BoardGame-img p-0"/>
                                 <h5 className="fs-my">{array[i].name}</h5>
                             </div>
                         )

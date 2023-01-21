@@ -144,7 +144,7 @@ function Avatar()
                     show={modalShow}
                     onSend={(avt)=>{onSend(avt)}}
                     onHide={onHide}
-                    avatar={avatars[(sel*16)+imgNum]}
+                    avatar={avatars[(sel*16)+imgNum+1]}
                     imgpath={imgPath}
                     isspinner={isSpinner}
                 />:null
@@ -178,11 +178,11 @@ function AvatarList(props)
 
     if(props.array.length>0)
     {
-        let max = props.array.length - (sel * 16);
-        if(max > 15) max =16;
+        let max = props.array.length - (sel * 16) - 1;
+        if(max > 15) max = 16;
 
         for(let i=0; i < max; i++)
-            array.push(props.array[(sel*16)+i]);
+            array.push(props.array[1+(sel*16)+i]);
 
         console.log("AvatarList",array);
 
@@ -205,7 +205,7 @@ function AvatarList(props)
                             if(e.point!=0)
                             return(
                                 <>
-                                    <div key={i} className="col-3 Avatar-pad ">
+                                    <div key={i} className="col-4 Avatar-pad ">
                                         <div>
                                             <img className={classN} onClick={Cilck} src={path} />
                                             <p className="mb-0">{uid}</p>
@@ -243,7 +243,7 @@ function MyModal(props) {
             <img className="Avatar-modal-img col-7" src={imgpath} />
             <div className='col-5'>
                 <p className="px-1 pt-3">
-                    이름 : {props.avatar.path.substring(2,6)}
+                    이름 : {props.avatar.name}
                 </p>
                 <p className="px-1">
                     가격 : {props.avatar.point}p

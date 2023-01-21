@@ -368,6 +368,8 @@ function VCoin()
 
 
     return(
+    <div className="flex">
+
         <div className="VCoin-body">
             <div className="title">
                 <h3> VCoin </h3>
@@ -505,6 +507,7 @@ function VCoin()
             </Modal>
          
         </div> 
+        </div>
     )
 }
 

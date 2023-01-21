@@ -394,6 +394,7 @@ function Racing()
 
 
     return(
+    <div className="flex">
         <div className="Racing-body">
             <div className="title">
                 <h3>{"Racing (작업중..)"}</h3>
@@ -465,6 +466,7 @@ function Racing()
             </Modal>
          
         </div> 
+    </div>
     )
 }
 

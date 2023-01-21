@@ -331,6 +331,7 @@ function Betting()
     }
 
     return(
+    <div className="flex">
         <div className="betting-w">
             <div className="title">
                 <h3> Betting </h3>
@@ -446,7 +447,8 @@ function Betting()
                     <Button variant="primary" onClick={onAddOk}>추가</Button>
                 </Modal.Footer>
             </Modal>
-        </div> 
+        </div>
+    </div> 
     )
 }
 

@@ -244,7 +244,8 @@ function VCoinMine()
 
 
     return(
-        <div className="VCoinMine-body">
+    <div className="flex">
+    <div className="VCoinMine-body">
             <div className="title">
                 <h3>{"VCoinMine (작업중..)"}</h3>
             </div>
@@ -307,6 +308,7 @@ function VCoinMine()
             </Modal>
          
         </div> 
+    </div>
     )
 }
 

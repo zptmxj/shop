@@ -14,6 +14,8 @@ import Detail from './Detail';
 import MainSlider from './page/MainSlider';
 import MainShortcuts from './page/MainShortcuts';
 
+
+import Notice from './page/Notice';
 import MainAtt from './page/MainAtt';
 import MemberList from './page/MemberList';
 import CheckIn from './page/CheckIn';
@@ -270,6 +272,7 @@ function App() {
                       <Nav className="me-auto" >
                         {/* <Nav.Link as={Link} className="App-nav" to="/">◆ Home </Nav.Link> */}
                         <NavDropdown className="App-nav" title="◆ info" id="basic-nav-dropdown">
+                          <NavDropdown.Item as={Link} to="/Notice"> Notice </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/Member"> Member </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/CheckIn"> Check-In </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/Games"> Games </NavDropdown.Item>
@@ -351,7 +354,9 @@ function App() {
               <MainShortcuts/>
               {/* <MainSlider/> */}
             </Route>
-            
+            <Route path="/Notice">
+              <Notice/>
+            </Route>
             <Route path="/Member">
               <MemberList/>
             </Route>

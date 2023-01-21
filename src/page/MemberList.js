@@ -5,13 +5,6 @@ import MemberStatus from './component/Member/MemberStatus';
 import { useEffect, useState } from 'react';
 import {serverPath,imagePath} from '../IP_PORT';
 import {useDispatch, useSelector} from 'react-redux'
-import {setStoreMember} from '../store'
-import { useParams } from 'react-router-dom';
-import { Button,Modal,Form,Row,OverlayTrigger,Tooltip,Toast,ToastContainer } from 'react-bootstrap';
-import img_male from './component/Member/male.png';
-import img_female from './component/Member/female.png';
-import up_mg from './component/Member/up.png';
-import down_mg from './component/Member/down.png';
 
 
 function MemberList(props)

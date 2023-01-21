@@ -140,8 +140,13 @@ function MemberStatus(props){
         }
 
         const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
-        if (betweenTimeDay < 365) {
+        if (betweenTimeDay < 30) {
             return `${betweenTimeDay}일전`;
+        }
+
+        const betweenTimeMonth = Math.floor(betweenTime / 60 / 24 / 30);
+        if (betweenTimeDay < 365) {
+            return `${betweenTimeMonth}달전`;
         }
 
         return `${Math.floor(betweenTimeDay / 365)}년전`;
@@ -423,8 +428,12 @@ function MemberStatus(props){
                     </Modal.Footer>
                 </Modal>
 
+                <div className='mb-4 mt-4'>
+                    <Button  onClick={props.callback}>뒤로</Button>
+                </div>
+
                 <Button className='my-3' onClick={onFavorShow} disabled={userId==data.uid}>메시지 입력</Button>
-                
+
                 <Modal
                     show={inputShow}
                     size="sm"

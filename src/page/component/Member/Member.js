@@ -7,6 +7,7 @@ import sub_mg from './sub-mg.png';
 import eng_mg from './eng-mg.png';
 import up_mg from './up.png';
 import down_mg from './down.png';
+import {MANAGER_PRIVI,GENERAL_PRIVI,ENGINEER_PRIVI} from '../../../PRIVILEGE';
 
 import {serverPath,imagePath} from '../../../IP_PORT';
 
@@ -20,32 +21,38 @@ function Member(props)
     let path = data.path;
     let anipath = data.anipath;
     let aniidx = data.animal;
+
+    let HeaderClass = "list-th-m";
+    if(data.privilege == 4) HeaderClass = "list-th-s"
+
     return(
         <div className="list">
             <table className="list-Table" onClick={()=>{props.setMemberSel(data.idx)}}>
                 <tbody>
                     <tr>
-                        <th className="list-th"></th>
-                        <th className="list-th"></th>
-                        <th className="list-th"></th>
-                        <th className="list-th"></th>
-                        <th className="list-th"></th>
-                        <th className="list-th"></th>
+                        <th className={HeaderClass}></th>
+                        <th className={HeaderClass}></th>
+                        <th className={HeaderClass}></th>
+                        <th className={HeaderClass}></th>
+                        <th className={HeaderClass}></th>
+                        <th className={HeaderClass}></th>
                     </tr>
                     <tr>
                         <td className="list-td">{
-                            data.privilege===2?
+                            (data.name!="홍연"&&data.name!="동규")?
+                            data.privilege===MANAGER_PRIVI||(data.name=="아서"||data.name=="종현")?
                             <img src={sub_mg} width='25px' height='25px'/>:
-                            (data.privilege===3?
+                            (data.privilege===GENERAL_PRIVI?
                             <img src={super_mg} width='25px' height='25px'/>:
-                            (data.privilege===4?
+                            (data.privilege===ENGINEER_PRIVI?
                             <img src={eng_mg} width='25px' height='25px'/>:
                             props.num
                             ))
+                            :props.num
                         }</td>
                         <Character sex={data.sex} path={path} anipath={anipath} aniidx={aniidx} />
                         <td className="list-td" colSpan={2}>{ data.name }</td>
-                        <td className="list-td">{((Year+1)-data.age)}</td>
+                        <td className="list-td">{((Year)-data.age)}</td>
                         <td className="list-td">{data.sex?
                             <img src={img_female} width='30px' height='30px'/>:
                             <img src={img_male} width='30px' height='30px'/>
@@ -62,12 +69,12 @@ function Member(props)
                         {/* <td className="list-td" colSpan={2}>{data.total_point+" TP"}</td> */}
                     </tr>
                     <tr>
-                        <td className="list-th"></td>
-                        <td className="list-th"></td>
-                        <td className="list-th"></td>
-                        <td className="list-th"></td>
-                        <td className="list-th"></td>
-                        <td className="list-th"></td>
+                        <td className={HeaderClass}></td>
+                        <td className={HeaderClass}></td>
+                        <td className={HeaderClass}></td>
+                        <td className={HeaderClass}></td>
+                        <td className={HeaderClass}></td>
+                        <td className={HeaderClass}></td>
                     </tr>
                           {/* <Form.Group as={Row} controlId={"Member"+idx} className="Form-Group">
                             <Col xs={2} className='Cal-td'>{ idx }</Col>

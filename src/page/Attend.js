@@ -2,6 +2,7 @@
 import { Form, ProgressBar, Button, Alert} from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import {serverPath,imagePath} from '../IP_PORT';
+import * as PRIVI from '../PRIVILEGE';
 import moment from 'moment';
 import './Attend.scss';
 import {useDispatch, useSelector} from 'react-redux'
@@ -27,7 +28,9 @@ function Attend(props)
     const [curAttend, setCurAttend] = useState([]);
     const [workDay, setWorkDay] = useState(new Date());
     const [nonNext, setNonNext] = useState(false);
+    const [missing, setMissing] = useState([]);
 
+    
     
     useEffect(()=>{
         console.log('Attend',member);
@@ -77,7 +80,6 @@ function Attend(props)
             })
             .then((res)=>res.json())
             .then((json)=>{
-
                 json = json.map(j=>{
                     let name = member.filter(e=>{
                         if(j.uid==e.uid) return e.name;
@@ -130,8 +132,9 @@ function Attend(props)
                     }
                 });
                 setTotal(uids.length);
-                let nonAttend = member.filter(mem=>{if(mem.activity&&!uids.includes(mem.uid)) return mem});
+                let nonAttend = member.filter(mem=>{if(mem.activity&&!uids.includes(mem.uid)&&mem.privilege != PRIVI.HONOR_PRIVI&&mem.privilege != 0&&mem.view!=0) return mem});
                 console.log("nonAttend",nonAttend);
+                setMissing(nonAttend);
                 setReqAtt(true);
             });
         }
@@ -341,6 +344,33 @@ function Attend(props)
                     {/* <Button variant="secondary" onClick={onAttCancel}>취소</Button> */}
 
                     <Button variant="success" onClick={onAttSend}>전송</Button>
+                </div>
+
+                <div className="Attend-middle mb-5">
+                    <table className='Attend-table'>
+                        <thead>
+                            <tr>
+                                <th className='Attend-th-20'></th>
+                                <th className='Attend-th-20'>미투표</th>
+                                <th className='Attend-th-20'></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr className='Attend-tr'>
+                                <td className='Attend-td'>
+                                </td>
+                                <td className='Attend-td'>
+                                    {
+                                        missing.map((e,i)=>{
+                                            return(<NamePlate mem={e}/>);
+                                        })
+                                    }
+                                </td>
+                                <td className='Attend-td'>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         }

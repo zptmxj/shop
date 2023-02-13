@@ -7,6 +7,7 @@ import AutoComplete from '../component/AutoComplete/AutoComplete';
 import './MngMemberMod.scss';
 import {setStoreMember} from '../../store'
 import {useDispatch, useSelector} from 'react-redux'
+import * as PRIVI  from '../../PRIVILEGE';
 
 
 function MngMemberMod(props)
@@ -93,8 +94,10 @@ function MngMemberMod(props)
         setBirth(mem.age);
         setSex(mem.sex==0?'남':'여');
         let mclass = "신입";
-        if(mem.privilege==1) mclass = "일반";
-        else if(mem.privilege==1) mclass = "부방";
+        if(mem.privilege==PRIVI.IRREGUL_PRIVI) mclass = "비정기";
+        else if(mem.privilege==PRIVI.REGUL_PRIVI) mclass = "정기";
+        else if(mem.privilege==PRIVI.HONOR_PRIVI) mclass = "명예";
+        else if(mem.privilege==PRIVI.MANAGER_PRIVI) mclass = "부방";
         setMemClass(mclass);
         setView(mem.view==1);
         setActivity(mem.activity==1);
@@ -139,8 +142,10 @@ function MngMemberMod(props)
         if(sex == "여")  sexinfo = 1;
 
         let mclass = 0;
-        if(memClass=="일반") mclass = 1;
-        else if(memClass=="부방") mclass = 2;
+        if(memClass=="비정기") mclass = PRIVI.IRREGUL_PRIVI;
+        else if(memClass=="정기") mclass = PRIVI.REGUL_PRIVI;
+        else if(memClass=="명예") mclass = PRIVI.HONOR_PRIVI;
+        else if(memClass=="부방") mclass = PRIVI.MANAGER_PRIVI;
 
         let data = {uid:useinfo.uid,last:lastname,name:firstname,sex:sexinfo,age:birth,privilege:mclass,view:isView,activity:isActivity};
 

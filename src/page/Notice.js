@@ -1,28 +1,27 @@
 import './Notice.scss';
-import {Accordion } from 'react-bootstrap';
-import {serverPath,imagePath} from '../IP_PORT';
+import {Accordion,Card,useAccordionButton } from 'react-bootstrap';
+import {serverPath} from '../IP_PORT';
 import { useEffect, useState } from 'react';
-import {useDispatch, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 
 
 function Notice(props)
 {
  
     let member = useSelector((state)=>{return state.member});
-    const dispatch = useDispatch();
 
-    const curDate = new Date();
-    const Year = curDate.getFullYear();
+    // const curDate = new Date();
+    // const Year = curDate.getFullYear();
     
-    const [sel, setSel] = useState(-1);
     const [noticeList, setNoticeList] = useState([]);
-    const [isButton,setIsButton] = useState(false);
-    const [allStatus, setAllStatus] = useState([]);
-    const [scrollY, setScrollY] = useState(0);
+    // const [sel, setSel] = useState(-1);
+    // const [isButton,setIsButton] = useState(false);
+    // const [allStatus, setAllStatus] = useState([]);
+    // const [scrollY, setScrollY] = useState(0);
 
 
     useEffect(()=>{
-        if(noticeList.length==0)
+        if(noticeList.length===0)
         {
             fetch(serverPath()+"/out_notice",{
                 method:"post",
@@ -60,8 +59,26 @@ function Notice(props)
     //     console.log('onCancel');
     //     setIsButton(false)
     // }
+    function HeaderToggle({ HeaderText, eventKey }) {
+        const [isOpen, setIsOpen] = useState(false);
+        const [compStyle, setCompStyle] = useState("notice-title-text notice-title-close");
 
-    let num = 0;
+        const decoratedOnClick = useAccordionButton(eventKey, () =>{
+            console.log('totally custom!',isOpen);
+            setIsOpen(!isOpen); 
+            if(isOpen) setCompStyle("notice-title-text notice-title-close");
+            else setCompStyle("notice-title-text notice-title-open");
+        });
+
+        return (
+          <Card.Header className={compStyle}
+            onClick={decoratedOnClick}
+          >
+            {HeaderText}
+          </Card.Header>
+        );
+    }
+
     return(
         <div >
         {
@@ -72,14 +89,21 @@ function Notice(props)
                 <div>
                 <Accordion alwaysOpen>
                 {
-                    noticeList.length!=0?
+                    noticeList.length!==0?
                     noticeList.map((notice,i)=>{
-                        return <Accordion.Item eventKey={i}>
-                        <Accordion.Header>{notice.title}</Accordion.Header>
-                        <Accordion.Body bsPrefix='accordion-body'>
-                        {notice.text}
-                        </Accordion.Body>
-                    </Accordion.Item>
+                        return (
+                        <Accordion.Item eventKey={i} key={i}>
+                            {/* <Card.Header className='notice-title' onClick={useAccordionButton(i)} >{notice.title}</Card.Header> */}
+                            <HeaderToggle HeaderText={`${('00' + notice.idx).slice(-3)} ||  ${notice.title}`} eventKey={i}></HeaderToggle>
+                            <Accordion.Collapse eventKey={i}>
+                                <Card.Body>
+                                    <div className='notice-text'>
+                                        {notice.text}
+                                    </div>   
+                                </Card.Body>
+                            </Accordion.Collapse>
+                        </Accordion.Item>
+                        )
                     }) : null 
 
                 }

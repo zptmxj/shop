@@ -1,16 +1,32 @@
 import './BoardGame.scss';
 import React,{useState,useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
-import {Pagination } from 'react-bootstrap';
+import {Pagination,Button,Breadcrumb,Form,Col,Row } from 'react-bootstrap';
 import {serverPath,imagePath} from '../IP_PORT';
+import NamePlate from './component/NamePlate/NamePlate'
+import AutoComplete from './component/AutoComplete/AutoComplete';
+import {useDispatch, useSelector} from 'react-redux'
 
 function BoardGame()
 {
     let history = useHistory();
+    const userData = useSelector((state)=>{return state.data});
+    const member = useSelector((state)=>{return state.member});
+    const [userId,setUserId] = useState(userData.uid);
     const [sel, setSel] = useState(0);
     const [games, setGames] = useState([]);
+    const [ranks, setRanks] = useState([]);
     const [total, setTotal] = useState(-1);
+    const [idx, setIdx] = useState(-1);
+    const [picel, setPicel] = useState(-1);
+    const [tap, setTap] = useState(0);
+    const [modMember, setModMember] = useState([]);
+    const [fromText, setFromText] = useState("");
+    const [isFromEnter,setIsFromEnter] = useState(false);
 
+    
+
+    
     useEffect(()=>{
         console.log('useEffect', sel);
 
@@ -28,6 +44,13 @@ function BoardGame()
                 console.log('boardgame_total', json);
                 setTotal(json[0]);
             })
+        }
+
+        if(modMember.length==0)
+        {
+            let mems = member.filter((e)=>{if(e.privilege>0 || e.uid == userId) return e});
+            console.log("mems",mems);
+            setModMember(mems);
         }
 
         if(games.length == 0)
@@ -48,15 +71,94 @@ function BoardGame()
         }
     });
 
+    const onFromEnterClick = ()=>{
+        setIsFromEnter(true);
+    }
+
+    const onFromEnter = (idx)=>{
+        // if(isAlert) return;
+        let mem = modMember[idx];
+        // setFromUser(mem);
+        // setIsFromEnter(false);
+    }
+
+    const onClickGame = (picker,idx)=>{
+        setPicel(picker);
+        setIdx(idx);
+    }
+
+    const onTapSel = (idx)=>{
+        setTap(idx);
+    }
+
+
     return(
         <div>
             <div className="title">
                 <h3> BoardGame </h3>
             </div>
-            <GameList array={games} idx={0}/>
-            <div className="BoardGame-pag">
-                <MyPagination max={Math.ceil(total/9)} sel={sel} setValue={(idx)=>(setGames([]),setSel(idx-1))}/>
-            </div>
+            {
+                idx==-1?
+                <div>
+                    <GameList callback={(i)=>onClickGame(i,i+(sel*9))} array={games} idx={0}/>
+                    <div className="BoardGame-pag">
+                        <MyPagination max={Math.ceil(total/9)} sel={sel} setValue={(idx)=>(setGames([]),setSel(idx-1))}/>
+                    </div>
+                </div>:
+                <div>
+                    <img src={imagePath()+"/images/"+games[picel].image} className="BoardGame-img-L p-0"/>
+                    <h4 className="m-3">{games[picel].name}</h4>
+                    <Button onClick={()=>{setIdx(-1);setTap(0);}}>Back</Button>
+                    <Breadcrumb className="mx-4">
+                        <Breadcrumb.Item  active={(tap == 0)} onClick={()=>onTapSel(0)}>랭킹</Breadcrumb.Item>
+                        <Breadcrumb.Item  active={(tap == 1)} onClick={()=>onTapSel(1)}>기록</Breadcrumb.Item>
+                    </Breadcrumb>
+                    {
+                    tap==0?
+                    <div className="Attend-middle mb-5">
+                        <table className='Attend-table'>
+                            <thead>
+                                <tr>
+                                    <th className='Attend-th-20'></th>
+                                    <th className='Attend-th-20'>랭킹</th>
+                                    <th className='Attend-th-20'></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr className='Attend-tr'>
+                                    <td className='Attend-td'>
+                                    </td>
+                                    <td className='Attend-td'>
+                                        {
+                                            ranks.map((e,i)=>{
+                                                return(<NamePlate mem={e}/>);
+                                            })
+                                        }
+                                    </td>
+                                    <td className='Attend-td'>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>:
+                    <div>
+                        <Form.Group as={Row} controlId="formUser" className="mb-4">
+                            <Form.Label column xs={3} className="px-0">
+                            </Form.Label>
+                            <Col xs={3} className='px-0'>
+                                <AutoComplete list={modMember.map(e=>e.name)} value={fromText} setValue={setFromText} onEnter={onFromEnter} isEnter={isFromEnter} setIsEnter={setIsFromEnter} placeholder="이름.."/>
+                            </Col>
+                            <Col xs={1} className='px-0'>
+                                
+                            </Col>
+                            <Col xs={3} className='px-0'>
+                                <Button onClick={onFromEnterClick}>추가</Button>
+                            </Col>
+                        </Form.Group>
+                    </div>
+                    }
+                </div>
+            }
         </div> 
     )
 }
@@ -74,7 +176,7 @@ function GameList(props)
                     array.map((e,i)=>{
                         return(
                             <div key={i} className="col-4 pad-top-2 ">
-                                <img src={imagePath()+"/images/"+array[i].image} className="BoardGame-img p-0"/>
+                                <img onClick={()=>props.callback(i)} src={imagePath()+"/images/"+array[i].image} className="BoardGame-img p-0"/>
                                 <h5 className="fs-my">{array[i].name}</h5>
                             </div>
                         )

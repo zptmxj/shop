@@ -228,7 +228,7 @@ function Passing(props)
             {/* <Form.Control className="mb-1" value={history} placeholder="History.." onChange={(e)=>{setHistory(e.target.value)}} /> */}
             <div className="mb-3">
                 <strong className="fs-3">{pointValue}p</strong>
-                <Form.Range step={10} min={10} max={100} value={pointValue} onChange={(e)=>{setPointValue(e.target.value)}}/>
+                <Form.Range step={1} min={1} max={100} value={pointValue} onChange={(e)=>{setPointValue(e.target.value)}}/>
                 <strong className="fs-3">▼</strong>
             </div>
 

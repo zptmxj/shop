@@ -12,14 +12,10 @@ import {useDispatch, useSelector} from 'react-redux'
 function EvScoreDv(props)
 {
     const userData = useSelector((state)=>{return state.data});
-    const member = useSelector((state)=>{return state.member});
     const [userId,setUserId] = useState(userData.uid);
-    const [userName,setUserName] = useState(userData.name);
-    const [userPrivilege] = useState(userData.privilege);
 
     let dispatch = useDispatch();
 
-    const [modMember, setModMember] = useState([]);
     const [isAlert, setIsAlert] = useState(false);
     const [value, setValue] = useState(0);
     

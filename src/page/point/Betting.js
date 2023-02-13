@@ -6,6 +6,7 @@ import {Toast , Modal, Button,Spinner,Form,OverlayTrigger,Popover,Row,Col,Breadc
 import {serverPath,imagePath} from '../../IP_PORT';
 import {useSelector} from 'react-redux'
 import NamePlate from '../component/NamePlate/NamePlate'
+import * as PRIVI  from '../../PRIVILEGE';
 
 function Betting()
 {
@@ -342,7 +343,7 @@ function Betting()
                     <Breadcrumb.Item active={!proceeding} onClick={()=>onBreadcrumb(1)}>종료됨</Breadcrumb.Item>
                 </Breadcrumb>
                 <Breadcrumb>
-                    {userPrivilege>1?<Breadcrumb.Item onClick={()=>onBreadcrumb(2)}>추가</Breadcrumb.Item>:null}
+                    {userPrivilege>=PRIVI.MANAGER_PRIVI?<Breadcrumb.Item onClick={()=>onBreadcrumb(2)}>추가</Breadcrumb.Item>:null}
                 </Breadcrumb>
             </div>
 
@@ -598,7 +599,7 @@ function BettingList(props)
                         </div>
                         <div>
                             {proceeding?<Button variant="info" className="" onClick={()=>{props.onInputShow(sel)}}>참가</Button>:null}
-                            {(userPrivilege>1&&proceeding)?<Button variant="secondary" className="mx-1" onClick={()=>{props.onEndShow(sel)}}>베팅종료</Button>:null}
+                            {(userPrivilege>PRIVI.MANAGER_PRIVI&&proceeding)?<Button variant="secondary" className="mx-1" onClick={()=>{props.onEndShow(sel)}}>베팅종료</Button>:null}
                         </div>
                     </Toast.Body>
                 </Toast>

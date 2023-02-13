@@ -230,8 +230,6 @@ function MngAttend(props)
                 <Calendar onChange={onDateChasnge} />
             </div>
 
-            
-
             <div className="MyPw-alert">
                 {
                 isAlert?(

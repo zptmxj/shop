@@ -1,4 +1,4 @@
-import './MngDeposit.scss';
+import './MngBadge.scss';
 import react,{ useEffect, useState, useRef } from 'react';
 import {ListGroup,Dropdown,FormControl,Table,Button,Modal,InputGroup,SplitButton,Alert} from 'react-bootstrap';
 import Calendar from 'react-calendar';
@@ -6,7 +6,7 @@ import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import {serverPath} from '../../IP_PORT';
 
-function MngDeposit(props)
+function MngBadge(props)
 {
 
     const [showModal, setShowModal] = useState(false);
@@ -45,8 +45,8 @@ function MngDeposit(props)
     }]);
 
     const [inDate, setInDate] = useState();
-    const [history, setHistory] = useState('Deposit');
-    const [variance, setVariance] = useState();
+    const [history, setHistory] = useState('원숭이');
+    const [variance, setVariance] = useState(0);
     const [isAlert, setIsAlert] = useState(false);
     const [alertText, setAlertText] = useState("");
     const [alertColor,setAlertColor] = useState("primary");
@@ -68,7 +68,7 @@ function MngDeposit(props)
         if(member.length<3)
         {
           listKey = 0;
-          console.log('MngDeposit',"멤버정보 불러오기");
+          console.log('MngBadge',"멤버정보 불러오기");
     
           fetch(serverPath()+"/out_member",{
             method:"post",
@@ -270,11 +270,11 @@ function MngDeposit(props)
         if(isAlert) return;
 
         let data = inName.map((e)=>{
-        return {uid:e.uid,name:e.name,variance:variance,date:inDate,time:moment().format('HH:mm:ss'),history:history};
+        return {uid:e.uid,name:e.name,badgeidx:variance};
         })
         console.log('sendQuery',data);
 
-        fetch(serverPath()+"/in_syngDeposit", {
+        fetch(serverPath()+"/in_badgelog", {
             method : "post", // 통신방법
             headers : {
               "content-type" : "application/json",
@@ -304,7 +304,7 @@ function MngDeposit(props)
     return(
         <div>
             <div className="title">
-                <h3> Manager Deposit </h3>
+                <h3> Manager Badge </h3>
             </div>           
         {
             <div>
@@ -316,8 +316,8 @@ function MngDeposit(props)
                     </ListGroup>
                         
                     <div>
-                        <FormControl id='nameinput' className='MngDeposit-input-name' value={useName} onChange={onNameChange} onClick={onInputClick} onKeyDown={onInputKeyPress} ></FormControl>
-                        <div className='MngDeposit-dropdown-name' >
+                        <FormControl id='nameinput' className='MngBadge-input-name' value={useName} onChange={onNameChange} onClick={onInputClick} onKeyDown={onInputKeyPress} ></FormControl>
+                        <div className='MngBadge-dropdown-name' >
                         {
                             (results.length!==0)?(
                                 <Dropdown onSelect={onDropdownonClick}>
@@ -352,7 +352,7 @@ function MngDeposit(props)
                 </div>
 
                 <div className='Manager'>
-                    <div className='MngDeposit-inputList'>
+                    <div className='MngBadge-inputList'>
 
                         <Table striped bordered hover>
                             <thead>
@@ -386,15 +386,37 @@ function MngDeposit(props)
                 </div>
 
                 <div className='Manager'>
-                    <InputGroup className='MngDeposit-input'>
+                    <InputGroup className='MngBadge-input'>
                         <SplitButton
                         variant="outline-secondary"
                         title="History :"
                         id="segmented-button-dropdown-1"
                         >
-                            <Dropdown.Item onClick={()=>{setHistory("Deposit")}}>Deposit</Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item onClick={()=>{setHistory("Check-In"); setVariance("-5000")}}>Check-In (-5000)</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("원숭이"); setVariance("0")}}>원숭이</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("나뭇잎"); setVariance("1")}}>나뭇잎</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("한탕주의"); setVariance("2")}}>한탕주의</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("코인러"); setVariance("3")}}>코인러</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("대주주"); setVariance("4")}}>대주주</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("이벤트"); setVariance("5")}}>이벤트</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("애완동물"); setVariance("6")}}>애완동물</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("광부"); setVariance("7")}}>광부</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("프로참석러"); setVariance("8")}}>프로참석러</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("임원"); setVariance("9")}}>임원</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("표창장"); setVariance("10")}}>표창장</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("인싸"); setVariance("11")}}>인싸</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("아싸"); setVariance("12")}}>아싸</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("인기인"); setVariance("13")}}>인기인</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("2020"); setVariance("14")}}>2020</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("2021"); setVariance("15")}}>2021</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("2022"); setVariance("16")}}>2022</Dropdown.Item>
+                            {/* <Dropdown.Item onClick={()=>{setHistory("2023"); setVariance("17")}}>2023</Dropdown.Item> */}
+                            <Dropdown.Item onClick={()=>{setHistory("할로윈"); setVariance("18")}}>할로윈</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("신분증"); setVariance("19")}}>신분증</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("패셔니스타"); setVariance("20")}}>패셔니스타</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("애호가"); setVariance("21")}}>애호가</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("후원자"); setVariance("22")}}>후원자</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("악플러"); setVariance("23")}}>악플러</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{setHistory("균형의수호자"); setVariance("24")}}>균형의수호자</Dropdown.Item>
                         </SplitButton>
                         <FormControl value={history} onChange={onHistoryChange}/>
                     </InputGroup>
@@ -407,7 +429,7 @@ function MngDeposit(props)
                 </div>
 
                 <div className='Manager'>
-                    <InputGroup className='MngDeposit-input'>
+                    <InputGroup className='MngBadge-input'>
                         <SplitButton
                         variant="outline-secondary"
                         title="Cash :"
@@ -431,22 +453,7 @@ function MngDeposit(props)
                     </div> */}
                 </div>
 
-                <div className='Manager'>
-                    <Calendar onChange={onDateChange} />
-                </div>
-
-                <div className='Manager mb-5'>
-                    <InputGroup className='MngDeposit-input'>
-                        <InputGroup.Text id="inputGroup-sizing-default">Date :</InputGroup.Text>
-                        <FormControl  value={inDate} disabled/>
-                    </InputGroup>
-                    {/* <ListGroup.Item>
-                            Date :
-                    </ListGroup.Item>
-                    <FormControl id='nameinput' className='deposit-input' value={inDate}></FormControl> */}
-                </div>
-
-                <div className="MngDeposit-alert">
+                <div className="MngBadge-alert">
                     {
                     isAlert?(
                     <Alert variant={alertColor}>
@@ -463,4 +470,4 @@ function MngDeposit(props)
     )
 }
 
-export default MngDeposit;
+export default MngBadge;

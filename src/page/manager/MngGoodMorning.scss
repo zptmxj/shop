@@ -1,0 +1,33 @@
+
+.Mng-GoodMorning-base{
+  justify-content: center;
+}
+
+.MngGoodMorning-text{
+    display: flex;
+    color:black;
+    width: 90vw;
+    max-width: 500px;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+.MngGoodMorning-th{
+    border-bottom: 3px solid #181818;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.MngGoodMorning-th-15 {
+    @extend .MngGoodMorning-th;
+    width: 15%;
+}
+.MngGoodMorning-th-40 {
+    @extend .MngGoodMorning-th;
+    width: 40%;
+}
+
+.MngGoodMorning-td{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

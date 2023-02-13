@@ -1,5 +1,5 @@
 import './MemberStatus.scss';
-import { Button,Modal,Form,Row,OverlayTrigger,Tooltip,Toast,ToastContainer } from 'react-bootstrap';
+import { Button,Modal,Form,Row,OverlayTrigger,Tooltip,Toast,ToastContainer,Popover } from 'react-bootstrap';
 import img_male from './male.png';
 import img_female from './female.png';
 import up_mg from './up.png';
@@ -42,6 +42,8 @@ function MemberStatus(props){
     const [favorUp, setFavorUp] = useState(0);
     const [favorDown, setFavorDown] = useState(0);
     const [btnReady, setBtnReady] = useState(true);
+    const [badges, setBadges] = useState([1,2,1,1,1,1,1,1,1]);
+    // const [badges, setBadges] = useState([1,2,3,1,1,1,1,1],[1,1,1,1,2,3,1,1]);
 
 
     const data = props.data;
@@ -51,6 +53,8 @@ function MemberStatus(props){
     const img = imagePath()+ "/avatars/" + data.path;
     const aniimg = imagePath()+ "/animals/" + data.anipath;
     const myavatar = imagePath()+ "/avatars/" + userData.avatar;
+
+    
 
     useEffect(()=>{
         console.log("MemberStatus_useEffect",data);
@@ -92,6 +96,19 @@ function MemberStatus(props){
                 //console.log("sortlist",sortlist);
                 
                 dispatch(setStoreMember(membercopy));
+            });
+
+            fetch(serverPath()+"/out_badge",{
+                method:"post",
+                headers : {
+                    "content-type" : "application/json",
+                },
+                body : JSON.stringify(uid),
+            })
+            .then((res)=>res.json())
+            .then((badgelist)=>{
+                setBadges(badgelist);
+                console.log("badgelist",badgelist);
             });
         }
 
@@ -291,6 +308,9 @@ function MemberStatus(props){
         setRefresh(!refresh);
     }
 
+    let HeaderClass = "list-th-m";
+    if(member.privilege == 4) HeaderClass = "list-th-s"
+
     return(
         <div>
             <div className="memberStatus">
@@ -298,12 +318,12 @@ function MemberStatus(props){
                 <table className="list-Table" >
                     <tbody>
                         <tr>
-                            <th className="list-th"></th>
-                            <th className="list-th"></th>
-                            <th className="list-th"></th>
-                            <th className="list-th"></th>
-                            <th className="list-th"></th>
-                            <th className="list-th"></th>
+                            <th className={HeaderClass}></th>
+                            <th className={HeaderClass}></th>
+                            <th className={HeaderClass}></th>
+                            <th className={HeaderClass}></th>
+                            <th className={HeaderClass}></th>
+                            <th className={HeaderClass}></th>
                         </tr>
                         <tr>
                             <td className="list-td" rowSpan={2} colSpan={2}>
@@ -316,7 +336,7 @@ function MemberStatus(props){
                                 
                             </td>
                             <td className="list-td" colSpan={2} onClick={()=>{props.setMemberSel(data.idx)}}>{ data.name }</td>
-                            <td className="list-td">{((Year+1)-data.age)}</td>
+                            <td className="list-td">{((Year)-data.age)}</td>
                             <td className="list-td">{data.sex?
                                 <img src={img_female} width='30px' height='30px'/>:
                                 <img src={img_male} width='30px' height='30px'/>
@@ -390,6 +410,15 @@ function MemberStatus(props){
                             </td>
                         </tr>
                         <tr>
+                            <td className="list-td" colSpan={6}>
+                                <div className="list-td-bedge">
+                                    <div className="row w-100">
+                                        {badges.map((e,i)=>{return <Bedge src={up_mg} data={e}/>})}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
                             <td className="list-td" colSpan={3}>
                                 <div className="flex">
                                     <img src={up_mg} width='30px' height='30px'/>
@@ -404,12 +433,12 @@ function MemberStatus(props){
                             </td>
                         </tr>
                         <tr>
-                            <td className="list-th"></td>
-                            <td className="list-th"></td>
-                            <td className="list-th"></td>
-                            <td className="list-th"></td>
-                            <td className="list-th"></td>
-                            <td className="list-th"></td>
+                            <td className={HeaderClass}></td>
+                            <td className={HeaderClass}></td>
+                            <td className={HeaderClass}></td>
+                            <td className={HeaderClass}></td>
+                            <td className={HeaderClass}></td>
+                            <td className={HeaderClass}></td>
                         </tr>
                     </tbody>
                 </table>
@@ -512,6 +541,34 @@ function MemberStatus(props){
         </div>
     )
 }
+
+function Bedge(props)
+{
+    let data = props.data;
+    let rt;
+    rt = <div className="col-2 m-1 flex">
+            <OverlayTrigger
+            placement="bottom"
+            overlay={
+                <Popover id={`popover-positioned-bottom`}>
+                <Popover.Header as="h3">{`${data.title}`}</Popover.Header>
+                <Popover.Body>
+                    <p className="">{`${data.nece}`}</p> 
+                    <p className="m-0 badge-font-italic">{`${data.text}`}</p>
+                </Popover.Body>
+                </Popover>
+            }
+            >
+                <img src={imagePath()+ "/bedges/" + data.path} width='45px' height='45px'/>
+            </OverlayTrigger>
+        </div>;
+    return  (
+        rt
+    )
+}
+
+
+
 
 
 

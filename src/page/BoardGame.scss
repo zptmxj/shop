@@ -60,6 +60,20 @@
   object-fit: contain;
 }
 
+.BoardGame-img-L {
+  width: 60vmin;
+  height: 60vmin;
+  max-width: 300px;
+  max-height: 300px;
+  display: block; 
+  margin: 0px auto;
+  object-fit: contain;
+}
+
+.BoardGame-tap {
+  margin: 0;
+}
+
 .Form-Group{
   border: 1px solid rgb(200, 200, 200);
   width: 80vmin;

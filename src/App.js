@@ -50,18 +50,18 @@ import MngMemberMod from './page/manager/MngMemberMod';
 import MngAvatarAdd from './page/manager/MngAvatarAdd';
 import MngAnimalAdd from './page/manager/MngAnimalAdd';
 import MngAttend from './page/manager/MngAttend';
+import MngGoodMorning from './page/manager/MngGoodMorning';
+import MngBadge from './page/manager/MngBadge';
 
 
 import MonkeyLottery from './page/lottery/MonkeyLottery';
 import LeavesLottery from './page/lottery/LeavesLottery';
 
-
 import {serverPath,imagePath} from './IP_PORT';
-
+import * as PRIVI from './PRIVILEGE';
 
 import {setStoreMember, setStorePlate, setStoreUserData} from './store'
 import {useDispatch, useSelector} from 'react-redux'
-
 
 function App() {
 
@@ -104,8 +104,8 @@ function App() {
   const [avtidx,setAvtidx] = useState([]);
 
   
-  const Mnglink = ["/Passing","/MngAttend","/","/MngMemberAdd","/MngMemberMod","/","/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/EvScoreDv","/MngGameAdd","/MngAvatarAdd","MngAnimalAdd"];
-  const Mngtext = ["Passing","Attend","/","MemberAdd","MemberMod","/","TestPage","CheckIn","Deposit","Point","EvScoreDv","GameAdd","AvatarAdd","AnimalAdd"];
+  const Mnglink = ["/MngGoodMorning","/Passing","/MngAttend","/","/MngMemberAdd","/MngMemberMod","/","/TestPage","/MngCheckIn","/MngDeposit","/MngPoint","/MngBadge","/EvScoreDv","/MngGameAdd","/MngAvatarAdd","MngAnimalAdd"];
+  const Mngtext = ["GoodMorning","Passing","Attend","/","MemberAdd","MemberMod","/","TestPage","CheckIn","Deposit","Point","Badge","EvScoreDv","GameAdd","AvatarAdd","AnimalAdd"];
   
   
   useEffect(()=>{
@@ -291,7 +291,7 @@ function App() {
                           {/* <NavDropdown.Item as={Link} to="/Border"> Border </NavDropdown.Item> */}
                         </NavDropdown>
                         {
-                          userPrivilege>1?(
+                          userPrivilege>=PRIVI.MANAGER_PRIVI?(
                           <NavDropdown className="App-nav" title="◇ Manager" id="basic-nav-dropdown">
                           {
                             Mngtext.map((e,i)=>{return <Manager key={i} idx={i} link={Mnglink[i]} text={e} Privilege={userPrivilege}/>})
@@ -425,7 +425,7 @@ function App() {
             </Route>            
 
             {
-              userPrivilege>3?(
+              userPrivilege>=PRIVI.ENGINEER_PRIVI?(
               <div>
                 <Route path="/TestPage">
                   <TestPage />
@@ -439,10 +439,13 @@ function App() {
                 <Route path="/MngPoint">
                   <MngPoint />
                 </Route>
+                <Route path="/MngBadge">
+                  <MngBadge />
+                </Route>
                 <Route path="/EvScoreDv">
                   <EvScoreDv />
                 </Route>
-
+                
                 <Route path="/MngGameAdd">
                   <MngGameAdd />
                 </Route>
@@ -457,7 +460,7 @@ function App() {
               ):null
             }
             {
-              userPrivilege>2?(
+              userPrivilege>=PRIVI.GENERAL_PRIVI?(
               <>
               <Route path="/MngMemberAdd">
                 <MngMemberAdd />
@@ -469,8 +472,11 @@ function App() {
               ):null
             }
             {
-              userPrivilege>1?(
+              userPrivilege>=PRIVI.MANAGER_PRIVI?(
                 <>
+                  <Route path="/MngGoodMorning">
+                    <MngGoodMorning />
+                  </Route>
                   <Route path="/Passing">
                     <Passing />
                   </Route>
@@ -507,9 +513,11 @@ function Manager(props){
     let text = props.text;
     let idx = props.idx;
 
-    if(privilege < 2) return;
-    if(idx > 1 && privilege == 2) return;
-    if(idx > 4 && privilege == 3) return;
+    console.log(privilege,PRIVI.GENERAL_PRIVI);
+
+    if(privilege < PRIVI.MANAGER_PRIVI) return;
+    if(idx > 2 && privilege == PRIVI.MANAGER_PRIVI) return;
+    if(idx > 5 && privilege == PRIVI.GENERAL_PRIVI) return;
 
     if(text=="/")
     {

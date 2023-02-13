@@ -141,7 +141,7 @@ function MyBonus(props)
                     <tbody>
                         {
                             historylist.map((e,i)=>{
-                                if(i>(sel*50) && i < ((sel+1)*50))
+                                if(i>=(sel*50) && i < ((sel+1)*50))
                                 {
                                     let color = "table-danger";
                                     let sign = "";

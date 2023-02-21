@@ -1,0 +1,141 @@
+@import "../../node_modules/rfs/scss";
+
+.Farmer-top{
+  background:rgb(255, 255, 255);
+  display: flex;
+  color:black;
+  padding-left:5vw;
+  padding-right:5vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.Farmer-top{
+  display: flex;
+  align-items:flex-end;
+  justify-content: center;
+  padding-bottom: 30px;
+}
+
+.Farmer-midle00{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  visibility: hidden;
+  padding-bottom: 30px;
+}
+
+.Farmer-midle01{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Farmer-img-l {
+  width: 85px;
+  height: 100px;
+  display: flex;
+  justify-content:flex-start;
+
+}
+.Farmer-img-r {
+  width: 85px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.Farmer-button {
+  width: 14vmin;
+  height: 14vmin;
+  max-width: 70px;
+  max-height: 70px;
+  border: 1px solid #a7a7a7;
+  border-radius: 10px;
+  box-shadow: inset -3px -3px 3px #a7a7a7;
+}
+
+.Farmer-button:active {
+  @extend .Farmer-button;
+  box-shadow: inset 3px 3px 3px #a7a7a7;
+}
+
+.Farmer-rect{
+  width: 52px;
+  height: 60px;
+}
+
+.Farmer-rect:active{
+  @extend .Farmer-rect;
+  background-color: rgb(255, 103, 103);
+}
+
+.Farmer-field{
+  width: 52px;
+  height: 60px;
+  background-color: rgb(203, 255, 144);
+  border: 1px solid rgb(200, 200, 200);
+}
+
+.Farmer-field:hover{
+  @extend .Farmer-field;
+  background-color: rgb(255, 103, 103);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+.wrap {
+  width: 95%;
+  max-width: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  
+}
+.hex{
+  width: 20%;
+  margin-bottom: 1.4%;
+  position: relative;
+  visibility: hidden;
+}
+.hex:nth-of-type(9n+1) { //9개 중에 6번째
+  margin-left: 10%;
+}
+.hex::after {
+  content: '';
+  display: block;
+  padding-bottom: 80%;
+}
+.hex-inner {
+  position: absolute;
+  width: 97%;
+  padding-bottom: 112%;
+  overflow: hidden;
+  visibility: hidden;
+  transform: rotate3d(0,0,1,-60deg) skewY(30deg);
+}
+.hex-inner * {
+  position: absolute;
+  visibility: visible;
+}
+.content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform: skewY(-30deg) rotate3d(0,0,1,60deg);
+  background: #00ca54;
+  justify-content: center;
+  align-items: center;
+}
+.content:hover {
+  @extend .content;
+  background: #00ec62;
+}
+.content p {
+  font-size: 3vw;
+  text-align: center;
+  color: #fff;
+}

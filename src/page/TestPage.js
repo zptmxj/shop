@@ -6,6 +6,7 @@ import {serverPath,imagePath} from '../IP_PORT';
 import './TestPage.scss';
 import ReactApexChart from "react-apexcharts"; 
 //import {Unity,useUnityContext } from 'react-unity-webgl';
+const apiUrl =  "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20230214T165905Z.8a81df36b7695a30.58c549c08f8e2ded06162d28bb1c6696e4afb196&lang=en-en&flag=4&text="
 const img1 = imagePath()+ "/avatars/m/m001.png";
 const img2 = imagePath()+ "/animal/a054.png";
 
@@ -134,17 +135,16 @@ function TestPage(props)
 
     const onTestButton = (e)=>{
       
-        //fetch("https://api.coinpaprika.com//tickers?quotes=USD"
+        let url = apiUrl + data00;
+        console.log("in:",data00);
 
         const options = {method: 'GET', headers: {accept: 'application/json'}};
 
-        fetch('https://api.bithumb.com/public/ticker/ALL_KRW', options)
+        fetch(url, options)
           .then(response => response.json())
           .then(json => 
             {
-                console.log(json);
-                console.log(json.data.BTC);
-
+                console.log("API:",json);
             })
           .catch(err => console.error(err));
     }
@@ -293,12 +293,11 @@ function TestPage(props)
             </div>
 
             <svg class="octicon octicon-star v-align-text-bottom"
-                viewBox="0 0 14 16" version="1.1"
-                width="14" height="16" aria-hidden="true" fill="#0D6EFD">
+                viewBox="0 0 30 30" version="1.1"
+                width="30" height="30" aria-hidden="true" fill="#0D6EFD">
 
-                <path fill-rule="evenodd"
-                    d="M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14">
-                </path>
+                <path fill-rule="evenodd" d="M30 8 l-10 -0 L15 0 10 8 0 8 l7 9 L5 30 l10 -8 10 8 -2 -12">{/* L은 절대좌표 l은 상대좌표 */}
+                </path> 
             </svg>
 
             {/* <Unity unityProvider={unityProvider}></Unity> */}

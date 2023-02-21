@@ -42,7 +42,7 @@ function MemberStatus(props){
     const [favorUp, setFavorUp] = useState(0);
     const [favorDown, setFavorDown] = useState(0);
     const [btnReady, setBtnReady] = useState(true);
-    const [badges, setBadges] = useState([1,2,1,1,1,1,1,1,1]);
+    const [badges, setBadges] = useState([]);
     // const [badges, setBadges] = useState([1,2,3,1,1,1,1,1],[1,1,1,1,2,3,1,1]);
 
 

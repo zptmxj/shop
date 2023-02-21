@@ -32,6 +32,7 @@ import Exchange from './page/mypage/Exchange';
 import EvScore from './page/mypage/EvScore';
 import EvScoreDv from './page/manager/EvScoreDv';
 import Border from './page/Border';
+import Farmer from './page/Farmer';
 import MyCash from './page/mypage/MyCash';
 import MyPoint from './page/mypage/MyPoint';
 import MyBonus from './page/mypage/MyBonus';
@@ -288,6 +289,7 @@ function App() {
                           <NavDropdown.Item as={Link} to="/Racing"> Racing </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/LeavesLottery"> LeavesLottery </NavDropdown.Item>
                           <NavDropdown.Item as={Link} to="/MonkeyLottery"> MonkeyLottery </NavDropdown.Item>
+                          <NavDropdown.Item as={Link} to="/Farmer"> Farmer </NavDropdown.Item>
                           {/* <NavDropdown.Item as={Link} to="/Border"> Border </NavDropdown.Item> */}
                         </NavDropdown>
                         {
@@ -393,9 +395,12 @@ function App() {
             <Route path="/LeavesLottery">
               <LeavesLottery/>
             </Route>
-            <Route path="/Border">
-              <Border/>
+            <Route path="/Farmer">
+              <Farmer/>
             </Route>
+            {/* <Route path="/Border">
+              <Border/>
+            </Route> */}
             <Route path="/MyCash">
               <MyCash />
             </Route>

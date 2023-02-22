@@ -40,7 +40,7 @@ function Animal()
 
         if(Animals.length == 0)
         {
-            fetch(serverPath()+"/out_animal",{
+            fetch(serverPath()+"/out_animalall",{
                 method:"post",
                 headers : {
                     "content-type" : "application/json",

@@ -14,7 +14,6 @@
   display: flex;
   align-items:flex-end;
   justify-content: center;
-  padding-bottom: 30px;
 }
 
 .Farmer-midle00{
@@ -23,6 +22,7 @@
   justify-content: center;
   overflow: hidden;
   visibility: hidden;
+  padding-top: 30px;
   padding-bottom: 30px;
 }
 
@@ -83,6 +83,24 @@
   background-color: rgb(255, 103, 103);
 }
 
+.Farmer-modal-midle{
+  width: 95%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.Farmer-modal-progress{
+  width: 50%;
+  max-width: 200px;
+}
+.Farmer-modal-text{
+  width: 50%;
+  max-width: 200px;
+  display: flex;
+  justify-content: center;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -130,7 +148,7 @@
   justify-content: center;
   align-items: center;
 }
-.content:hover {
+.content-sel {
   @extend .content;
   background: #00ec62;
 }
